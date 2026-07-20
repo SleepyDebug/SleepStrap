@@ -21,6 +21,7 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         public VisualModsViewModel()
         {
+            RemoveLegacyBlurSetting();
             ImportSkyboxCommand = new AsyncRelayCommand(ImportSkyboxAsync, () => !IsBusy);
             RemoveSkyboxCommand = new RelayCommand(RemoveSkybox, () => !IsBusy && CustomSkyboxEnabled);
             OpenModsFolderCommand = new RelayCommand(OpenModsFolder);
@@ -132,10 +133,6 @@ namespace SleepStrap.UI.ViewModels.Settings
             ? "pack://application:,,,/Resources/SleepStrap/Previews/Dark.png"
             : "pack://application:,,,/Resources/SleepStrap/Previews/Basic.png";
 
-        public string ActiveBlurPreview => App.Settings.Prop.DarkTexturesEnabled
-            ? "pack://application:,,,/Resources/SleepStrap/Previews/Dark.png"
-            : "pack://application:,,,/Resources/SleepStrap/Previews/BasicBlur.png";
-
         public string ActiveRtxPreview => App.Settings.Prop.DarkTexturesEnabled
             ? "pack://application:,,,/Resources/SleepStrap/Previews/DarkRtx.png"
             : "pack://application:,,,/Resources/SleepStrap/Previews/BasicRtx.png";
@@ -179,41 +176,7 @@ namespace SleepStrap.UI.ViewModels.Settings
             OnPropertyChanged(nameof(DarkTexturesEnabled));
             OnPropertyChanged(nameof(SelectedTexturePack));
             OnPropertyChanged(nameof(ActiveTexturePreview));
-            OnPropertyChanged(nameof(ActiveBlurPreview));
             OnPropertyChanged(nameof(ActiveRtxPreview));
-        }
-
-        public bool BlurryTexturesEnabled
-        {
-            get => App.Settings.Prop.BlurryTexturesEnabled;
-            set
-            {
-                if (value == App.Settings.Prop.BlurryTexturesEnabled || IsBusy)
-                    return;
-
-                try
-                {
-                    IsBusy = true;
-                    StatusText = value ? "Applying blurry texture quality…" : "Restoring previous texture quality…";
-                    BlurryTextureService.SetEnabled(value);
-                    App.Settings.Prop.BlurryTexturesEnabled = value;
-                    App.Settings.Save();
-                    StatusText = value
-                        ? "Blurry texture quality is ready for the next launch."
-                        : "Previous texture-quality flags restored.";
-                }
-                catch (Exception ex)
-                {
-                    App.Logger.WriteException("VisualModsViewModel::SetBlurryTextures", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not change blurry textures.\n\n{ex.Message}", MessageBoxImage.Error);
-                    OnPropertyChanged(nameof(BlurryTexturesEnabled));
-                    StatusText = "Blurry texture switch failed.";
-                }
-                finally
-                {
-                    IsBusy = false;
-                }
-            }
         }
 
         public bool RtxShineEnabled
@@ -258,7 +221,6 @@ namespace SleepStrap.UI.ViewModels.Settings
         public IReadOnlyList<TextureEffectChoice> TextureEffectChoices { get; } = new[]
         {
             new TextureEffectChoice("None"),
-            new TextureEffectChoice("Blur"),
             new TextureEffectChoice("RTX")
         };
 
@@ -269,20 +231,16 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         public string SelectedTextureEffect
         {
-            get => App.Settings.Prop.RtxShineEnabled
-                ? "RTX"
-                : App.Settings.Prop.BlurryTexturesEnabled ? "Blur" : "None";
+            get => App.Settings.Prop.RtxShineEnabled ? "RTX" : "None";
             set
             {
                 if (!TextureEffectChoices.Any(choice => String.Equals(choice.Name, value, StringComparison.Ordinal)) || IsBusy)
                     return;
 
-                bool oldBlur = App.Settings.Prop.BlurryTexturesEnabled;
                 bool oldRtx = App.Settings.Prop.RtxShineEnabled;
-                bool enableBlur = String.Equals(value, "Blur", StringComparison.Ordinal);
                 bool enableRtx = String.Equals(value, "RTX", StringComparison.Ordinal);
 
-                if (oldBlur == enableBlur && oldRtx == enableRtx)
+                if (oldRtx == enableRtx)
                     return;
                 if (enableRtx && !oldRtx && !EnsureRiskAcknowledged())
                 {
@@ -293,36 +251,24 @@ namespace SleepStrap.UI.ViewModels.Settings
                 try
                 {
                     IsBusy = true;
-                    StatusText = enableBlur
-                        ? "Applying blurry textures…"
-                        : enableRtx ? "Applying RTX shine…" : "Restoring normal textures…";
+                    StatusText = enableRtx ? "Applying RTX shine…" : "Restoring normal textures…";
 
-                    // Restore the old layer first so the next effect captures the
-                    // actual underlying settings, not another effect's overrides.
                     if (oldRtx && !enableRtx)
                         VisualModService.SetRtxShine(false);
-                    if (oldBlur && !enableBlur)
-                        BlurryTextureService.SetEnabled(false);
-                    if (enableBlur && !oldBlur)
-                        BlurryTextureService.SetEnabled(true);
                     if (enableRtx && !oldRtx)
                         VisualModService.SetRtxShine(true);
 
-                    App.Settings.Prop.BlurryTexturesEnabled = enableBlur;
                     App.Settings.Prop.RtxShineEnabled = enableRtx;
                     App.Settings.Save();
                     OnPropertyChanged(nameof(SelectedTextureEffect));
                     OnPropertyChanged(nameof(DarkRtxPreviewVisibility));
-                    StatusText = enableBlur
-                        ? "Blurry is ready for the next launch."
-                        : enableRtx ? "RTX is ready for the next launch." : "None selected.";
+                    StatusText = enableRtx ? "RTX is ready for the next launch." : "None selected.";
                 }
                 catch (Exception ex)
                 {
                     App.Logger.WriteException("VisualModsViewModel::SetTextureEffect", ex);
                     try
                     {
-                        BlurryTextureService.SetEnabled(oldBlur);
                         VisualModService.SetRtxShine(oldRtx);
                     }
                     catch (Exception rollbackException)
@@ -338,6 +284,23 @@ namespace SleepStrap.UI.ViewModels.Settings
                 {
                     IsBusy = false;
                 }
+            }
+        }
+
+        private static void RemoveLegacyBlurSetting()
+        {
+            if (!App.Settings.Prop.BlurryTexturesEnabled && App.Settings.Prop.BlurryTexturesFlagBackup.Count == 0)
+                return;
+
+            try
+            {
+                BlurryTextureService.SetEnabled(false);
+                App.Settings.Prop.BlurryTexturesEnabled = false;
+                App.Settings.Save();
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("VisualModsViewModel::RemoveLegacyBlur", ex);
             }
         }
 

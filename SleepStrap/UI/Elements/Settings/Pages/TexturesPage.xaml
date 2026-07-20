@@ -27,7 +27,7 @@
     </ui:UiPage.Resources>
 
     <StackPanel Margin="0,0,14,20">
-        <Border Padding="18" CornerRadius="14" BorderThickness="1" BorderBrush="#668B5CF6">
+        <Border Padding="18" CornerRadius="14" BorderThickness="0">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Color="#442D1760" Offset="0" />
@@ -42,9 +42,14 @@
             </Grid>
         </Border>
 
-        <TextBlock Text="Texture pack" Margin="2,16,0,7" FontSize="17" FontWeight="SemiBold" />
-        <Border Padding="7" CornerRadius="12" Background="{DynamicResource ControlFillColorDefaultBrush}"
-                BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+        <ui:CardExpander Margin="0,14,0,0" IsExpanded="True">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Texture pack" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Choose the base look" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+            <Border Padding="7" Background="Transparent">
             <ListBox Height="214"
                      ItemsSource="{Binding TexturePackChoices}"
                      SelectedValuePath="Name"
@@ -70,25 +75,61 @@
                                     <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                                FontSize="13" FontWeight="SemiBold" />
                                 </Border>
+                                <Border x:Name="SelectedBadge" Grid.RowSpan="2" Width="28" Height="28" Margin="8"
+                                        HorizontalAlignment="Right" VerticalAlignment="Top" CornerRadius="9"
+                                        Background="#E67C3AED" Visibility="Collapsed" Panel.ZIndex="7">
+                                    <ui:SymbolIcon Symbol="Checkmark24" Foreground="White" FontSize="17" />
+                                </Border>
+                                <Rectangle x:Name="SelectionShine" Grid.RowSpan="2" Width="76" HorizontalAlignment="Left"
+                                           Panel.ZIndex="5" IsHitTestVisible="False" Opacity="0">
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#00FFFFFF" Offset="0" />
+                                            <GradientStop Color="#70FFFFFF" Offset="0.5" />
+                                            <GradientStop Color="#00FFFFFF" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                    <Rectangle.RenderTransform><TranslateTransform X="-90" /></Rectangle.RenderTransform>
+                                </Rectangle>
                             </Grid>
                         </Border>
                         <DataTemplate.Triggers>
                             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                                <Setter TargetName="Card" Property="BorderBrush" Value="#B794F6" />
-                                <Setter TargetName="Card" Property="BorderThickness" Value="3" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                                <Setter TargetName="Card" Property="BorderBrush" Value="#A78BFA" />
+                                <Setter TargetName="Card" Property="BorderBrush" Value="#E6FFFFFF" />
+                                <Setter TargetName="Card" Property="BorderThickness" Value="2" />
+                                <Setter TargetName="Card" Property="Background" Value="#33FFFFFF" />
+                                <Setter TargetName="SelectedBadge" Property="Visibility" Value="Visible" />
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="SelectionShine" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="-90" To="420" Duration="0:0:0.55">
+                                                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseInOut" /></DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="SelectionShine" Storyboard.TargetProperty="Opacity" Duration="0:0:0.55">
+                                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.08" Value="1" />
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.45" Value="1" />
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.55" Value="0" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
                             </DataTrigger>
                         </DataTemplate.Triggers>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </Border>
+            </Border>
+        </ui:CardExpander>
 
-        <TextBlock Text="Effect" Margin="2,16,0,7" FontSize="17" FontWeight="SemiBold" />
-        <Border Padding="7" CornerRadius="12" Background="{DynamicResource ControlFillColorDefaultBrush}"
-                BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+        <ui:CardExpander Margin="0,10,0,0" IsExpanded="True">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Material effect" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Apply an additional visual finish" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+            <Border Padding="7" Background="Transparent">
             <ListBox Height="190"
                      ItemsSource="{Binding TextureEffectChoices}"
                      SelectedValuePath="Name"
@@ -98,7 +139,7 @@
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate><UniformGrid Columns="3" /></ItemsPanelTemplate>
+                    <ItemsPanelTemplate><UniformGrid Columns="2" /></ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -118,16 +159,25 @@
                                     <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center"
                                                FontSize="13" FontWeight="SemiBold" />
                                 </Border>
+                                <Border x:Name="SelectedBadge" Grid.RowSpan="2" Width="28" Height="28" Margin="8"
+                                        HorizontalAlignment="Right" VerticalAlignment="Top" CornerRadius="9"
+                                        Background="#E67C3AED" Visibility="Collapsed" Panel.ZIndex="7">
+                                    <ui:SymbolIcon Symbol="Checkmark24" Foreground="White" FontSize="17" />
+                                </Border>
+                                <Rectangle x:Name="SelectionShine" Grid.RowSpan="2" Width="70" HorizontalAlignment="Left"
+                                           Panel.ZIndex="5" IsHitTestVisible="False" Opacity="0">
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                            <GradientStop Color="#00FFFFFF" Offset="0" />
+                                            <GradientStop Color="#70FFFFFF" Offset="0.5" />
+                                            <GradientStop Color="#00FFFFFF" Offset="1" />
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                    <Rectangle.RenderTransform><TranslateTransform X="-80" /></Rectangle.RenderTransform>
+                                </Rectangle>
                             </Grid>
                         </Border>
                         <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding Name}" Value="Blur">
-                                <Setter TargetName="PreviewImage" Property="Source">
-                                    <Setter.Value>
-                                        <Binding Path="DataContext.ActiveBlurPreview" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListBox}}" />
-                                    </Setter.Value>
-                                </Setter>
-                            </DataTrigger>
                             <DataTrigger Binding="{Binding Name}" Value="RTX">
                                 <Setter TargetName="PreviewImage" Property="Source">
                                     <Setter.Value>
@@ -135,37 +185,56 @@
                                     </Setter.Value>
                                 </Setter>
                             </DataTrigger>
-                            <MultiDataTrigger>
-                                <MultiDataTrigger.Conditions>
-                                    <Condition Binding="{Binding Name}" Value="Blur" />
-                                    <Condition Binding="{Binding DataContext.DarkTexturesEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}}" Value="True" />
-                                </MultiDataTrigger.Conditions>
-                                <Setter TargetName="PreviewImage" Property="Effect">
-                                    <Setter.Value><BlurEffect Radius="5" KernelType="Gaussian" /></Setter.Value>
-                                </Setter>
-                            </MultiDataTrigger>
                             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                                <Setter TargetName="Card" Property="BorderBrush" Value="#B794F6" />
-                                <Setter TargetName="Card" Property="BorderThickness" Value="3" />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
-                                <Setter TargetName="Card" Property="BorderBrush" Value="#A78BFA" />
+                                <Setter TargetName="Card" Property="BorderBrush" Value="#E6FFFFFF" />
+                                <Setter TargetName="Card" Property="BorderThickness" Value="2" />
+                                <Setter TargetName="Card" Property="Background" Value="#33FFFFFF" />
+                                <Setter TargetName="SelectedBadge" Property="Visibility" Value="Visible" />
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="SelectionShine" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="-80" To="300" Duration="0:0:0.5">
+                                                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseInOut" /></DoubleAnimation.EasingFunction>
+                                            </DoubleAnimation>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="SelectionShine" Storyboard.TargetProperty="Opacity" Duration="0:0:0.5">
+                                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.08" Value="1" />
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.41" Value="1" />
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.5" Value="0" />
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
                             </DataTrigger>
                         </DataTemplate.Triggers>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-        </Border>
+            </Border>
+        </ui:CardExpander>
 
-        <Border Margin="0,14,0,0" Padding="12,10" CornerRadius="10" Background="#221392F6"
-                BorderBrush="#448B5CF6" BorderThickness="1">
+        <ui:CardExpander Margin="0,10,0,0" IsExpanded="False">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Font" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Change every in-game Roblox font" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center" FontSize="12"
-                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                <ui:ProgressRing Grid.Column="1" Width="22" Height="22" Margin="12,0,0,0" IsIndeterminate="True"
-                                 Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <StackPanel Margin="0,0,20,0">
+                    <TextBlock Text="All in-game fonts" FontSize="15" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding FontStatus}" Margin="0,5,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <ComboBox Width="250" MaxDropDownHeight="330" ItemsSource="{Binding FontChoices}"
+                              DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedFont, Mode=TwoWay}" />
+                    <ui:Button Content="Restore Roblox default" Icon="ArrowReset20" Command="{Binding RestoreDefaultFontCommand}"
+                               Visibility="{Binding RestoreFontVisibility}" Margin="0,8,0,0" />
+                    <ui:ProgressRing Width="22" Height="22" Margin="0,9,0,0" HorizontalAlignment="Center" IsIndeterminate="True"
+                                     Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </StackPanel>
             </Grid>
-        </Border>
+        </ui:CardExpander>
     </StackPanel>
 </ui:UiPage>

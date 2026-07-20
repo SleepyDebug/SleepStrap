@@ -136,37 +136,6 @@ namespace SleepStrap.UI.ViewModels.Settings
             }
         }
 
-        public bool FpsCounterEnabled
-        {
-            get => App.Settings.Prop.RivalsFpsCounterEnabled;
-            set
-            {
-                if (value == App.Settings.Prop.RivalsFpsCounterEnabled)
-                    return;
-
-                try
-                {
-                    if (value)
-                        RivalsFpsCounterService.SetEnabled(true);
-                    else
-                        RivalsFpsCounterService.SetEnabled(false);
-
-                    App.Settings.Prop.RivalsFpsCounterEnabled = value;
-                    App.Settings.Prop.UseFastFlagManager = true;
-                    App.FastFlags.Save();
-                    App.Settings.Save();
-                    OnPropertyChanged(nameof(FpsCounterEnabled));
-                    RefreshStatus();
-                }
-                catch (Exception ex)
-                {
-                    App.Logger.WriteException("RivalsViewModel::ChangeFpsCounter", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not change the FPS counter.\n\n{ex.Message}", MessageBoxImage.Error);
-                    OnPropertyChanged(nameof(FpsCounterEnabled));
-                }
-            }
-        }
-
         private string _statusText = "Checking display…";
         public string StatusText
         {
@@ -178,7 +147,11 @@ namespace SleepStrap.UI.ViewModels.Settings
             }
         }
 
-        public RivalsViewModel() => RefreshStatus();
+        public RivalsViewModel()
+        {
+            RemoveLegacyFpsCounter();
+            RefreshStatus();
+        }
 
         private void EnableStretch()
         {
@@ -265,13 +238,26 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         private static string GetFpsStatus() => App.Settings.Prop.RivalsFpsLimit switch
         {
-            0 => $"FPS uses the Roblox default.{GetCounterStatus()}",
-            9999 => $"FPS is unlimited.{GetCounterStatus()}",
-            int limit => $"FPS limit: {limit}.{GetCounterStatus()}"
+            0 => "FPS uses the Roblox default.",
+            9999 => "FPS is unlimited.",
+            int limit => $"FPS limit: {limit}."
         };
 
-        private static string GetCounterStatus() => App.Settings.Prop.RivalsFpsCounterEnabled
-            ? " Counter: Roblox performance stats enabled."
-            : "";
+        private static void RemoveLegacyFpsCounter()
+        {
+            if (!App.Settings.Prop.RivalsFpsCounterEnabled && App.Settings.Prop.RivalsFpsCounterFlagBackup.Count == 0)
+                return;
+
+            try
+            {
+                RivalsFpsCounterService.SetEnabled(false);
+                App.Settings.Prop.RivalsFpsCounterEnabled = false;
+                App.Settings.Save();
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("RivalsViewModel::RemoveLegacyFpsCounter", ex);
+            }
+        }
     }
 }

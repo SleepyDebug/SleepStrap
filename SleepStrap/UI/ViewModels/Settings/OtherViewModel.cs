@@ -1,3 +1,5 @@
+using SleepStrap.Services;
+
 namespace SleepStrap.UI.ViewModels.Settings
 {
     public class OtherViewModel : NotifyPropertyChangedViewModel
@@ -15,6 +17,30 @@ namespace SleepStrap.UI.ViewModels.Settings
                 App.Settings.Prop.CloseSleepStrapOnLaunch = value;
                 App.Settings.Save();
                 OnPropertyChanged(nameof(CloseSleepStrapOnLaunch));
+            }
+        }
+
+        public bool OverrideLegacyBloxstrapSettings
+        {
+            get => App.Settings.Prop.OverrideLegacyBloxstrapSettings;
+            set
+            {
+                if (value == App.Settings.Prop.OverrideLegacyBloxstrapSettings)
+                    return;
+
+                try
+                {
+                    LegacyBloxstrapOverrideService.SetEnabled(value);
+                    App.Settings.Prop.OverrideLegacyBloxstrapSettings = value;
+                    App.Settings.Save();
+                    OnPropertyChanged(nameof(OverrideLegacyBloxstrapSettings));
+                }
+                catch (Exception ex)
+                {
+                    App.Logger.WriteException("OtherViewModel::OverrideLegacyBloxstrapSettings", ex);
+                    Frontend.ShowMessageBox($"SleepStrap could not update the FastFlag override.\n\n{ex.Message}", System.Windows.MessageBoxImage.Error);
+                    OnPropertyChanged(nameof(OverrideLegacyBloxstrapSettings));
+                }
             }
         }
     }

@@ -29,6 +29,8 @@ namespace SleepStrap.Models.Persistable
         public string? SelectedCustomTheme { get; set; } = null;
         public bool BackgroundUpdatesEnabled { get; set; } = false;
         public bool CloseSleepStrapOnLaunch { get; set; } = false;
+        public bool OverrideLegacyBloxstrapSettings { get; set; } = false;
+        public Dictionary<string, string> LegacyBloxstrapFlagBackup { get; set; } = new();
         public bool DebugDisableVersionPackageCleanup { get; set; } = false;
         public WebEnvironment WebEnvironment { get; set; } = WebEnvironment.Production;
 
@@ -67,5 +69,18 @@ namespace SleepStrap.Models.Persistable
         public Dictionary<string, string> RivalsFpsFlagBackup { get; set; } = new();
         public bool RivalsFpsCounterEnabled { get; set; } = false;
         public Dictionary<string, string> RivalsFpsCounterFlagBackup { get; set; } = new();
+
+        // SleepStrap replay buffer
+        public bool ClippingEnabled { get; set; } = false;
+        public int ClippingBufferMinutes { get; set; } = 3;
+        public int ClippingHotkeyModifiers { get; set; } = 1; // MOD_ALT
+        public int ClippingHotkeyVirtualKey { get; set; } = 0x58; // X
+        public string ClippingDisplayDevice { get; set; } = "";
+        public bool ClippingSpeakerEnabled { get; set; } = true;
+        public string ClippingSpeakerDevice { get; set; } = "";
+        public int ClippingSpeakerVolume { get; set; } = 80;
+        public bool ClippingMicrophoneEnabled { get; set; } = false;
+        public string ClippingMicrophoneDevice { get; set; } = "";
+        public int ClippingMicrophoneVolume { get; set; } = 70;
     }
 }

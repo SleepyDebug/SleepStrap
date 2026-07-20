@@ -810,7 +810,7 @@ namespace SleepStrap
                         autoclosePids.Add(pid);
                 }
 
-                if (App.Settings.Prop.EnableActivityTracking || App.LaunchSettings.TestModeFlag.Active || autoclosePids.Any())
+                if (App.Settings.Prop.EnableActivityTracking || App.Settings.Prop.ClippingEnabled || App.LaunchSettings.TestModeFlag.Active || autoclosePids.Any())
                 {
                     using var ipl = new InterProcessLock("Watcher", TimeSpan.FromSeconds(5));
 
@@ -1284,16 +1284,13 @@ namespace SleepStrap
 
             try
             {
-                // The old toggle UI allowed both effects at once. The dropdown is
-                // exclusive, so keep RTX when migrating that legacy combination.
-                if (App.Settings.Prop.BlurryTexturesEnabled && App.Settings.Prop.RtxShineEnabled)
+                // Blur was removed. Restore any flags left by an older build.
+                if (App.Settings.Prop.BlurryTexturesEnabled || App.Settings.Prop.BlurryTexturesFlagBackup.Count > 0)
                 {
                     BlurryTextureService.SetEnabled(false);
                     App.Settings.Prop.BlurryTexturesEnabled = false;
                     App.Settings.Save();
                 }
-
-                BlurryTextureService.RefreshIfEnabled();
             }
             catch (Exception ex)
             {
@@ -1304,11 +1301,28 @@ namespace SleepStrap
 
             try
             {
-                RivalsFpsCounterService.RefreshState();
+                // The on-screen FPS counter was removed. Undo its old flags once.
+                if (App.Settings.Prop.RivalsFpsCounterEnabled || App.Settings.Prop.RivalsFpsCounterFlagBackup.Count > 0)
+                {
+                    RivalsFpsCounterService.SetEnabled(false);
+                    App.Settings.Prop.RivalsFpsCounterEnabled = false;
+                    App.Settings.Save();
+                }
             }
             catch (Exception ex)
             {
                 App.Logger.WriteLine(LOG_IDENT, "Failed to prepare the Rivals FPS counter");
+                App.Logger.WriteException(LOG_IDENT, ex);
+                success = false;
+            }
+
+            try
+            {
+                LegacyBloxstrapOverrideService.PrepareForLaunch();
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Failed to prepare the legacy Bloxstrap settings override");
                 App.Logger.WriteException(LOG_IDENT, ex);
                 success = false;
             }

@@ -7,7 +7,7 @@
       mc:Ignorable="d"
       d:DesignHeight="900" d:DesignWidth="800" Title="Other" Scrollable="True">
     <StackPanel Margin="0,0,14,20">
-        <Border Padding="18" CornerRadius="14" BorderThickness="1" BorderBrush="#668B5CF6">
+        <Border Padding="18" CornerRadius="14" BorderThickness="0">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Color="#442D1760" Offset="0" />
@@ -25,24 +25,47 @@
             </Grid>
         </Border>
 
-        <Border Margin="0,14,0,0" Padding="18" CornerRadius="12"
-                Background="{DynamicResource ControlFillColorDefaultBrush}"
-                BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
-            <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                <StackPanel Margin="0,0,20,0">
-                    <TextBlock Text="Close SleepStrap after launch" FontSize="17" FontWeight="Medium" />
-                    <TextBlock Text="Off keeps the settings window open after Roblox starts." Margin="0,4,0,0"
-                               FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        <ui:CardExpander Margin="0,14,0,0" IsExpanded="True">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="General" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Launch behavior" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                 </StackPanel>
-                <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding CloseSleepStrapOnLaunch, Mode=TwoWay}"
-                                 VerticalAlignment="Center" />
-            </Grid>
-        </Border>
+            </ui:CardExpander.Header>
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <StackPanel Margin="0,0,20,0">
+                        <TextBlock Text="Close SleepStrap after launch" FontSize="17" FontWeight="Medium" />
+                        <TextBlock Text="Off keeps the settings window open after Roblox starts." Margin="0,4,0,0"
+                                   FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                    <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding CloseSleepStrapOnLaunch, Mode=TwoWay}"
+                                     VerticalAlignment="Center" />
+                </Grid>
 
-        <Border Margin="0,14,0,0" Padding="18" CornerRadius="12"
-                Background="{DynamicResource ControlFillColorDefaultBrush}"
-                BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                <Separator Margin="0,16" />
+                <Grid>
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <StackPanel Margin="0,0,20,0">
+                        <TextBlock Text="Override old Bloxstrap settings" FontSize="17" FontWeight="Medium" />
+                        <TextBlock Text="SleepStrap replaces inherited ClientAppSettings and disables the legacy grey-sky FastFlag when it launches Roblox."
+                                   Margin="0,4,0,0" FontSize="12" TextWrapping="Wrap"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                    <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding OverrideLegacyBloxstrapSettings, Mode=TwoWay}"
+                                     VerticalAlignment="Center" />
+                </Grid>
+            </StackPanel>
+        </ui:CardExpander>
+
+        <ui:CardExpander Margin="0,10,0,0" IsExpanded="False">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Community" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Discord and support" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <StackPanel>
@@ -53,14 +76,17 @@
                 <ui:Anchor Grid.Column="1" Content="Join Discord" Icon="Chat24"
                            NavigateUri="https://discord.gg/W3CMjx8C7s" VerticalAlignment="Center" />
             </Grid>
-        </Border>
+        </ui:CardExpander>
 
-        <Border Margin="0,14,0,0" Padding="18" CornerRadius="12"
-                Background="{DynamicResource ControlFillColorDefaultBrush}"
-                BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+        <ui:CardExpander Margin="0,10,0,0" IsExpanded="False">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Terms of Use &amp; Risk Notice" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Important information before using SleepStrap" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
             <StackPanel>
-                <TextBlock Text="Terms of Use &amp; Risk Notice" FontSize="20" FontWeight="SemiBold" />
-                <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" FontSize="12.5" LineHeight="19"
+                <TextBlock TextWrapping="Wrap" FontSize="12.5" LineHeight="19"
                            Foreground="{DynamicResource TextFillColorSecondaryBrush}">
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="1. Unofficial software." />
                     <LineBreak />
@@ -107,6 +133,6 @@
                     <Run Text="By installing, launching, or continuing to use SleepStrap, you confirm that you understand it is unofficial, accept the risks described above, and take responsibility for your choices. If you do not agree, stop using SleepStrap and remove it. These notices may be updated in later versions as features, platform rules, and risks change." />
                 </TextBlock>
             </StackPanel>
-        </Border>
+        </ui:CardExpander>
     </StackPanel>
 </ui:UiPage>
