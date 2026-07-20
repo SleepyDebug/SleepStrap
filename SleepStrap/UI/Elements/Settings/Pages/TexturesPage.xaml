@@ -8,34 +8,27 @@
       mc:Ignorable="d" d:DataContext="{d:DesignInstance dmodels:VisualModsViewModel, IsDesignTimeCreatable=True}"
       d:DesignHeight="620" d:DesignWidth="800" Title="Textures" Scrollable="True">
     <StackPanel Margin="0,0,14,20">
-        <Border Padding="18" CornerRadius="14" BorderThickness="1" BorderBrush="#668B5CF6">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#442D1760" Offset="0" />
-                    <GradientStop Color="#662D1B69" Offset="0.55" />
-                    <GradientStop Color="#33211A3A" Offset="1" />
-                </LinearGradientBrush>
-            </Border.Background>
+        <Border Padding="18" CornerRadius="14" BorderThickness="1" Background="{DynamicResource SleepStrapSurfaceBrush}" BorderBrush="{DynamicResource SleepStrapCardBorderBrush}">
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <TextBlock Text="Textures" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
-                <ui:SymbolIcon Grid.Column="1" Symbol="WrenchScrewdriver20" FontSize="34" Foreground="#A78BFA" />
+                <ui:SymbolIcon Grid.Column="1" Symbol="WrenchScrewdriver20" FontSize="34" Foreground="{DynamicResource SleepStrapAccentBrush}" />
             </Grid>
         </Border>
 
-        <Border Margin="0,14,0,0" Padding="18" CornerRadius="12" Background="{DynamicResource ControlFillColorDefaultBrush}" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+        <Border Margin="0,14,0,0" Padding="18" CornerRadius="12" Background="{DynamicResource SleepStrapCardSurfaceBrush}" BorderBrush="{DynamicResource SleepStrapCardBorderBrush}" BorderThickness="1">
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <TextBlock Text="Dark textures" FontSize="17" FontWeight="Medium" VerticalAlignment="Center" />
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Basic" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                     <ui:ToggleSwitch IsChecked="{Binding DarkTexturesEnabled, Mode=TwoWay}" />
-                    <TextBlock Text="Dark" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="SemiBold" Foreground="#B99AFB" />
+                    <TextBlock Text="Dark" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="SemiBold" Foreground="{DynamicResource SleepStrapAccentBrush}" />
                 </StackPanel>
             </Grid>
         </Border>
 
-        <Border Margin="0,12,0,0" Padding="18" CornerRadius="12" Background="{DynamicResource ControlFillColorDefaultBrush}" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+        <Border Margin="0,12,0,0" Padding="18" CornerRadius="12" Background="{DynamicResource SleepStrapCardSurfaceBrush}" BorderBrush="{DynamicResource SleepStrapCardBorderBrush}" BorderThickness="1">
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <TextBlock Text="Texture effect" FontSize="17" FontWeight="Medium" VerticalAlignment="Center" />
@@ -45,7 +38,7 @@
             </Grid>
         </Border>
 
-        <Border Margin="0,14,0,0" Padding="12,10" CornerRadius="10" Background="#221392F6" BorderBrush="#448B5CF6" BorderThickness="1">
+        <Border Margin="0,14,0,0" Padding="12,10" CornerRadius="10" Background="{DynamicResource SleepStrapStatusSurfaceBrush}" BorderBrush="{DynamicResource SleepStrapCardBorderBrush}" BorderThickness="1">
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
