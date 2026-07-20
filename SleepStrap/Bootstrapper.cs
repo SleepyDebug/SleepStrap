@@ -1315,6 +1315,17 @@ namespace SleepStrap
 
             try
             {
+                VisualModService.RefreshTexturePackState();
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Failed to prepare the selected Basic/Dark texture pack");
+                App.Logger.WriteException(LOG_IDENT, ex);
+                success = false;
+            }
+
+            try
+            {
                 VisualModService.RefreshRtxShineState();
             }
             catch (Exception ex)
@@ -1409,7 +1420,7 @@ namespace SleepStrap
             string managedTextureRepairMarker = Path.Combine(
                 Paths.SleepStrapData,
                 "State",
-                $"managed-texture-repair-v1-{Path.GetFileName(_latestVersionDirectory)}.complete");
+                $"managed-texture-repair-v2-{Path.GetFileName(_latestVersionDirectory)}.complete");
             bool repairManagedTextures = !File.Exists(managedTextureRepairMarker);
             bool managedTextureRepairFailed = false;
 
