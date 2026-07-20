@@ -335,9 +335,9 @@ namespace SleepStrap.Services
             }
             else
             {
-                string versionMarker = Path.Combine(RtxShineBackupRoot, "metal-layer-v2");
+                string versionMarker = Path.Combine(RtxShineBackupRoot, "metal-layer-v3");
                 if (Directory.Exists(RtxShineBackupRoot) && !File.Exists(versionMarker))
-                    RestoreBackup(RtxShineBackupRoot, new[] { RtxShineTexturePath });
+                    RestoreBackup(RtxShineBackupRoot, GetLegacyRtxTexturePaths());
                 else
                     RestoreBackup(RtxShineBackupRoot, texturePaths);
                 DisableRtxShineFlags();
@@ -387,6 +387,22 @@ namespace SleepStrap.Services
 
         private static IReadOnlyList<string> GetRtxTexturePaths()
         {
+            // Preserve each material's diffuse map so RTX cannot silently re-enable the
+            // dark pack. The normal maps and BRDF lookup provide the reflective layer.
+            string[] materialFileNames = { "normal.dds", "normaldetail.dds" };
+            return GetDarkTextureResources()
+                .Select(item => item.RelativePath)
+                .Where(path => materialFileNames.Contains(Path.GetFileName(path), StringComparer.OrdinalIgnoreCase))
+                .Where(path => !path.StartsWith("sky/", StringComparison.OrdinalIgnoreCase))
+                .Where(path => !path.StartsWith("water/", StringComparison.OrdinalIgnoreCase))
+                .Append(RtxShineTexturePath)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+        }
+
+        private static IReadOnlyList<string> GetLegacyRtxTexturePaths()
+        {
             string[] materialFileNames = { "diffuse.dds", "normal.dds", "normaldetail.dds" };
             return GetDarkTextureResources()
                 .Select(item => item.RelativePath)
@@ -419,7 +435,7 @@ namespace SleepStrap.Services
             Dictionary<string, string> embeddedTextures = GetDarkTextureResources()
                 .ToDictionary(item => item.RelativePath, item => item.ResourceName, StringComparer.OrdinalIgnoreCase);
             Dictionary<string, byte[]> polishedMetalMaps = new(StringComparer.OrdinalIgnoreCase);
-            foreach (string fileName in new[] { "diffuse.dds", "normal.dds", "normaldetail.dds" })
+            foreach (string fileName in new[] { "normal.dds", "normaldetail.dds" })
             {
                 string metalPath = $"metal/{fileName}";
                 if (!embeddedTextures.TryGetValue(metalPath, out string? metalResourceName))
@@ -498,7 +514,15 @@ namespace SleepStrap.Services
                     metalMaps[fileName] = ReadEmbeddedResource(resourceName);
             }
 
-            foreach (string relativePath in GetRtxTexturePaths())
+            if (App.Settings.Prop.DarkTexturesEnabled)
+            {
+                // An interrupted legacy RTX restore may have left its shared metal diffuse
+                // map on every material. Re-applying the selected dark pack reconstructs
+                // the correct per-material layer before the skybox is refreshed.
+                ApplyDarkTextures();
+            }
+
+            foreach (string relativePath in GetLegacyRtxTexturePaths())
             {
                 if (App.Settings.Prop.DarkTexturesEnabled &&
                     !String.Equals(relativePath, RtxShineTexturePath, StringComparison.OrdinalIgnoreCase))
@@ -694,15 +718,16 @@ namespace SleepStrap.Services
         private static void CreateRtxBackupIfNeeded(IReadOnlyList<string> relativePaths)
         {
             string manifestPath = Path.Combine(RtxShineBackupRoot, "manifest.json");
-            string versionMarker = Path.Combine(RtxShineBackupRoot, "metal-layer-v2");
+            string versionMarker = Path.Combine(RtxShineBackupRoot, "metal-layer-v3");
 
-            // Version 6.7 originally backed up only brdfLUT.dds. Restore that legacy
-            // layer before capturing the complete material set for the first time.
+            // Earlier builds either backed up only brdfLUT.dds or replaced every diffuse
+            // map with the dark metal texture. Restore that layer before capturing the
+            // v3 normal/BRDF-only set so Basic and Dark remain independent from RTX.
             if (File.Exists(manifestPath) && !File.Exists(versionMarker))
-                RestoreBackup(RtxShineBackupRoot, new[] { RtxShineTexturePath });
+                RestoreBackup(RtxShineBackupRoot, GetLegacyRtxTexturePaths());
 
             CreateBackupIfNeeded(RtxShineBackupRoot, relativePaths);
-            File.WriteAllText(versionMarker, "SleepStrap RTX material layer v2");
+            File.WriteAllText(versionMarker, "SleepStrap RTX material layer v3");
         }
 
         private static void CreateBackupIfNeeded(string backupRoot, IReadOnlyList<string> relativePaths)

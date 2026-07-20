@@ -126,6 +126,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                     VisualModService.SetDarkTextures(value);
                     App.Settings.Prop.DarkTexturesEnabled = value;
                     App.Settings.Save();
+                    OnPropertyChanged(nameof(DarkRtxPreviewVisibility));
                     StatusText = value ? "Dark textures are ready for the next launch." : "Basic Roblox textures restored.";
                 }
                 catch (Exception ex)
@@ -192,6 +193,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                     VisualModService.SetRtxShine(value);
                     App.Settings.Prop.RtxShineEnabled = value;
                     App.Settings.Save();
+                    OnPropertyChanged(nameof(DarkRtxPreviewVisibility));
                     StatusText = value
                         ? "RTX shine is ready for the next launch."
                         : "Normal lighting restored.";
@@ -211,6 +213,11 @@ namespace SleepStrap.UI.ViewModels.Settings
         }
 
         public IReadOnlyList<string> TextureEffectChoices { get; } = new[] { "None", "Blurry", "RTX" };
+
+        public Visibility DarkRtxPreviewVisibility =>
+            App.Settings.Prop.DarkTexturesEnabled && App.Settings.Prop.RtxShineEnabled
+                ? Visibility.Visible
+                : Visibility.Collapsed;
 
         public string SelectedTextureEffect
         {
@@ -256,6 +263,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                     App.Settings.Prop.BlurryTexturesEnabled = enableBlur;
                     App.Settings.Prop.RtxShineEnabled = enableRtx;
                     App.Settings.Save();
+                    OnPropertyChanged(nameof(DarkRtxPreviewVisibility));
                     StatusText = enableBlur
                         ? "Blurry is ready for the next launch."
                         : enableRtx ? "RTX is ready for the next launch." : "None selected.";

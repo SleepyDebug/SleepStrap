@@ -1304,6 +1304,17 @@ namespace SleepStrap
 
             try
             {
+                RivalsFpsCounterService.RefreshState();
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Failed to prepare the Rivals FPS counter");
+                App.Logger.WriteException(LOG_IDENT, ex);
+                success = false;
+            }
+
+            try
+            {
                 VisualModService.RefreshRtxShineState();
             }
             catch (Exception ex)

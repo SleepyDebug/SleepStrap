@@ -45,6 +45,18 @@
             </Grid>
         </Border>
 
+        <Border Margin="0,12,0,0" Height="210" CornerRadius="12" ClipToBounds="True"
+                BorderBrush="#668B5CF6" BorderThickness="1"
+                Visibility="{Binding DarkRtxPreviewVisibility}">
+            <Grid>
+                <Image Source="pack://application:,,,/Resources/SleepStrap/Previews/DarkRtx.png"
+                       Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality" />
+                <Border VerticalAlignment="Bottom" Padding="14,9" Background="#B0140D24">
+                    <TextBlock Text="Dark + RTX" FontSize="15" FontWeight="SemiBold" Foreground="White" />
+                </Border>
+            </Grid>
+        </Border>
+
         <Border Margin="0,14,0,0" Padding="12,10" CornerRadius="10" Background="#221392F6" BorderBrush="#448B5CF6" BorderThickness="1">
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>

@@ -94,6 +94,7 @@
     <EmbeddedResource Include="Resources\SleepStrap\RivalsSkyboxFix\CacheHeader.bin">
       <LogicalName>SleepStrap.RivalsSkyboxFix/CacheHeader.bin</LogicalName>
     </EmbeddedResource>
+    <Resource Include="Resources\SleepStrap\Previews\DarkRtx.png" />
   </ItemGroup>
 
   <ItemGroup>
