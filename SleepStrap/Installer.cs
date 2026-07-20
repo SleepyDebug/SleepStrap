@@ -409,6 +409,22 @@ namespace SleepStrap
 
             App.Logger.WriteLine(LOG_IDENT, "Doing upgrade");
 
+            try
+            {
+                int closedProcessCount = Services.ProcessShutdownService.CloseOtherSleepStrapProcesses();
+                if (closedProcessCount > 0)
+                    App.Logger.WriteLine(LOG_IDENT, $"Closed {closedProcessCount} other SleepStrap process(es)");
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Could not close other SleepStrap processes");
+                App.Logger.WriteException(LOG_IDENT, ex);
+                Frontend.ShowMessageBox(
+                    $"SleepStrap could not close its other running processes.\n\n{ex.Message}",
+                    MessageBoxImage.Error);
+                return;
+            }
+
             Filesystem.AssertReadOnly(Paths.Application);
 
             using (var ipl = new InterProcessLock("AutoUpdater", TimeSpan.FromSeconds(5)))

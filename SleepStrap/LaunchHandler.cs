@@ -249,6 +249,26 @@ namespace SleepStrap
                 }
             }
 
+            if (launchMode == LaunchMode.Player)
+            {
+                try
+                {
+                    int closedProcessCount = Services.VisualModService.CloseRobloxProcesses();
+                    if (closedProcessCount > 0)
+                        App.Logger.WriteLine(LOG_IDENT, $"Closed {closedProcessCount} running Roblox process(es) before launch");
+                }
+                catch (Exception ex)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, "Could not close Roblox before launch");
+                    App.Logger.WriteException(LOG_IDENT, ex);
+                    Frontend.ShowMessageBox(
+                        $"SleepStrap could not close Roblox before launching it.\n\n{ex.Message}",
+                        MessageBoxImage.Error);
+                    App.Terminate(ErrorCode.ERROR_INSTALL_FAILURE);
+                    return;
+                }
+            }
+
             // start bootstrapper and show the bootstrapper modal if we're not running silently
             App.Logger.WriteLine(LOG_IDENT, "Initializing bootstrapper");
             App.Bootstrapper = new Bootstrapper(launchMode);

@@ -65,22 +65,33 @@ namespace SleepStrap.Services
                     throw new InvalidDataException("The GitHub release contains an invalid download URL.");
                 }
 
-                Directory.CreateDirectory(Paths.TempUpdates);
+                int closedProcessCount = ProcessShutdownService.CloseOtherSleepStrapProcesses();
+                if (closedProcessCount > 0)
+                    App.Logger.WriteLine(LogIdent, $"Closed {closedProcessCount} other SleepStrap process(es) before updating");
+
+                CleanupStaleUpdateDownloads();
+
+                // Each update attempt gets its own staging directory. This prevents an
+                // older updater executable from locking the new download's destination.
+                string stagingDirectory = Path.Combine(
+                    Paths.TempUpdates,
+                    $"{releaseVersion}-{Guid.NewGuid():N}");
+                Directory.CreateDirectory(stagingDirectory);
                 string assetName = Path.GetFileName(asset.Name);
-                string downloadLocation = Path.Combine(Paths.TempUpdates, assetName);
+                string downloadLocation = Path.Combine(stagingDirectory, assetName);
 
                 App.Logger.WriteLine(LogIdent, $"Downloading {release.TagName} from GitHub");
                 using (HttpResponseMessage response = await App.HttpClient.GetAsync(downloadUri, HttpCompletionOption.ResponseHeadersRead))
                 {
                     response.EnsureSuccessStatusCode();
                     await using Stream input = await response.Content.ReadAsStreamAsync();
-                    await using FileStream output = new(downloadLocation, FileMode.Create, FileAccess.Write, FileShare.None);
+                    await using FileStream output = new(downloadLocation, FileMode.CreateNew, FileAccess.Write, FileShare.None);
                     await input.CopyToAsync(output);
                 }
 
                 await ValidateDownloadedExecutableAsync(downloadLocation);
 
-                _updateLock = new InterProcessLock("AutoUpdater");
+                _updateLock = new InterProcessLock("AutoUpdater", TimeSpan.FromSeconds(5));
                 if (!_updateLock.IsAcquired)
                     throw new InvalidOperationException("Another SleepStrap update is already running.");
 
@@ -121,6 +132,24 @@ namespace SleepStrap.Services
             await using FileStream input = new(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             if (await input.ReadAsync(signature) != signature.Length || signature[0] != (byte)'M' || signature[1] != (byte)'Z')
                 throw new InvalidDataException("The downloaded update is not a Windows executable.");
+        }
+
+        private static void CleanupStaleUpdateDownloads()
+        {
+            if (!Directory.Exists(Paths.TempUpdates))
+                return;
+
+            try
+            {
+                Directory.Delete(Paths.TempUpdates, true);
+            }
+            catch (Exception ex)
+            {
+                // A security scanner may briefly retain a handle. Unique staging still
+                // lets this update proceed, and the next update will try cleanup again.
+                App.Logger.WriteLine(LogIdent, "Could not remove one or more stale update downloads");
+                App.Logger.WriteException(LogIdent, ex);
+            }
         }
     }
 }

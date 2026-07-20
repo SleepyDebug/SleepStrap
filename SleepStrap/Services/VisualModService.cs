@@ -29,7 +29,7 @@ namespace SleepStrap.Services
         private static readonly string[] RobloxProcessNames =
         {
             "RobloxPlayerBeta", "RobloxPlayerLauncher",
-            "RobloxCrashHandler", "RobloxCrashHandler64"
+            "RobloxCrashHandler", "RobloxCrashHandler64", "eurotrucks2"
         };
 
         private static readonly string[] RivalsSkyboxCacheFiles =
@@ -102,7 +102,7 @@ namespace SleepStrap.Services
                 .Where(name => System.Diagnostics.Process.GetProcessesByName(name).Length > 0)
                 .ToArray();
             if (stillRunning.Length > 0)
-                throw new InvalidOperationException($"Close Roblox before changing the skybox. Still running: {String.Join(", ", stillRunning)}.");
+                throw new InvalidOperationException($"Roblox is still running: {String.Join(", ", stillRunning)}.");
 
             return processes.Count;
         }
