@@ -59,7 +59,6 @@ namespace SleepStrap.Services
 
         private static string TextureModRoot => Path.Combine(Paths.Modifications, @"PlatformContent\pc\textures");
         private static string SkyboxModRoot => Path.Combine(TextureModRoot, "sky");
-        private static string DarkTextureBackupRoot => Path.Combine(Paths.SleepStrapData, "Backups", "DarkTextures");
         private static string RtxShineBackupRoot => Path.Combine(Paths.SleepStrapData, "Backups", "RtxShine");
         private static string SkyboxBackupRoot => Path.Combine(Paths.SleepStrapData, "Backups", "Skybox");
         private static string RivalsSkyboxCacheBackupRoot => Path.Combine(Paths.SleepStrapData, "Backups", "RivalsSkyboxCache");
@@ -283,7 +282,6 @@ namespace SleepStrap.Services
         public static void SetDarkTextures(bool enabled)
         {
             bool reapplyCustomSkybox = App.Settings.Prop.CustomSkyboxEnabled && HasCachedSkybox;
-            IReadOnlyList<string> texturePaths = GetDarkTextureResources().Select(item => item.RelativePath).ToArray();
             IReadOnlyList<string> rtxPaths = GetRtxTexturePaths();
             bool reapplyRtx = App.Settings.Prop.RtxShineEnabled;
 
@@ -298,14 +296,13 @@ namespace SleepStrap.Services
                 {
                     if (reapplyCustomSkybox)
                         RestoreBackup(SkyboxBackupRoot, GetSkyboxRelativePaths());
-                    CreateBackupIfNeeded(DarkTextureBackupRoot, texturePaths);
                     ApplyDarkTextures();
                     if (reapplyCustomSkybox)
                         ApplyCachedSkybox();
                 }
                 else
                 {
-                    RestoreBackup(DarkTextureBackupRoot, texturePaths);
+                    ApplyBasicTextures();
                     if (reapplyCustomSkybox)
                     {
                         CreateBackupIfNeeded(SkyboxBackupRoot, GetSkyboxRelativePaths());
@@ -321,6 +318,17 @@ namespace SleepStrap.Services
                     ApplyRtxShine();
                 }
             }
+        }
+
+        public static void RefreshTexturePackState()
+        {
+            if (App.Settings.Prop.DarkTexturesEnabled)
+                ApplyDarkTextures();
+            else
+                ApplyBasicTextures();
+
+            if (App.Settings.Prop.CustomSkyboxEnabled && HasCachedSkybox)
+                ApplyCachedSkybox();
         }
 
         public static void SetRtxShine(bool enabled)
@@ -341,6 +349,7 @@ namespace SleepStrap.Services
                 else
                     RestoreBackup(RtxShineBackupRoot, texturePaths);
                 DisableRtxShineFlags();
+                RefreshTexturePackState();
             }
 
             App.Settings.Prop.UseFastFlagManager = true;
@@ -426,6 +435,26 @@ namespace SleepStrap.Services
                     ?? throw new InvalidOperationException($"Missing embedded texture '{item.ResourceName}'.");
                 using FileStream output = File.Create(destination);
                 input.CopyTo(output);
+            }
+        }
+
+        private static void ApplyBasicTextures()
+        {
+            // Basic is always the stock texture set from the active Roblox package.
+            // Removing SleepStrap-owned overrides lets the bootstrapper restore the
+            // current version's official files instead of freezing an old snapshot.
+            IReadOnlyList<string> managedPaths = GetDarkTextureResources()
+                .Select(item => item.RelativePath)
+                .Append(RtxShineTexturePath)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+
+            foreach (string relativePath in managedPaths)
+            {
+                string destination = GetTextureModPath(relativePath);
+                Filesystem.AssertReadOnly(destination);
+                if (File.Exists(destination))
+                    File.Delete(destination);
             }
         }
 
