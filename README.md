@@ -35,6 +35,8 @@ dotnet build SleepStrap.sln -c Release --no-restore
 dotnet publish .\SleepStrap\SleepStrap.csproj -c Release --no-restore /p:PublishProfile=Publish-x64
 ```
 
+The Windows x64 publish profile produces a self-contained single-file build, so users do not need to install the .NET Desktop Runtime separately.
+
 ## Safety notice
 
 SleepStrap is unofficial software. Its visual options replace local Roblox assets and settings; they do not inject code into the Roblox executable. No third-party launcher can guarantee protection from account enforcement. Read the full [Terms of Use and Risk Notice](docs/TERMS.md) before use.
