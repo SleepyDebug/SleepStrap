@@ -1,0 +1,108 @@
+<ui:UiPage x:Class="SleepStrap.UI.Elements.Settings.Pages.SkyboxPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:dmodels="clr-namespace:SleepStrap.UI.ViewModels.Settings"
+      mc:Ignorable="d" d:DataContext="{d:DesignInstance dmodels:SkyboxViewModel, IsDesignTimeCreatable=True}"
+      d:DesignHeight="760" d:DesignWidth="800" Title="Skybox" Scrollable="True">
+    <StackPanel Margin="0,0,14,20">
+        <Border Padding="18" CornerRadius="14" BorderThickness="1" BorderBrush="#668B5CF6">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#442D1760" Offset="0" />
+                    <GradientStop Color="#662D1B69" Offset="0.55" />
+                    <GradientStop Color="#33211A3A" Offset="1" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <TextBlock Text="Skybox" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
+                <ui:SymbolIcon Grid.Column="1" Symbol="WeatherMoon24" FontSize="34" Foreground="#A78BFA" />
+            </Grid>
+        </Border>
+
+        <Border Margin="0,14,0,0" Padding="8" CornerRadius="12" Background="{DynamicResource ControlFillColorDefaultBrush}" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+            <ListBox Height="500"
+                     ItemsSource="{Binding SkyboxChoices}"
+                     SelectedItem="{Binding SelectedSkybox, Mode=TwoWay}"
+                     Background="Transparent" BorderThickness="0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     VirtualizingPanel.IsVirtualizing="True">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Margin" Value="5" />
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1" BorderBrush="#445C4B82" Background="#33231B38" ClipToBounds="True">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="118" />
+                                    <RowDefinition Height="38" />
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0" ClipToBounds="True">
+                                    <Image x:Name="PreviewImage" Source="{Binding Preview}" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality" />
+                                    <Border x:Name="NonePreview" Visibility="Collapsed">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="#3B2A55" Offset="0" />
+                                                <GradientStop Color="#17121F" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="58" FontWeight="SemiBold" Foreground="#C4B5FD" />
+                                    </Border>
+                                </Grid>
+                                <TextBlock Grid.Row="1" Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                            </Grid>
+                        </Border>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsNone}" Value="True">
+                                <Setter TargetName="PreviewImage" Property="Visibility" Value="Collapsed" />
+                                <Setter TargetName="NonePreview" Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                <Setter TargetName="Card" Property="BorderBrush" Value="#B794F6" />
+                                <Setter TargetName="Card" Property="BorderThickness" Value="3" />
+                                <Setter TargetName="Card" Property="Background" Value="#553B257A" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                <Setter TargetName="Card" Property="BorderBrush" Value="#A78BFA" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Border>
+
+        <Border Margin="0,14,0,0" Padding="12,10" CornerRadius="10" Background="#221392F6" BorderBrush="#448B5CF6" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding StatusText}" VerticalAlignment="Center" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <ui:ProgressRing Grid.Column="1" Width="22" Height="22" Margin="12,0,0,0" IsIndeterminate="True"
+                                 Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Grid>
+        </Border>
+    </StackPanel>
+</ui:UiPage>
