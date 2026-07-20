@@ -19,7 +19,7 @@
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <StackPanel>
                     <TextBlock Text="Other" FontSize="28" FontWeight="SemiBold" />
-                    <TextBlock Text="SleepStrap 6.7" Margin="0,4,0,0" FontSize="13" Foreground="#C4B5FD" />
+                    <TextBlock Text="SleepStrap 6.7.1" Margin="0,4,0,0" FontSize="13" Foreground="#C4B5FD" />
                 </StackPanel>
                 <ui:SymbolIcon Grid.Column="1" Symbol="Info24" FontSize="34" Foreground="#A78BFA" />
             </Grid>
