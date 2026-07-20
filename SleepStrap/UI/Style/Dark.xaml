@@ -1,26 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <SolidColorBrush x:Key="SleepStrapWindowBackgroundBrush" Color="#F0000000" />
-    <SolidColorBrush x:Key="SleepStrapSurfaceBrush" Color="#E6000000" />
-    <SolidColorBrush x:Key="SleepStrapCardSurfaceBrush" Color="#D9000000" />
-    <SolidColorBrush x:Key="SleepStrapCardBorderBrush" Color="#66FFFFFF" />
-    <SolidColorBrush x:Key="SleepStrapStatusSurfaceBrush" Color="#B3000000" />
-    <SolidColorBrush x:Key="SleepStrapAccentBrush" Color="#FFFFFF" />
-    <SolidColorBrush x:Key="SleepStrapMutedBrush" Color="#BFFFFFFF" />
-    <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#E6000000" />
-    <SolidColorBrush x:Key="ControlFillColorSecondaryBrush" Color="#F0000000" />
-    <SolidColorBrush x:Key="ControlFillColorTertiaryBrush" Color="#CC000000" />
-    <SolidColorBrush x:Key="ControlFillColorInputActiveBrush" Color="#FF000000" />
-    <SolidColorBrush x:Key="ControlSolidFillColorDefaultBrush" Color="#FF000000" />
-    <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#66FFFFFF" />
-    <SolidColorBrush x:Key="ControlElevationBorderBrush" Color="#66FFFFFF" />
-    <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#E6000000" />
-    <SolidColorBrush x:Key="CardBackgroundFillColorSecondaryBrush" Color="#D9000000" />
-    <SolidColorBrush x:Key="LayerFillColorDefaultBrush" Color="#F0000000" />
-    <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush" Color="#FF000000" />
-    <SolidColorBrush x:Key="SolidBackgroundFillColorSecondaryBrush" Color="#FF000000" />
-    <SolidColorBrush x:Key="SolidBackgroundFillColorTertiaryBrush" Color="#FF000000" />
-    <SolidColorBrush x:Key="SolidBackgroundFillColorBaseAltBrush" Color="#FF000000" />
-    <SolidColorBrush x:Key="NewTextEditorBackground" Color="#000000" />
+    <LinearGradientBrush x:Key="SleepStrapWindowBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#120D22" Offset="0" />
+        <GradientStop Color="#1A1230" Offset="0.52" />
+        <GradientStop Color="#0D0A16" Offset="1" />
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="SleepStrapSurfaceBrush" Color="#CC251A42" />
+    <SolidColorBrush x:Key="SleepStrapAccentBrush" Color="#8B5CF6" />
+    <SolidColorBrush x:Key="NewTextEditorBackground" Color="#191126" />
     <SolidColorBrush x:Key="NewTextEditorForeground" Color="White" />
-    <SolidColorBrush x:Key="NewTextEditorLink" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="NewTextEditorLink" Color="#B99AFB" />
 </ResourceDictionary>

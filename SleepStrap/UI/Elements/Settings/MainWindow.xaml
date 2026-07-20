@@ -16,7 +16,7 @@
              Height="600"
              Background="{DynamicResource SleepStrapWindowBackgroundBrush}"
              ExtendsContentIntoTitleBar="True"
-             WindowBackdropType="Acrylic"
+             WindowBackdropType="Mica"
              WindowStartupLocation="CenterScreen"
              Closing="WpfUiWindow_Closing"
              Closed="WpfUiWindow_Closed">
@@ -67,7 +67,7 @@
             </Grid.ColumnDefinitions>
 
             <Border Grid.Row="0" Grid.Column="0" Margin="0,0,12,12" Padding="14,10" CornerRadius="10"
-                    Background="{DynamicResource SleepStrapSurfaceBrush}" BorderBrush="{DynamicResource SleepStrapCardBorderBrush}" BorderThickness="1">
+                    Background="{DynamicResource SleepStrapSurfaceBrush}" BorderBrush="{DynamicResource SleepStrapAccentBrush}" BorderThickness="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="32" />
