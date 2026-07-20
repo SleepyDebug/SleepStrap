@@ -9,7 +9,7 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:vms="clr-namespace:SleepStrap.UI.ViewModels.Bootstrapper"
     Width="500"
-    Height="280"
+    Height="350"
     MinHeight="0"
     d:DataContext="{d:DesignInstance vms:FluentDialogViewModel,
                                      IsDesignTimeCreatable=True}"
@@ -22,12 +22,23 @@
     WindowStyle="None"
     mc:Ignorable="d">
 
+    <base:WpfUiWindow.Resources>
+        <Style x:Key="WhiteGlassProgressBar" TargetType="ProgressBar">
+            <Setter Property="Height" Value="5" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="#28FFFFFF" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+    </base:WpfUiWindow.Resources>
+
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressState="{Binding Path=TaskbarProgressState}" ProgressValue="{Binding Path=TaskbarProgressValue}" />
     </Window.TaskbarItemInfo>
 
     <!--  Background is for Aero theme only  -->
-    <Grid Background="{Binding Path=BackgroundColourBrush, Mode=OneTime}">
+    <Border Margin="1" CornerRadius="14" BorderThickness="1" BorderBrush="#66FFFFFF"
+            Background="{Binding Path=BackgroundColourBrush, Mode=OneTime}" ClipToBounds="True">
+    <Grid>
         <!--  Allow for drag  -->
         <TextBlock Margin="5" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="10" FontFamily="{StaticResource Rubik}" Text="{Binding VersionText}" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
         <TextBlock Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="10" FontFamily="{StaticResource Rubik}" Text="{Binding ChannelText}" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
@@ -38,27 +49,58 @@
             ShowMaximize="False"
             ShowMinimize="False" />
 
-        <Grid Margin="32,16">
+        <Grid Margin="32,12,32,18">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="170" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <Image
-                Grid.Row="0"
-                Width="80"
-                Height="80"
-                Margin="0,30,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                RenderOptions.BitmapScalingMode="HighQuality"
-                Source="{Binding Icon, Mode=OneWay}" />
+            <Grid x:Name="BrandStage" Grid.Row="0" Loaded="BrandStage_Loaded">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="112" />
+                    <RowDefinition Height="58" />
+                </Grid.RowDefinitions>
+
+                <Grid x:Name="LogoStage" Width="94" Height="94" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                      Opacity="0" RenderTransformOrigin="0.5,0.5">
+                    <Grid.RenderTransform><ScaleTransform ScaleX="0.55" ScaleY="0.55" /></Grid.RenderTransform>
+                    <Ellipse x:Name="LogoGlow" Margin="-18" Opacity="0.24">
+                        <Ellipse.Fill>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#BFFFFFFF" Offset="0" />
+                                <GradientStop Color="#00FFFFFF" Offset="1" />
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                    <Border CornerRadius="28" Background="#18FFFFFF" BorderBrush="#54FFFFFF" BorderThickness="1">
+                        <Image Width="76" Height="76" RenderOptions.BitmapScalingMode="HighQuality"
+                               Source="{Binding Icon, Mode=OneWay}" />
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" ClipToBounds="True">
+                    <StackPanel x:Name="BrandLetters" Orientation="Horizontal">
+                        <TextBlock Text="S" /><TextBlock Text="l" /><TextBlock Text="e" /><TextBlock Text="e" /><TextBlock Text="p" />
+                        <TextBlock Text="S" Margin="3,0,0,0" /><TextBlock Text="t" /><TextBlock Text="r" /><TextBlock Text="a" /><TextBlock Text="p" />
+                    </StackPanel>
+                    <Rectangle x:Name="BrandShine" Width="52" HorizontalAlignment="Left" Opacity="0" IsHitTestVisible="False">
+                        <Rectangle.Fill>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#00FFFFFF" Offset="0" />
+                                <GradientStop Color="#CFFFFFFF" Offset="0.5" />
+                                <GradientStop Color="#00FFFFFF" Offset="1" />
+                            </LinearGradientBrush>
+                        </Rectangle.Fill>
+                        <Rectangle.RenderTransform><TranslateTransform X="-70" /></Rectangle.RenderTransform>
+                    </Rectangle>
+                </Grid>
+            </Grid>
 
             <TextBlock
                 Grid.Row="1"
-                Margin="0,0,0,8"
+                Margin="0,0,0,10"
                 HorizontalAlignment="Center"
                 TextAlignment="Center"
                 FontSize="18"
@@ -69,6 +111,7 @@
             <ProgressBar
                 Grid.Row="2"
                 Margin="0,0,0,16"
+                Style="{StaticResource WhiteGlassProgressBar}"
                 IsIndeterminate="{Binding ProgressIndeterminate, Mode=OneWay}"
                 Maximum="{Binding ProgressMaximum, Mode=OneWay}"
                 Value="{Binding ProgressValue, Mode=OneWay}" />
@@ -84,4 +127,5 @@
                 IsEnabled="{Binding CancelEnabled, Mode=OneWay}" />
         </Grid>
     </Grid>
+    </Border>
 </base:WpfUiWindow>

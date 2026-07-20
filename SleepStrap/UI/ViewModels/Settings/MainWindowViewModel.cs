@@ -22,6 +22,9 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         public bool GBSEnabled = App.GlobalSettings.Loaded;
 
+        public string WindowTitle => $"SleepStrap {new Version(App.Version).ToString(3)}";
+        public string VersionText => $"v{new Version(App.Version).ToString(3)}";
+
         public bool TestModeEnabled
         {
             get => App.LaunchSettings.TestModeFlag.Active;
@@ -73,9 +76,17 @@ namespace SleepStrap.UI.ViewModels.Settings
         {
             SaveSettings();
             if (!App.LaunchSettings.TestModeFlag.Active) // test mode already launches an instance
-                LaunchHandler.LaunchRoblox(LaunchMode.Player);
+            {
+                bool keepSettingsOpen = !App.Settings.Prop.CloseSleepStrapOnLaunch;
+                LaunchHandler.LaunchRoblox(LaunchMode.Player, keepSettingsOpen);
 
-            CloseWindow();
+                if (App.Settings.Prop.CloseSleepStrapOnLaunch)
+                    CloseWindow();
+            }
+            else
+            {
+                CloseWindow();
+            }
         }
     }
 }

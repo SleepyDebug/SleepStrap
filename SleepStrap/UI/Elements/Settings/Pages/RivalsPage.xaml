@@ -8,7 +8,7 @@
       mc:Ignorable="d" d:DataContext="{d:DesignInstance dmodels:RivalsViewModel, IsDesignTimeCreatable=True}"
       d:DesignHeight="650" d:DesignWidth="800" Title="Rivals" Scrollable="True">
     <StackPanel Margin="0,0,14,20">
-        <Border Padding="18" CornerRadius="14" BorderThickness="1" BorderBrush="#668B5CF6">
+        <Border Padding="18" CornerRadius="14" BorderThickness="0">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Color="#442D1760" Offset="0" />
@@ -23,12 +23,17 @@
             </Grid>
         </Border>
 
-        <Border Margin="0,14,0,0" Padding="18" CornerRadius="12" Background="{DynamicResource ControlFillColorDefaultBrush}" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+        <ui:CardExpander Margin="0,14,0,0" IsExpanded="True">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Screen stretch" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Horizontal display scaling" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <StackPanel Margin="0,0,22,0">
-                    <TextBlock Text="Screen stretch" FontSize="17" FontWeight="Medium" />
-                    <TextBlock Text="Strength" Margin="0,12,0,5" FontSize="12" FontWeight="SemiBold" />
+                    <TextBlock Text="Strength" Margin="0,0,0,5" FontSize="12" FontWeight="SemiBold" />
                     <ComboBox Width="230" HorizontalAlignment="Left"
                               ItemsSource="{Binding StretchPresets}"
                               SelectedValuePath="Percent"
@@ -40,34 +45,24 @@
                     <TextBlock Text="Stretched" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="#B99AFB" />
                 </StackPanel>
             </Grid>
-        </Border>
+        </ui:CardExpander>
 
-        <Border Margin="0,12,0,0" Padding="18" CornerRadius="12" Background="{DynamicResource ControlFillColorDefaultBrush}" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
-            <StackPanel>
+        <ui:CardExpander Margin="0,10,0,0" IsExpanded="True">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="FPS limit" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Choose Roblox's target framerate" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
                 <Grid>
                     <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                    <TextBlock Text="FPS limit" FontSize="17" FontWeight="Medium" VerticalAlignment="Center" />
+                    <TextBlock Text="Target framerate" FontSize="14" VerticalAlignment="Center" />
                     <ComboBox Grid.Column="1" Width="190"
                               ItemsSource="{Binding FpsPresets}"
                               SelectedValuePath="Limit"
                               SelectedValue="{Binding SelectedFpsLimit, Mode=TwoWay}" />
                 </Grid>
-                <Separator Margin="0,14,0,14" />
-                <Grid>
-                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                    <TextBlock Text="FPS counter" FontSize="17" FontWeight="Medium" VerticalAlignment="Center" />
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Off" VerticalAlignment="Center" Margin="0,0,10,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                        <ui:ToggleSwitch IsChecked="{Binding FpsCounterEnabled, Mode=TwoWay}" />
-                        <TextBlock Text="Top right" VerticalAlignment="Center" Margin="10,0,0,0" FontWeight="SemiBold" Foreground="#B99AFB" />
-                    </StackPanel>
-                </Grid>
-            </StackPanel>
-        </Border>
-
-        <Border Margin="0,16,0,0" Padding="14,13" CornerRadius="10" Background="#221392F6" BorderBrush="#448B5CF6" BorderThickness="1">
-            <TextBlock Text="{Binding StatusText}" FontSize="12" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-        </Border>
+        </ui:CardExpander>
 
     </StackPanel>
 </ui:UiPage>

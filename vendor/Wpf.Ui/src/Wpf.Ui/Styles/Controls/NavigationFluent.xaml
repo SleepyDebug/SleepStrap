@@ -59,8 +59,25 @@
                                 RadiusX="2"
                                 RadiusY="2">
                                 <Rectangle.Fill>
-                                    <SolidColorBrush Color="{DynamicResource SystemAccentColorSecondary}" />
+                                    <SolidColorBrush Color="Transparent" />
                                 </Rectangle.Fill>
+                            </Rectangle>
+                            <Rectangle
+                                x:Name="SelectionShine"
+                                Width="64"
+                                HorizontalAlignment="Left"
+                                IsHitTestVisible="False"
+                                Opacity="0">
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                        <GradientStop Color="#00FFFFFF" Offset="0" />
+                                        <GradientStop Color="#66FFFFFF" Offset="0.5" />
+                                        <GradientStop Color="#00FFFFFF" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                                <Rectangle.RenderTransform>
+                                    <TranslateTransform X="-80" />
+                                </Rectangle.RenderTransform>
                             </Rectangle>
                             <Grid Margin="16,8" HorizontalAlignment="Left">
                                 <Grid.ColumnDefinitions>
@@ -116,8 +133,27 @@
                                             Storyboard.TargetName="ActiveRectangle"
                                             Storyboard.TargetProperty="(Rectangle.Opacity)"
                                             From="0.0"
-                                            To="1.0"
+                                            To="0.0"
                                             Duration="00:00:00.167" />
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="SelectionShine"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                                            From="-80"
+                                            To="200"
+                                            Duration="00:00:00.42">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CubicEase EasingMode="EaseInOut" />
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                        <DoubleAnimationUsingKeyFrames
+                                            Storyboard.TargetName="SelectionShine"
+                                            Storyboard.TargetProperty="Opacity"
+                                            Duration="00:00:00.42">
+                                            <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                                            <LinearDoubleKeyFrame KeyTime="0:0:0.08" Value="1" />
+                                            <LinearDoubleKeyFrame KeyTime="0:0:0.34" Value="1" />
+                                            <LinearDoubleKeyFrame KeyTime="0:0:0.42" Value="0" />
+                                        </DoubleAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.EnterActions>

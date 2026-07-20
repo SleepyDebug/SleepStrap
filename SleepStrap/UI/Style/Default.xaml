@@ -4,6 +4,14 @@
     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
 
+    <Style TargetType="{x:Type ui:CardExpander}" BasedOn="{StaticResource DefaultUiCardExpanderStyle}">
+        <Setter Property="Background" Value="{DynamicResource SleepStrapGlassSurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Border.CornerRadius" Value="12" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    </Style>
+
     <!--  Taken from DefaultUiCardExpanderStyle  -->
     <Style x:Key="NoUserExpansionCardExpanderStyle" TargetType="{x:Type ui:CardExpander}">
         <!--  Universal WPF UI focus  -->

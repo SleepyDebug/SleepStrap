@@ -4,8 +4,8 @@ namespace SleepStrap.Services
     {
         private const string MissingFlagValue = "__SLEEPSTRAP_FLAG_WAS_MISSING__";
 
-        // Current Roblox builds still contain both gates. DebugDisplayFPS selects the
-        // readout, while DebugAlwaysDisplayRenderStats makes the render overlay visible.
+        // Keep the legacy gates as compatibility helpers, but the saved Roblox
+        // PerformanceStatsVisible preference is what makes the current UI appear.
         internal static IReadOnlyDictionary<string, string> ManagedFlags { get; } = new Dictionary<string, string>
         {
             ["FFlagDebugDisplayFPS"] = "True",
@@ -19,6 +19,7 @@ namespace SleepStrap.Services
             else
                 Disable();
 
+            SetPerformanceStatsVisible(enabled);
             App.Settings.Prop.UseFastFlagManager = true;
             App.FastFlags.Save();
         }
@@ -30,6 +31,7 @@ namespace SleepStrap.Services
             else if (App.Settings.Prop.RivalsFpsCounterFlagBackup.Count > 0)
                 Disable();
 
+            SetPerformanceStatsVisible(App.Settings.Prop.RivalsFpsCounterEnabled);
             App.Settings.Prop.UseFastFlagManager = true;
             App.FastFlags.Save();
             App.Settings.Save();
@@ -62,6 +64,20 @@ namespace SleepStrap.Services
             }
 
             backup.Clear();
+        }
+
+        private static void SetPerformanceStatsVisible(bool visible)
+        {
+            // Roblox can rewrite this file when it exits, so reload it immediately
+            // before every launch and then save the requested state.
+            App.GlobalSettings.Load();
+            if (!App.GlobalSettings.Loaded)
+                return;
+
+            App.GlobalSettings.SetPreset(
+                "User.PerformanceStatsVisible",
+                visible ? "true" : "false");
+            App.GlobalSettings.Save();
         }
     }
 }

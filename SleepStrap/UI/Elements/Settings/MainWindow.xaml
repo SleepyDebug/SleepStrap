@@ -10,7 +10,7 @@
              xmlns:dmodels="clr-namespace:SleepStrap.UI.ViewModels.Settings"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance dmodels:MainWindowViewModel, IsDesignTimeCreatable=True}"
-             Title="{x:Static resources:Strings.Menu_Title}"
+             Title="{Binding WindowTitle}"
              MinWidth="920"
              Width="920"
              Height="600"
@@ -20,6 +20,7 @@
              WindowStartupLocation="CenterScreen"
              Closing="WpfUiWindow_Closing"
              Closed="WpfUiWindow_Closed">
+    <Grid Background="Transparent">
     <Grid x:Name="RootShell" Opacity="0">
         <Grid.RenderTransform>
             <TranslateTransform Y="10" />
@@ -54,7 +55,7 @@
             Message="{x:Static resources:Strings.Menu_SettingsSaved_Message}"
             Appearance="Success" Icon="CheckmarkCircle32" Timeout="3000" Margin="200,0,200,20" Grid.RowSpan="10" Panel.ZIndex="9" />
 
-        <ui:TitleBar Padding="8" x:Name="RootTitleBar" Grid.Row="0" ForceShutdown="False" MinimizeToTray="False" UseSnapLayout="True" Title="{x:Static resources:Strings.Menu_Title}" Icon="pack://application:,,,/SleepStrap.ico" />
+        <ui:TitleBar Padding="8" x:Name="RootTitleBar" Grid.Row="0" ForceShutdown="False" MinimizeToTray="False" UseSnapLayout="True" Title="{Binding WindowTitle}" Icon="pack://application:,,,/SleepStrap.ico" />
 
         <Grid x:Name="RootGrid" Grid.Row="1" Margin="12,12,0,0" Visibility="Visible">
             <Grid.RowDefinitions>
@@ -67,14 +68,17 @@
             </Grid.ColumnDefinitions>
 
             <Border Grid.Row="0" Grid.Column="0" Margin="0,0,12,12" Padding="14,10" CornerRadius="10"
-                    Background="{DynamicResource SleepStrapSurfaceBrush}" BorderBrush="{DynamicResource SleepStrapAccentBrush}" BorderThickness="1">
+                    Background="{DynamicResource SleepStrapSurfaceBrush}" BorderThickness="0">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="32" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Image Width="26" Height="26" Source="pack://application:,,,/SleepStrap.ico" RenderOptions.BitmapScalingMode="HighQuality" />
-                    <TextBlock Grid.Column="1" Text="SleepStrap" Margin="9,0,0,0" VerticalAlignment="Center" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource SleepStrapAccentBrush}" />
+                    <StackPanel Grid.Column="1" Margin="9,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="SleepStrap" FontSize="17" FontWeight="SemiBold" Foreground="{DynamicResource SleepStrapAccentBrush}" />
+                        <TextBlock Text="{Binding VersionText}" Margin="0,1,0,0" FontSize="10.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
                 </Grid>
             </Border>
 
@@ -83,7 +87,7 @@
                     <ui:NavigationItem Content="Skybox" PageType="{x:Type pages:SkyboxPage}" Icon="Cube24" Tag="skybox" />
                     <ui:NavigationItem Content="Textures" PageType="{x:Type pages:TexturesPage}" Icon="WrenchScrewdriver20" Tag="textures" />
                     <ui:NavigationItem Content="Rivals" PageType="{x:Type pages:RivalsPage}" Icon="PlaySettings20" Tag="rivals" />
-                    <ui:NavigationItem Content="Fonts" PageType="{x:Type pages:FontsPage}" Icon="TextFont24" Tag="fonts" />
+                    <ui:NavigationItem Content="Clipping" PageType="{x:Type pages:ClippingPage}" Icon="VideoClip24" Tag="clipping" />
                     <ui:NavigationItem Content="Other" PageType="{x:Type pages:OtherPage}" Icon="MoreHorizontal24" Tag="other" />
                 </ui:NavigationFluent.Items>
             </ui:NavigationFluent>
@@ -98,7 +102,7 @@
             </Grid>
         </Grid>
 
-        <StatusBar x:Name="RootStatusBar" Grid.Row="2" Padding="14,10" BorderThickness="0,1,0,0">
+        <StatusBar x:Name="RootStatusBar" Grid.Row="2" Padding="14,10" BorderThickness="0">
             <StatusBar.Background>
                 <SolidColorBrush Color="{ui:ThemeResource ApplicationBackgroundColor}" Opacity="0" />
             </StatusBar.Background>
@@ -124,5 +128,43 @@
                 <ui:Button Content="{x:Static resources:Strings.Common_Close}" Command="{Binding CloseWindowCommand, Mode=OneWay}" />
             </StatusBarItem>
         </StatusBar>
+    </Grid>
+
+    <Grid x:Name="SettingsIntroOverlay" Panel.ZIndex="100" Background="{DynamicResource SleepStrapWindowBackgroundBrush}"
+          Loaded="SettingsIntroOverlay_Loaded">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid x:Name="SettingsIntroLogo" Width="112" Height="112" HorizontalAlignment="Center"
+                  Opacity="0" RenderTransformOrigin="0.5,0.5">
+                <Grid.RenderTransform><ScaleTransform ScaleX="0.5" ScaleY="0.5" /></Grid.RenderTransform>
+                <Ellipse x:Name="SettingsIntroGlow" Margin="-28" Opacity="0.2">
+                    <Ellipse.Fill>
+                        <RadialGradientBrush>
+                            <GradientStop Color="#AFFFFFFF" Offset="0" />
+                            <GradientStop Color="#00FFFFFF" Offset="1" />
+                        </RadialGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <Border Background="#12FFFFFF" BorderThickness="0" CornerRadius="26">
+                    <Image Width="92" Height="92" Source="pack://application:,,,/SleepStrap.ico" RenderOptions.BitmapScalingMode="HighQuality" />
+                </Border>
+            </Grid>
+            <Grid Margin="0,18,0,0" ClipToBounds="True">
+                <StackPanel x:Name="SettingsBrandLetters" Orientation="Horizontal">
+                    <TextBlock Text="S" /><TextBlock Text="l" /><TextBlock Text="e" /><TextBlock Text="e" /><TextBlock Text="p" />
+                    <TextBlock Text="S" Margin="4,0,0,0" /><TextBlock Text="t" /><TextBlock Text="r" /><TextBlock Text="a" /><TextBlock Text="p" />
+                </StackPanel>
+                <Rectangle x:Name="SettingsBrandShine" Width="60" HorizontalAlignment="Left" Opacity="0" IsHitTestVisible="False">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                            <GradientStop Color="#00FFFFFF" Offset="0" />
+                            <GradientStop Color="#DFFFFFFF" Offset="0.5" />
+                            <GradientStop Color="#00FFFFFF" Offset="1" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                    <Rectangle.RenderTransform><TranslateTransform X="-80" /></Rectangle.RenderTransform>
+                </Rectangle>
+            </Grid>
+        </StackPanel>
+    </Grid>
     </Grid>
 </base:WpfUiWindow>

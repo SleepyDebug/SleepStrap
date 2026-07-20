@@ -27,20 +27,46 @@ namespace SleepStrap.Services
         public static DisplayMode ApplyHorizontalStretch(int percent, DisplayMode nativeMode)
         {
             percent = Math.Clamp(percent, 55, 95);
-            int targetWidth = (int)Math.Round(nativeMode.Width * percent / 100d);
+            int targetWidth = (int)Math.Round(nativeMode.Width * percent / 100d / 2d) * 2;
 
-            List<DisplayMode> supportedModes = GetSupportedModes()
+            List<DisplayMode> allNarrowerModes = GetSupportedModes()
+                .Where(x => x.Width < nativeMode.Width && x.Width >= 800 && x.Height >= 600)
+                .ToList();
+
+            List<DisplayMode> supportedModes = allNarrowerModes
                 .Where(x => x.Height == nativeMode.Height && x.Width < nativeMode.Width && x.Width >= 800)
                 .OrderBy(x => Math.Abs(x.Width - targetWidth))
                 .ThenBy(x => x.Frequency == nativeMode.Frequency ? 0 : 1)
                 .ToList();
 
-            if (supportedModes.Count == 0)
-                throw new InvalidOperationException($"No narrower resolution with a height of {nativeMode.Height}px is available on this display.");
+            if (supportedModes.Count > 0)
+            {
+                DisplayMode selected = supportedModes[0];
+                ApplyMode(selected);
+                return selected;
+            }
 
-            DisplayMode selected = supportedModes[0];
-            ApplyMode(selected);
-            return selected;
+            // Some drivers accept a GPU-scaled mode even when Windows does not list it.
+            // Trying it directly makes stretching work on many laptops and secondary displays.
+            var generatedMode = new DisplayMode(targetWidth, nativeMode.Height, nativeMode.Frequency);
+            if (TryApplyMode(generatedMode, out _))
+                return generatedMode;
+
+            double targetAspect = targetWidth / (double)nativeMode.Height;
+            double nativeAspect = nativeMode.Width / (double)nativeMode.Height;
+            DisplayMode fallback = allNarrowerModes
+                .Where(x => x.Width / (double)x.Height < nativeAspect - 0.03)
+                .OrderBy(x => Math.Abs((x.Width / (double)x.Height) - targetAspect))
+                .ThenBy(x => Math.Abs(x.Height - nativeMode.Height))
+                .ThenBy(x => x.Frequency == nativeMode.Frequency ? 0 : 1)
+                .FirstOrDefault();
+
+            if (fallback.Width > 0 && TryApplyMode(fallback, out _))
+                return fallback;
+
+            throw new InvalidOperationException(
+                $"This display driver does not expose a stretchable resolution near {targetWidth} x {nativeMode.Height}. " +
+                "Add that custom resolution in your NVIDIA, AMD, or Intel graphics settings, then try again.");
         }
 
         public static void Restore(DisplayMode nativeMode)
@@ -74,9 +100,18 @@ namespace SleepStrap.Services
 
         private static void ApplyMode(DisplayMode displayMode)
         {
+            if (!TryApplyMode(displayMode, out int result))
+                throw new InvalidOperationException(GetDisplayError(result));
+        }
+
+        private static bool TryApplyMode(DisplayMode displayMode, out int result)
+        {
             DEVMODE mode = CreateMode();
             if (!EnumDisplaySettings(null, EnumCurrentSettings, ref mode))
-                throw new InvalidOperationException("Windows could not read the current display resolution.");
+            {
+                result = -1;
+                return false;
+            }
 
             mode.dmPelsWidth = displayMode.Width;
             mode.dmPelsHeight = displayMode.Height;
@@ -86,9 +121,8 @@ namespace SleepStrap.Services
             if (displayMode.Frequency > 0)
                 mode.dmFields |= DmDisplayFrequency;
 
-            int result = ChangeDisplaySettings(ref mode, 0);
-            if (result != DispChangeSuccessful)
-                throw new InvalidOperationException(GetDisplayError(result));
+            result = ChangeDisplaySettings(ref mode, 0);
+            return result == DispChangeSuccessful;
         }
 
         private static DEVMODE CreateMode() => new()

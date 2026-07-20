@@ -1,0 +1,217 @@
+<ui:UiPage x:Class="SleepStrap.UI.Elements.Settings.Pages.ClippingPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:dmodels="clr-namespace:SleepStrap.UI.ViewModels.Settings"
+      mc:Ignorable="d" d:DataContext="{d:DesignInstance dmodels:ClippingViewModel, IsDesignTimeCreatable=False}"
+      d:DesignHeight="1100" d:DesignWidth="800" Title="Clipping" Scrollable="True">
+    <ui:UiPage.Resources>
+        <Style x:Key="ClipIconButton" TargetType="Button">
+            <Setter Property="Width" Value="34" />
+            <Setter Property="Height" Value="34" />
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="#661A1622" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonSurface" Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonSurface" Property="Background" Value="#AA3A2F4E" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonSurface" Property="Opacity" Value="0.72" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </ui:UiPage.Resources>
+    <StackPanel Margin="0,0,14,24">
+        <Border Padding="18" CornerRadius="14" BorderThickness="0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#442D1760" Offset="0" />
+                    <GradientStop Color="#662D1B69" Offset="0.55" />
+                    <GradientStop Color="#33211A3A" Offset="1" />
+                </LinearGradientBrush>
+            </Border.Background>
+            <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <TextBlock Text="Clipping" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
+                <ui:SymbolIcon Grid.Column="1" Symbol="VideoClip24" FontSize="34" Foreground="#A78BFA" />
+            </Grid>
+        </Border>
+
+        <Border Margin="0,14,0,0" Padding="18" CornerRadius="12" Background="{DynamicResource SleepStrapGlassSurfaceBrush}"
+                BorderThickness="0">
+            <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Enable clipping" FontSize="18" FontWeight="SemiBold" />
+                    <TextBlock Text="Replay buffer runs while Roblox is open" Margin="0,4,0,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+                <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding ClippingEnabled, Mode=TwoWay}" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+
+        <StackPanel Visibility="{Binding AdvancedVisibility}">
+            <ui:CardExpander Margin="0,12,0,0" IsExpanded="True">
+                <ui:CardExpander.Header>
+                    <StackPanel>
+                        <TextBlock Text="Replay length" FontSize="17" FontWeight="SemiBold" />
+                        <TextBlock Text="Choose how much recent gameplay is kept" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                </ui:CardExpander.Header>
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="80" /></Grid.ColumnDefinitions>
+                        <Slider Minimum="1" Maximum="10" TickFrequency="1" IsSnapToTickEnabled="True"
+                                Value="{Binding BufferMinutes, Mode=TwoWay}" VerticalAlignment="Center" />
+                        <TextBox Grid.Column="1" Margin="14,0,0,0" HorizontalContentAlignment="Center"
+                                 Text="{Binding BufferMinutes, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                    </Grid>
+                    <TextBlock Text="minutes" HorizontalAlignment="Right" Margin="0,4,5,0" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+                    <Separator Margin="0,16" />
+                    <TextBlock Text="Save replay hotkey" FontSize="17" FontWeight="SemiBold" />
+                    <TextBox x:Name="HotkeyBox" Margin="0,9,0,0" Height="38" IsReadOnly="True" Cursor="Hand"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                             FontWeight="SemiBold" Text="{Binding HotkeyDisplay, Mode=OneWay}"
+                             PreviewMouseLeftButtonDown="HotkeyBox_PreviewMouseLeftButtonDown"
+                             PreviewKeyDown="HotkeyBox_PreviewKeyDown" LostKeyboardFocus="HotkeyBox_LostKeyboardFocus" />
+                </StackPanel>
+            </ui:CardExpander>
+
+            <ui:CardExpander Margin="0,10,0,0" IsExpanded="True">
+                <ui:CardExpander.Header>
+                    <StackPanel>
+                        <TextBlock Text="Capture" FontSize="17" FontWeight="SemiBold" />
+                        <TextBlock Text="Monitor, speaker, microphone, and volume" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                </ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Monitor" Margin="0,0,0,5" FontSize="12" FontWeight="SemiBold" />
+                    <ComboBox ItemsSource="{Binding Displays}" DisplayMemberPath="Name" SelectedValuePath="Id"
+                              SelectedValue="{Binding SelectedDisplay, Mode=TwoWay}" />
+
+                    <Separator Margin="0,16" />
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                        <TextBlock Text="Speaker audio" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding SpeakerEnabled, Mode=TwoWay}" />
+                    </Grid>
+                    <ComboBox Margin="0,9,0,0" ItemsSource="{Binding Speakers}" DisplayMemberPath="Name" SelectedValuePath="Id"
+                              SelectedValue="{Binding SelectedSpeaker, Mode=TwoWay}" IsEnabled="{Binding SpeakerEnabled}" />
+                    <Grid Margin="0,9,0,0">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="44" /></Grid.ColumnDefinitions>
+                        <ui:SymbolIcon Symbol="Speaker224" VerticalAlignment="Center" Margin="0,0,10,0" />
+                        <Slider Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding SpeakerVolume, Mode=TwoWay}" IsEnabled="{Binding SpeakerEnabled}" />
+                        <TextBlock Grid.Column="2" Text="{Binding SpeakerVolume, StringFormat={}{0}%}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    </Grid>
+
+                    <Separator Margin="0,16" />
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                        <TextBlock Text="Voice / microphone" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding MicrophoneEnabled, Mode=TwoWay}" />
+                    </Grid>
+                    <ComboBox Margin="0,9,0,0" ItemsSource="{Binding Microphones}" DisplayMemberPath="Name" SelectedValuePath="Id"
+                              SelectedValue="{Binding SelectedMicrophone, Mode=TwoWay}" IsEnabled="{Binding MicrophoneEnabled}" />
+                    <Grid Margin="0,9,0,0">
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="44" /></Grid.ColumnDefinitions>
+                        <ui:SymbolIcon Symbol="Mic24" VerticalAlignment="Center" Margin="0,0,10,0" />
+                        <Slider Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding MicrophoneVolume, Mode=TwoWay}" IsEnabled="{Binding MicrophoneEnabled}" />
+                        <TextBlock Grid.Column="2" Text="{Binding MicrophoneVolume, StringFormat={}{0}%}" HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    </Grid>
+                </StackPanel>
+            </ui:CardExpander>
+        </StackPanel>
+
+        <ui:CardExpander Margin="0,12,0,0" IsExpanded="True">
+            <ui:CardExpander.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Playbacks" FontSize="17" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding ClipCountText}" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                    <ui:Button Grid.Column="1" Icon="FolderOpen24" ToolTip="Open Playbacks folder" Click="OpenPlaybacks_Click" Margin="12,0" />
+                </Grid>
+            </ui:CardExpander.Header>
+            <StackPanel>
+                <Border Padding="24" CornerRadius="10" Background="{DynamicResource ControlFillColorDefaultBrush}"
+                        Visibility="{Binding EmptyVisibility}">
+                    <TextBlock Text="No clips yet" HorizontalAlignment="Center" FontSize="15" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </Border>
+
+                <ScrollViewer MaxHeight="560" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                              CanContentScroll="True" Margin="0,8,0,0">
+                <ItemsControl ItemsSource="{Binding Clips}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate><UniformGrid Columns="2" /></ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border x:Name="ClipCard" Margin="5" CornerRadius="11" ClipToBounds="True" BorderThickness="0"
+                            Background="#33231B38" RenderTransformOrigin="0.5,0.5"
+                            MouseEnter="ClipCard_MouseEnter" MouseLeave="ClipCard_MouseLeave">
+                        <Border.RenderTransform>
+                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                        </Border.RenderTransform>
+                        <Grid>
+                            <Grid.RowDefinitions><RowDefinition Height="190" /><RowDefinition Height="58" /></Grid.RowDefinitions>
+                            <MediaElement x:Name="PreviewMedia" Source="{Binding MediaUri}" LoadedBehavior="Manual" UnloadedBehavior="Manual"
+                                          ScrubbingEnabled="True" Stretch="UniformToFill" Volume="0"
+                                          Loaded="PreviewMedia_Loaded" MediaOpened="PreviewMedia_MediaOpened" MediaEnded="PreviewMedia_MediaEnded" />
+                            <Border x:Name="HoverControls" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8" Padding="4"
+                                    CornerRadius="8" Background="#D9121018" Opacity="0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Style="{StaticResource ClipIconButton}" ToolTip="Delete clip" Click="DeleteClip_Click">
+                                        <ui:SymbolIcon Symbol="Delete24" />
+                                    </Button>
+                                    <Button Style="{StaticResource ClipIconButton}" ToolTip="Show in folder" Click="ShowClip_Click">
+                                        <ui:SymbolIcon Symbol="FolderOpen24" />
+                                    </Button>
+                                    <Button Style="{StaticResource ClipIconButton}" ToolTip="Rename clip" Click="RenameClip_Click">
+                                        <ui:SymbolIcon Symbol="Rename24" />
+                                    </Button>
+                                </StackPanel>
+                            </Border>
+                            <Grid Grid.Row="1" Margin="12,7">
+                                <StackPanel Visibility="{Binding IsNotRenaming, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding Details}" Margin="0,3,0,0" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                                </StackPanel>
+                                <TextBox x:Name="RenameBox" Text="{Binding EditName, UpdateSourceTrigger=PropertyChanged}"
+                                         Visibility="{Binding IsRenaming, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                         KeyDown="RenameBox_KeyDown" LostKeyboardFocus="RenameBox_LostKeyboardFocus" />
+                            </Grid>
+                        </Grid>
+                    </Border>
+                    <DataTemplate.Triggers>
+                        <Trigger SourceName="ClipCard" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="HoverControls" Property="Opacity" Value="1" />
+                            <Setter TargetName="ClipCard" Property="Background" Value="#55362B49" />
+                            <Setter TargetName="ClipCard" Property="RenderTransform">
+                                <Setter.Value><ScaleTransform ScaleX="1.015" ScaleY="1.015" /></Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </DataTemplate.Triggers>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                </ScrollViewer>
+            </StackPanel>
+        </ui:CardExpander>
+    </StackPanel>
+</ui:UiPage>

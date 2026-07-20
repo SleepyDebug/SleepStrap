@@ -43,7 +43,10 @@ namespace SleepStrap.UI.Elements.Settings
             string? lastPageName = App.State.Prop.LastPage;
             Type? lastPage = lastPageName is null ? null : Type.GetType(lastPageName);
 
-            Type[] visiblePages = { typeof(SkyboxPage), typeof(TexturesPage), typeof(RivalsPage), typeof(FontsPage), typeof(OtherPage) };
+            if (lastPage == typeof(FontsPage))
+                lastPage = typeof(TexturesPage);
+
+            Type[] visiblePages = { typeof(SkyboxPage), typeof(TexturesPage), typeof(RivalsPage), typeof(ClippingPage), typeof(OtherPage) };
             if (lastPage != null && visiblePages.Contains(lastPage))
                 SafeNavigate(lastPage);
 
@@ -56,6 +59,76 @@ namespace SleepStrap.UI.Elements.Settings
 
                 App.State.Prop.LastPage = currentPage?.PageType.FullName!;
             }
+        }
+
+        private async void SettingsIntroOverlay_Loaded(object sender, RoutedEventArgs e)
+        {
+            var pop = new BackEase { EasingMode = EasingMode.EaseOut, Amplitude = 0.5 };
+            SettingsIntroLogo.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(260)));
+            if (SettingsIntroLogo.RenderTransform is ScaleTransform logoScale)
+            {
+                logoScale.BeginAnimation(ScaleTransform.ScaleXProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromMilliseconds(580)) { EasingFunction = pop });
+                logoScale.BeginAnimation(ScaleTransform.ScaleYProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromMilliseconds(580)) { EasingFunction = pop });
+            }
+
+            SettingsIntroGlow.BeginAnimation(OpacityProperty, new DoubleAnimation(0.12, 0.34, TimeSpan.FromMilliseconds(820))
+            {
+                AutoReverse = true,
+                RepeatBehavior = RepeatBehavior.Forever,
+                EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
+            });
+
+            int index = 0;
+            foreach (TextBlock letter in SettingsBrandLetters.Children.OfType<TextBlock>())
+            {
+                letter.FontSize = 38;
+                letter.FontWeight = FontWeights.SemiBold;
+                letter.Foreground = Brushes.White;
+                letter.Opacity = 0;
+                letter.RenderTransformOrigin = new Point(0.5, 0.72);
+                var scale = new ScaleTransform(0.58, 0.58);
+                var rise = new TranslateTransform(0, 24);
+                var group = new TransformGroup();
+                group.Children.Add(scale);
+                group.Children.Add(rise);
+                letter.RenderTransform = group;
+
+                TimeSpan delay = TimeSpan.FromMilliseconds(150 + index * 68);
+                letter.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(180)) { BeginTime = delay });
+                scale.BeginAnimation(ScaleTransform.ScaleXProperty, new DoubleAnimation(0.58, 1, TimeSpan.FromMilliseconds(410)) { BeginTime = delay, EasingFunction = pop });
+                scale.BeginAnimation(ScaleTransform.ScaleYProperty, new DoubleAnimation(0.58, 1, TimeSpan.FromMilliseconds(410)) { BeginTime = delay, EasingFunction = pop });
+                rise.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(24, 0, TimeSpan.FromMilliseconds(410)) { BeginTime = delay, EasingFunction = pop });
+                index++;
+            }
+
+            if (SettingsBrandShine.RenderTransform is TranslateTransform shine)
+            {
+                shine.BeginAnimation(TranslateTransform.XProperty, new DoubleAnimation(-80, 330, TimeSpan.FromMilliseconds(700))
+                {
+                    BeginTime = TimeSpan.FromMilliseconds(940),
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
+                });
+                SettingsBrandShine.BeginAnimation(OpacityProperty, new DoubleAnimationUsingKeyFrames
+                {
+                    BeginTime = TimeSpan.FromMilliseconds(940),
+                    Duration = TimeSpan.FromMilliseconds(700),
+                    KeyFrames =
+                    {
+                        new LinearDoubleKeyFrame(0, KeyTime.FromPercent(0)),
+                        new LinearDoubleKeyFrame(0.8, KeyTime.FromPercent(0.18)),
+                        new LinearDoubleKeyFrame(0.8, KeyTime.FromPercent(0.72)),
+                        new LinearDoubleKeyFrame(0, KeyTime.FromPercent(1))
+                    }
+                });
+            }
+
+            await Task.Delay(1700);
+            var fade = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(320))
+            {
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
+            };
+            fade.Completed += (_, _) => SettingsIntroOverlay.Visibility = Visibility.Collapsed;
+            SettingsIntroOverlay.BeginAnimation(OpacityProperty, fade);
         }
 
         private static void AnimatePageNavigation(object sender, NavigationEventArgs e)

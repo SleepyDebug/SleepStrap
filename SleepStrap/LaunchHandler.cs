@@ -217,7 +217,7 @@ namespace SleepStrap
             ProcessNextAction(dialog.CloseAction);
         }
 
-        public static void LaunchRoblox(LaunchMode launchMode)
+        public static void LaunchRoblox(LaunchMode launchMode, bool keepSettingsOpen = false)
         {
             const string LOG_IDENT = "LaunchHandler::LaunchRoblox";
 
@@ -244,7 +244,8 @@ namespace SleepStrap
 
                 if (result != MessageBoxResult.Yes)
                 {
-                    App.Terminate();
+                    if (!keepSettingsOpen)
+                        App.Terminate();
                     return;
                 }
             }
@@ -264,7 +265,8 @@ namespace SleepStrap
                     Frontend.ShowMessageBox(
                         $"SleepStrap could not close Roblox before launching it.\n\n{ex.Message}",
                         MessageBoxImage.Error);
-                    App.Terminate(ErrorCode.ERROR_INSTALL_FAILURE);
+                    if (!keepSettingsOpen)
+                        App.Terminate(ErrorCode.ERROR_INSTALL_FAILURE);
                     return;
                 }
             }
@@ -294,7 +296,8 @@ namespace SleepStrap
                         App.FinalizeExceptionHandling(t.Exception);
                 }
 
-                App.Terminate();
+                if (!keepSettingsOpen)
+                    App.Terminate();
             });
 
             dialog?.ShowBootstrapper();

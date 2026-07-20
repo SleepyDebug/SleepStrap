@@ -27,6 +27,7 @@
         public static string Roblox { get; private set; } = "";
         public static string CustomThemes { get; private set; } = "";
         public static string SleepStrapData { get; private set; } = "";
+        public static string Playbacks { get; private set; } = "";
 
         // cleaner paths
         public static string RobloxLogs { get; private set; } = "";
@@ -48,6 +49,7 @@
             Modifications = Path.Combine(Base, "Modifications");
             CustomThemes = Path.Combine(Base, "CustomThemes");
             SleepStrapData = Path.Combine(Base, "SleepStrapData");
+            Playbacks = Path.Combine(Base, "Playbacks");
             Roblox = Path.Combine(LocalAppData, "Roblox"); // that was base before?
 
             RobloxLogs = Path.Combine(Roblox, "logs");

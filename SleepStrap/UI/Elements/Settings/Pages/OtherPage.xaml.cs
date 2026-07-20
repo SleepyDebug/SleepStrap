@@ -4,6 +4,7 @@ namespace SleepStrap.UI.Elements.Settings.Pages
     {
         public OtherPage()
         {
+            DataContext = new SleepStrap.UI.ViewModels.Settings.OtherViewModel();
             InitializeComponent();
         }
     }
