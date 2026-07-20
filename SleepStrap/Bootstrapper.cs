@@ -1445,64 +1445,16 @@ namespace SleepStrap
                 success = false;
             }
 
-            // check custom font mod
-            // instead of replacing the fonts themselves, we'll just alter the font family manifests
-
-            string modFontFamiliesFolder = Path.Combine(Paths.Modifications, "content\\fonts\\families");
-
-            if (File.Exists(Paths.CustomFont))
+            try
             {
-                App.Logger.WriteLine(LOG_IDENT, "Begin font check");
-
-                Directory.CreateDirectory(modFontFamiliesFolder);
-
-                const string path = "rbxasset://fonts/CustomFont.ttf";
-
-                // lets make sure the content/fonts/families path exists in the version directory
-                string contentFolder = Path.Combine(_latestVersionDirectory, "content");
-                Directory.CreateDirectory(contentFolder);
-
-                string fontsFolder = Path.Combine(contentFolder, "fonts");
-                Directory.CreateDirectory(fontsFolder);
-
-                string familiesFolder = Path.Combine(fontsFolder, "families");
-                Directory.CreateDirectory(familiesFolder);
-
-                foreach (string jsonFilePath in Directory.GetFiles(familiesFolder))
-                {
-                    string jsonFilename = Path.GetFileName(jsonFilePath);
-                    string modFilepath = Path.Combine(modFontFamiliesFolder, jsonFilename);
-
-                    if (File.Exists(modFilepath))
-                        continue;
-
-                    App.Logger.WriteLine(LOG_IDENT, $"Setting font for {jsonFilename}");
-
-                    var fontFamilyData = JsonSerializer.Deserialize<FontFamily>(File.ReadAllText(jsonFilePath));
-
-                    if (fontFamilyData is null)
-                        continue;
-
-                    bool shouldWrite = false;
-
-                    foreach (var fontFace in fontFamilyData.Faces)
-                    {
-                        if (fontFace.AssetId != path)
-                        {
-                            fontFace.AssetId = path;
-                            shouldWrite = true;
-                        }
-                    }
-
-                    if (shouldWrite)
-                        File.WriteAllText(modFilepath, JsonSerializer.Serialize(fontFamilyData, new JsonSerializerOptions { WriteIndented = true }));
-                }
-
-                App.Logger.WriteLine(LOG_IDENT, "End font check");
+                App.Logger.WriteLine(LOG_IDENT, "Preparing complete in-game font overrides");
+                FontModService.PrepareInGameFontOverrides(_latestVersionDirectory);
             }
-            else if (Directory.Exists(modFontFamiliesFolder))
+            catch (Exception ex)
             {
-                Directory.Delete(modFontFamiliesFolder, true);
+                App.Logger.WriteLine(LOG_IDENT, "Failed to prepare in-game fonts");
+                App.Logger.WriteException(LOG_IDENT, ex);
+                success = false;
             }
 
             foreach (string file in Directory.GetFiles(Paths.Modifications, "*.*", SearchOption.AllDirectories))

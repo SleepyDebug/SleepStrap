@@ -50,6 +50,7 @@ namespace SleepStrap.Models.Persistable
         public bool BlurryTexturesEnabled { get; set; } = false;
         public Dictionary<string, string> BlurryTexturesFlagBackup { get; set; } = new();
         public bool RtxShineEnabled { get; set; } = false;
+        public Dictionary<string, string> RtxShineFlagBackup { get; set; } = new();
         public string SelectedFontName { get; set; } = "Roblox Default";
         public string SelectedFontSource { get; set; } = "";
         public bool CustomSkyboxEnabled { get; set; } = false;
@@ -61,5 +62,7 @@ namespace SleepStrap.Models.Persistable
         public int RivalsNativeWidth { get; set; } = 0;
         public int RivalsNativeHeight { get; set; } = 0;
         public int RivalsNativeFrequency { get; set; } = 0;
+        public int RivalsFpsLimit { get; set; } = 0;
+        public Dictionary<string, string> RivalsFpsFlagBackup { get; set; } = new();
     }
 }

@@ -12,6 +12,7 @@ namespace SleepStrap.Services
     {
         private const string TextureResourcePrefix = "SleepStrap.DarkTextures/";
         private const string RtxShineTexturePath = "brdfLUT.dds";
+        private const string MissingFlagValue = "__SLEEPSTRAP_FLAG_WAS_MISSING__";
         private const string RivalsSkyboxFixResource = "SleepStrap.RivalsSkyboxFix/CacheHeader.bin";
         private const int SkyboxFaceSize = 512;
         private const int EmbeddedSkyboxFaceSize = 1024;
@@ -39,6 +40,21 @@ namespace SleepStrap.Services
             @"6c\6c94b9385e52d221f0538aadaceead2d",
             @"92\9244e00ff9fd6cee0bb40a262bb35d31",
             @"78\78cb2e93aee0cdbd79b15a866bc93a54"
+        };
+
+        // These complement the material replacement below. Roblox can ignore retired
+        // internal flags, so the visible effect never depends on flags alone.
+        private static readonly IReadOnlyDictionary<string, string> RtxShineFlags = new Dictionary<string, string>
+        {
+            ["DFFlagTextureQualityOverrideEnabled"] = "True",
+            ["DFIntTextureQualityOverride"] = "3",
+            ["DFIntDebugFRMQualityLevelOverride"] = "21",
+            ["FIntDebugTextureManagerSkipMips"] = "0",
+            ["FIntDebugForceMSAASamples"] = "4",
+            ["FFlagDisablePostFx"] = "False",
+            ["FFlagDebugForceFutureIsBrightPhase2"] = "True",
+            ["FFlagDebugForceFutureIsBrightPhase3"] = "True",
+            ["DFFlagDebugRenderForceTechnologyVoxel"] = "False"
         };
 
         private static string TextureModRoot => Path.Combine(Paths.Modifications, @"PlatformContent\pc\textures");
@@ -268,47 +284,75 @@ namespace SleepStrap.Services
         {
             bool reapplyCustomSkybox = App.Settings.Prop.CustomSkyboxEnabled && HasCachedSkybox;
             IReadOnlyList<string> texturePaths = GetDarkTextureResources().Select(item => item.RelativePath).ToArray();
+            IReadOnlyList<string> rtxPaths = GetRtxTexturePaths();
+            bool reapplyRtx = App.Settings.Prop.RtxShineEnabled;
 
-            if (enabled)
+            // Work on the texture pack underneath the RTX layer, then put the metal
+            // layer back. This prevents the dark toggle from damaging RTX or sky files.
+            if (reapplyRtx)
+                RestoreBackup(RtxShineBackupRoot, rtxPaths);
+
+            try
             {
-                if (reapplyCustomSkybox)
-                    RestoreBackup(SkyboxBackupRoot, GetSkyboxRelativePaths());
-                CreateBackupIfNeeded(DarkTextureBackupRoot, texturePaths);
-                ApplyDarkTextures();
-                if (reapplyCustomSkybox)
-                    ApplyCachedSkybox();
-            }
-            else
-            {
-                RestoreBackup(DarkTextureBackupRoot, texturePaths);
-                if (reapplyCustomSkybox)
+                if (enabled)
                 {
-                    CreateBackupIfNeeded(SkyboxBackupRoot, GetSkyboxRelativePaths());
-                    ApplyCachedSkybox();
+                    if (reapplyCustomSkybox)
+                        RestoreBackup(SkyboxBackupRoot, GetSkyboxRelativePaths());
+                    CreateBackupIfNeeded(DarkTextureBackupRoot, texturePaths);
+                    ApplyDarkTextures();
+                    if (reapplyCustomSkybox)
+                        ApplyCachedSkybox();
+                }
+                else
+                {
+                    RestoreBackup(DarkTextureBackupRoot, texturePaths);
+                    if (reapplyCustomSkybox)
+                    {
+                        CreateBackupIfNeeded(SkyboxBackupRoot, GetSkyboxRelativePaths());
+                        ApplyCachedSkybox();
+                    }
+                }
+            }
+            finally
+            {
+                if (reapplyRtx)
+                {
+                    CreateRtxBackupIfNeeded(rtxPaths);
+                    ApplyRtxShine();
                 }
             }
         }
 
         public static void SetRtxShine(bool enabled)
         {
-            IReadOnlyList<string> texturePaths = new[] { RtxShineTexturePath };
+            IReadOnlyList<string> texturePaths = GetRtxTexturePaths();
 
             if (enabled)
             {
-                CreateBackupIfNeeded(RtxShineBackupRoot, texturePaths);
+                CreateRtxBackupIfNeeded(texturePaths);
                 ApplyRtxShine();
+                EnableRtxShineFlags();
             }
             else
             {
-                RestoreBackup(RtxShineBackupRoot, texturePaths);
+                string versionMarker = Path.Combine(RtxShineBackupRoot, "metal-layer-v2");
+                if (Directory.Exists(RtxShineBackupRoot) && !File.Exists(versionMarker))
+                    RestoreBackup(RtxShineBackupRoot, new[] { RtxShineTexturePath });
+                else
+                    RestoreBackup(RtxShineBackupRoot, texturePaths);
+                DisableRtxShineFlags();
             }
+
+            App.Settings.Prop.UseFastFlagManager = true;
+            App.FastFlags.Save();
+            App.Settings.Save();
         }
 
         public static void RefreshRtxShineState()
         {
             if (App.Settings.Prop.RtxShineEnabled)
                 SetRtxShine(true);
-            else if (Directory.Exists(RtxShineBackupRoot))
+            else if (Directory.Exists(RtxShineBackupRoot) || App.Settings.Prop.RtxShineFlagBackup.Count > 0)
                 SetRtxShine(false);
         }
 
@@ -324,6 +368,20 @@ namespace SleepStrap.Services
                 .OrderBy(item => item.Item2, StringComparer.OrdinalIgnoreCase)
                 .Select(item => (ResourceName: item.name, RelativePath: item.Item2))
                 .ToArray();
+
+        private static IReadOnlyList<string> GetRtxTexturePaths()
+        {
+            string[] materialFileNames = { "diffuse.dds", "normal.dds", "normaldetail.dds" };
+            return GetDarkTextureResources()
+                .Select(item => item.RelativePath)
+                .Where(path => materialFileNames.Contains(Path.GetFileName(path), StringComparer.OrdinalIgnoreCase))
+                .Where(path => !path.StartsWith("sky/", StringComparison.OrdinalIgnoreCase))
+                .Where(path => !path.StartsWith("water/", StringComparison.OrdinalIgnoreCase))
+                .Append(RtxShineTexturePath)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+        }
 
         private static void ApplyDarkTextures()
         {
@@ -342,6 +400,25 @@ namespace SleepStrap.Services
         private static void ApplyRtxShine()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
+            Dictionary<string, byte[]> polishedMetalMaps = new(StringComparer.OrdinalIgnoreCase);
+            foreach (string fileName in new[] { "diffuse.dds", "normal.dds", "normaldetail.dds" })
+            {
+                string metalResourceName = $"{TextureResourcePrefix}metal/{fileName}";
+                using Stream metalInput = assembly.GetManifestResourceStream(metalResourceName)
+                    ?? throw new InvalidOperationException($"The embedded RTX material map '{fileName}' is missing.");
+                using MemoryStream metalBuffer = new();
+                metalInput.CopyTo(metalBuffer);
+                polishedMetalMaps[fileName] = metalBuffer.ToArray();
+            }
+
+            foreach (string relativePath in GetRtxTexturePaths().Where(path => !String.Equals(path, RtxShineTexturePath, StringComparison.OrdinalIgnoreCase)))
+            {
+                string fileName = Path.GetFileName(relativePath);
+                string materialDestination = GetTextureModPath(relativePath);
+                Directory.CreateDirectory(Path.GetDirectoryName(materialDestination)!);
+                File.WriteAllBytes(materialDestination, polishedMetalMaps[fileName]);
+            }
+
             string resourceName = $"{TextureResourcePrefix}{RtxShineTexturePath}";
             using Stream input = assembly.GetManifestResourceStream(resourceName)
                 ?? throw new InvalidOperationException("The embedded RTX shine lookup texture is missing.");
@@ -385,6 +462,36 @@ namespace SleepStrap.Services
             string destination = GetTextureModPath(RtxShineTexturePath);
             Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
             File.WriteAllBytes(destination, texture);
+        }
+
+        private static void EnableRtxShineFlags()
+        {
+            Dictionary<string, string> backup = App.Settings.Prop.RtxShineFlagBackup;
+            foreach ((string key, string value) in RtxShineFlags)
+            {
+                if (!backup.ContainsKey(key))
+                    backup[key] = App.FastFlags.GetValue(key) ?? MissingFlagValue;
+
+                App.FastFlags.SetValue(key, value);
+            }
+        }
+
+        private static void DisableRtxShineFlags()
+        {
+            Dictionary<string, string> backup = App.Settings.Prop.RtxShineFlagBackup;
+            foreach ((string key, string ownedValue) in RtxShineFlags)
+            {
+                if (!backup.TryGetValue(key, out string? previous))
+                    continue;
+
+                // Do not overwrite a newer manual edit made while RTX was enabled.
+                if (String.Equals(App.FastFlags.GetValue(key), ownedValue, StringComparison.Ordinal))
+                    App.FastFlags.SetValue(key, previous == MissingFlagValue ? null : previous);
+
+                backup.Remove(key);
+            }
+
+            backup.Clear();
         }
 
         private static void ApplyDarkSkybox()
@@ -501,6 +608,20 @@ namespace SleepStrap.Services
 
         private static string GetTextureModPath(string relativePath) =>
             Path.Combine(TextureModRoot, relativePath.Replace('/', Path.DirectorySeparatorChar));
+
+        private static void CreateRtxBackupIfNeeded(IReadOnlyList<string> relativePaths)
+        {
+            string manifestPath = Path.Combine(RtxShineBackupRoot, "manifest.json");
+            string versionMarker = Path.Combine(RtxShineBackupRoot, "metal-layer-v2");
+
+            // Version 6.7 originally backed up only brdfLUT.dds. Restore that legacy
+            // layer before capturing the complete material set for the first time.
+            if (File.Exists(manifestPath) && !File.Exists(versionMarker))
+                RestoreBackup(RtxShineBackupRoot, new[] { RtxShineTexturePath });
+
+            CreateBackupIfNeeded(RtxShineBackupRoot, relativePaths);
+            File.WriteAllText(versionMarker, "SleepStrap RTX material layer v2");
+        }
 
         private static void CreateBackupIfNeeded(string backupRoot, IReadOnlyList<string> relativePaths)
         {

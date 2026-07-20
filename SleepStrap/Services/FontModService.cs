@@ -6,6 +6,9 @@ namespace SleepStrap.Services
 {
     internal static class FontModService
     {
+        private const string CustomFontAsset = "rbxasset://fonts/CustomFont.ttf";
+        private static string FontBackupRoot => Path.Combine(Paths.SleepStrapData, "Backups", "InGameFonts");
+
         private static readonly byte[][] ValidHeaders =
         {
             new byte[] { 0x00, 0x01, 0x00, 0x00 },
@@ -56,24 +59,169 @@ namespace SleepStrap.Services
             App.Settings.Prop.SelectedFontName = choice.DisplayName;
             App.Settings.Prop.SelectedFontSource = choice.FilePath;
             App.Settings.Save();
+
+            string currentVersion = new RobloxPlayerData().Directory;
+            if (Directory.Exists(currentVersion))
+                PrepareInGameFontOverrides(currentVersion);
+
             return choice;
         }
 
         public static void RestoreDefault()
         {
+            RestoreGeneratedOverrides();
+
             if (File.Exists(Paths.CustomFont))
             {
                 Filesystem.AssertReadOnly(Paths.CustomFont);
                 File.Delete(Paths.CustomFont);
             }
 
-            string familyMods = Path.Combine(Paths.Modifications, "content", "fonts", "families");
-            if (Directory.Exists(familyMods))
-                Directory.Delete(familyMods, true);
-
             App.Settings.Prop.SelectedFontName = "Roblox Default";
             App.Settings.Prop.SelectedFontSource = "";
             App.Settings.Save();
+        }
+
+        /// <summary>
+        /// Replaces both family-manifest faces and direct Latin text-font assets. Some
+        /// Roblox experiences reference a font file directly instead of a family JSON,
+        /// so doing both is required for a consistent in-game font.
+        /// </summary>
+        public static void PrepareInGameFontOverrides(string robloxVersionDirectory)
+        {
+            if (!File.Exists(Paths.CustomFont))
+            {
+                RestoreGeneratedOverrides();
+                return;
+            }
+
+            string fontsRoot = Path.Combine(robloxVersionDirectory, "content", "fonts");
+            string familiesRoot = Path.Combine(fontsRoot, "families");
+            if (!Directory.Exists(fontsRoot))
+                return;
+
+            foreach (string sourcePath in Directory.EnumerateFiles(fontsRoot, "*.*", SearchOption.AllDirectories)
+                .Where(IsFontFile)
+                .Where(ShouldReplaceTextFont))
+            {
+                string relativeFromFonts = Path.GetRelativePath(fontsRoot, sourcePath);
+                string relativeModPath = Path.Combine("content", "fonts", relativeFromFonts);
+                string destination = Path.Combine(Paths.Modifications, relativeModPath);
+                TrackOverride(relativeModPath, destination);
+                Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                Filesystem.AssertReadOnly(destination);
+                File.Copy(Paths.CustomFont, destination, true);
+            }
+
+            if (!Directory.Exists(familiesRoot))
+                return;
+
+            foreach (string jsonFilePath in Directory.EnumerateFiles(familiesRoot, "*.json", SearchOption.TopDirectoryOnly))
+            {
+                FontFamily? family = JsonSerializer.Deserialize<FontFamily>(File.ReadAllText(jsonFilePath));
+                if (family is null)
+                    continue;
+
+                foreach (FontFace face in family.Faces)
+                    face.AssetId = CustomFontAsset;
+
+                string relativeModPath = Path.Combine("content", "fonts", "families", Path.GetFileName(jsonFilePath));
+                string destination = Path.Combine(Paths.Modifications, relativeModPath);
+                TrackOverride(relativeModPath, destination, IsGeneratedFamilyOverride);
+                Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                Filesystem.AssertReadOnly(destination);
+                File.WriteAllText(destination, JsonSerializer.Serialize(family, new JsonSerializerOptions { WriteIndented = true }));
+            }
+        }
+
+        private static bool ShouldReplaceTextFont(string path)
+        {
+            string fileName = Path.GetFileName(path);
+            string[] preservedTokens = { "emoji", "twemoji", "symbol", "icon", "noto" };
+            return !preservedTokens.Any(token => fileName.Contains(token, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private static bool IsGeneratedFamilyOverride(string path)
+        {
+            try
+            {
+                return File.ReadAllText(path).Contains(CustomFontAsset, StringComparison.OrdinalIgnoreCase);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static void TrackOverride(string relativePath, string destination, Func<string, bool>? isAlreadyOwned = null)
+        {
+            string trackedPath = Path.Combine(FontBackupRoot, "tracked.json");
+            string existingPath = Path.Combine(FontBackupRoot, "existing.json");
+            HashSet<string> tracked = File.Exists(trackedPath)
+                ? JsonSerializer.Deserialize<HashSet<string>>(File.ReadAllText(trackedPath)) ?? new(StringComparer.OrdinalIgnoreCase)
+                : new(StringComparer.OrdinalIgnoreCase);
+            HashSet<string> existing = File.Exists(existingPath)
+                ? JsonSerializer.Deserialize<HashSet<string>>(File.ReadAllText(existingPath)) ?? new(StringComparer.OrdinalIgnoreCase)
+                : new(StringComparer.OrdinalIgnoreCase);
+
+            if (!tracked.Add(relativePath))
+                return;
+
+            Directory.CreateDirectory(FontBackupRoot);
+            if (File.Exists(destination) && !(isAlreadyOwned?.Invoke(destination) ?? false))
+            {
+                existing.Add(relativePath);
+                string backup = Path.Combine(FontBackupRoot, "Files", relativePath);
+                Directory.CreateDirectory(Path.GetDirectoryName(backup)!);
+                File.Copy(destination, backup, true);
+            }
+
+            File.WriteAllText(trackedPath, JsonSerializer.Serialize(tracked, new JsonSerializerOptions { WriteIndented = true }));
+            File.WriteAllText(existingPath, JsonSerializer.Serialize(existing, new JsonSerializerOptions { WriteIndented = true }));
+        }
+
+        private static void RestoreGeneratedOverrides()
+        {
+            string trackedPath = Path.Combine(FontBackupRoot, "tracked.json");
+            if (!File.Exists(trackedPath))
+            {
+                // Migrate the family-only implementation used by older SleepStrap builds.
+                string legacyFamilies = Path.Combine(Paths.Modifications, "content", "fonts", "families");
+                if (Directory.Exists(legacyFamilies))
+                {
+                    foreach (string path in Directory.EnumerateFiles(legacyFamilies, "*.json"))
+                    {
+                        if (IsGeneratedFamilyOverride(path))
+                            File.Delete(path);
+                    }
+                }
+                return;
+            }
+
+            HashSet<string> tracked = JsonSerializer.Deserialize<HashSet<string>>(File.ReadAllText(trackedPath))
+                ?? new(StringComparer.OrdinalIgnoreCase);
+            string existingPath = Path.Combine(FontBackupRoot, "existing.json");
+            HashSet<string> existing = File.Exists(existingPath)
+                ? JsonSerializer.Deserialize<HashSet<string>>(File.ReadAllText(existingPath)) ?? new(StringComparer.OrdinalIgnoreCase)
+                : new(StringComparer.OrdinalIgnoreCase);
+
+            foreach (string relativePath in tracked)
+            {
+                string destination = Path.Combine(Paths.Modifications, relativePath);
+                Filesystem.AssertReadOnly(destination);
+                if (existing.Contains(relativePath))
+                {
+                    string backup = Path.Combine(FontBackupRoot, "Files", relativePath);
+                    Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                    File.Copy(backup, destination, true);
+                }
+                else if (File.Exists(destination))
+                {
+                    File.Delete(destination);
+                }
+            }
+
+            Directory.Delete(FontBackupRoot, true);
         }
 
         private static string EnsureMontserratExtracted()

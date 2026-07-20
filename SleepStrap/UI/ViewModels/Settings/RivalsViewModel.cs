@@ -6,7 +6,16 @@ namespace SleepStrap.UI.ViewModels.Settings
 {
     public class RivalsViewModel : NotifyPropertyChangedViewModel
     {
+        private const string MissingFlagValue = "__SLEEPSTRAP_FLAG_WAS_MISSING__";
+        private const string TargetFpsFlag = "DFIntTaskSchedulerTargetFps";
+        private const string UnlockFpsFlag = "FFlagTaskSchedulerLimitTargetFpsTo2402";
+
         public sealed record StretchPreset(string Name, int Percent)
+        {
+            public override string ToString() => Name;
+        }
+
+        public sealed record FpsPreset(string Name, int Limit)
         {
             public override string ToString() => Name;
         }
@@ -16,6 +25,19 @@ namespace SleepStrap.UI.ViewModels.Settings
             new StretchPreset("Mild — 85% width", 85),
             new StretchPreset("Balanced — 75% width", 75),
             new StretchPreset("Strong — 67% width", 67)
+        };
+
+        public IReadOnlyList<FpsPreset> FpsPresets { get; } = new[]
+        {
+            new FpsPreset("Roblox default", 0),
+            new FpsPreset("60 FPS", 60),
+            new FpsPreset("120 FPS", 120),
+            new FpsPreset("144 FPS", 144),
+            new FpsPreset("165 FPS", 165),
+            new FpsPreset("240 FPS", 240),
+            new FpsPreset("360 FPS", 360),
+            new FpsPreset("480 FPS", 480),
+            new FpsPreset("Unlimited", 9999)
         };
 
         public bool StretchEnabled
@@ -83,6 +105,37 @@ namespace SleepStrap.UI.ViewModels.Settings
             }
         }
 
+        public int SelectedFpsLimit
+        {
+            get => App.Settings.Prop.RivalsFpsLimit;
+            set
+            {
+                if (!FpsPresets.Any(preset => preset.Limit == value) || value == App.Settings.Prop.RivalsFpsLimit)
+                    return;
+
+                try
+                {
+                    if (value == 0)
+                        RestoreFpsFlags();
+                    else
+                        ApplyFpsFlags(value);
+
+                    App.Settings.Prop.RivalsFpsLimit = value;
+                    App.Settings.Prop.UseFastFlagManager = true;
+                    App.FastFlags.Save();
+                    App.Settings.Save();
+                    OnPropertyChanged(nameof(SelectedFpsLimit));
+                    RefreshStatus();
+                }
+                catch (Exception ex)
+                {
+                    App.Logger.WriteException("RivalsViewModel::ChangeFps", ex);
+                    Frontend.ShowMessageBox($"SleepStrap could not change the FPS limit.\n\n{ex.Message}", MessageBoxImage.Error);
+                    OnPropertyChanged(nameof(SelectedFpsLimit));
+                }
+            }
+        }
+
         private string _statusText = "Checking display…";
         public string StatusText
         {
@@ -134,19 +187,56 @@ namespace SleepStrap.UI.ViewModels.Settings
             App.Settings.Prop.RivalsNativeHeight,
             App.Settings.Prop.RivalsNativeFrequency);
 
+        private static void ApplyFpsFlags(int limit)
+        {
+            Dictionary<string, string> backup = App.Settings.Prop.RivalsFpsFlagBackup;
+            if (!backup.ContainsKey(TargetFpsFlag))
+                backup[TargetFpsFlag] = App.FastFlags.GetValue(TargetFpsFlag) ?? MissingFlagValue;
+            if (!backup.ContainsKey(UnlockFpsFlag))
+                backup[UnlockFpsFlag] = App.FastFlags.GetValue(UnlockFpsFlag) ?? MissingFlagValue;
+
+            App.FastFlags.SetValue(TargetFpsFlag, limit.ToString());
+            App.FastFlags.SetValue(UnlockFpsFlag, "False");
+        }
+
+        private static void RestoreFpsFlags()
+        {
+            Dictionary<string, string> backup = App.Settings.Prop.RivalsFpsFlagBackup;
+            foreach (string key in new[] { TargetFpsFlag, UnlockFpsFlag })
+            {
+                if (!backup.TryGetValue(key, out string? previous))
+                    continue;
+
+                string ownedValue = key == TargetFpsFlag
+                    ? App.Settings.Prop.RivalsFpsLimit.ToString()
+                    : "False";
+                if (String.Equals(App.FastFlags.GetValue(key), ownedValue, StringComparison.Ordinal))
+                    App.FastFlags.SetValue(key, previous == MissingFlagValue ? null : previous);
+            }
+
+            backup.Clear();
+        }
+
         private void RefreshStatus()
         {
             try
             {
                 DisplayStretchService.DisplayMode current = DisplayStretchService.GetCurrentMode();
                 StatusText = StretchEnabled
-                    ? $"Stretch active: {current}. Turn the toggle off to restore the normal resolution."
-                    : $"Normal display: {current}.";
+                    ? $"Stretch active: {current}. {GetFpsStatus()}"
+                    : $"Normal display: {current}. {GetFpsStatus()}";
             }
             catch
             {
-                StatusText = StretchEnabled ? "Stretch is marked active." : "Stretch is off.";
+                StatusText = $"{(StretchEnabled ? "Stretch is marked active." : "Stretch is off.")} {GetFpsStatus()}";
             }
         }
+
+        private static string GetFpsStatus() => App.Settings.Prop.RivalsFpsLimit switch
+        {
+            0 => "FPS uses the Roblox default.",
+            9999 => "FPS is unlimited.",
+            int limit => $"FPS limit: {limit}."
+        };
     }
 }

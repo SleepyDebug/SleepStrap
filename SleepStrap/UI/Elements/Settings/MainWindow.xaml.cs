@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Navigation;
 
 using Wpf.Ui.Controls.Interfaces;
 using Wpf.Ui.Mvvm.Contracts;
@@ -45,6 +48,7 @@ namespace SleepStrap.UI.Elements.Settings
                 SafeNavigate(lastPage);
 
             RootNavigation.Navigated += OnNavigation!;
+            RootFrame.Navigated += AnimatePageNavigation;
 
             void OnNavigation(object? sender, RoutedNavigationEventArgs e)
             {
@@ -52,6 +56,20 @@ namespace SleepStrap.UI.Elements.Settings
 
                 App.State.Prop.LastPage = currentPage?.PageType.FullName!;
             }
+        }
+
+        private static void AnimatePageNavigation(object sender, NavigationEventArgs e)
+        {
+            if (e.Content is not FrameworkElement page)
+                return;
+
+            page.Opacity = 0;
+            var offset = new TranslateTransform(0, 12);
+            page.RenderTransform = offset;
+
+            var easing = new CubicEase { EasingMode = EasingMode.EaseOut };
+            page.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(260)) { EasingFunction = easing });
+            offset.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(12, 0, TimeSpan.FromMilliseconds(330)) { EasingFunction = easing });
         }
 
         public void LoadState()

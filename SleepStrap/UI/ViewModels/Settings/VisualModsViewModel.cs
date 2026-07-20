@@ -242,10 +242,16 @@ namespace SleepStrap.UI.ViewModels.Settings
                         ? "Applying blurry textures…"
                         : enableRtx ? "Applying RTX shine…" : "Restoring normal textures…";
 
-                    if (oldBlur != enableBlur)
-                        BlurryTextureService.SetEnabled(enableBlur);
-                    if (oldRtx != enableRtx)
-                        VisualModService.SetRtxShine(enableRtx);
+                    // Restore the old layer first so the next effect captures the
+                    // actual underlying settings, not another effect's overrides.
+                    if (oldRtx && !enableRtx)
+                        VisualModService.SetRtxShine(false);
+                    if (oldBlur && !enableBlur)
+                        BlurryTextureService.SetEnabled(false);
+                    if (enableBlur && !oldBlur)
+                        BlurryTextureService.SetEnabled(true);
+                    if (enableRtx && !oldRtx)
+                        VisualModService.SetRtxShine(true);
 
                     App.Settings.Prop.BlurryTexturesEnabled = enableBlur;
                     App.Settings.Prop.RtxShineEnabled = enableRtx;
