@@ -9,6 +9,7 @@ namespace SleepStrap.UI.ViewModels.Settings
         private const string MissingFlagValue = "__SLEEPSTRAP_FLAG_WAS_MISSING__";
         private const string TargetFpsFlag = "DFIntTaskSchedulerTargetFps";
         private const string UnlockFpsFlag = "FFlagTaskSchedulerLimitTargetFpsTo2402";
+        private const string DisplayFpsFlag = "FFlagDebugDisplayFPS";
 
         public sealed record StretchPreset(string Name, int Percent)
         {
@@ -136,6 +137,37 @@ namespace SleepStrap.UI.ViewModels.Settings
             }
         }
 
+        public bool FpsCounterEnabled
+        {
+            get => App.Settings.Prop.RivalsFpsCounterEnabled;
+            set
+            {
+                if (value == App.Settings.Prop.RivalsFpsCounterEnabled)
+                    return;
+
+                try
+                {
+                    if (value)
+                        EnableFpsCounter();
+                    else
+                        DisableFpsCounter();
+
+                    App.Settings.Prop.RivalsFpsCounterEnabled = value;
+                    App.Settings.Prop.UseFastFlagManager = true;
+                    App.FastFlags.Save();
+                    App.Settings.Save();
+                    OnPropertyChanged(nameof(FpsCounterEnabled));
+                    RefreshStatus();
+                }
+                catch (Exception ex)
+                {
+                    App.Logger.WriteException("RivalsViewModel::ChangeFpsCounter", ex);
+                    Frontend.ShowMessageBox($"SleepStrap could not change the FPS counter.\n\n{ex.Message}", MessageBoxImage.Error);
+                    OnPropertyChanged(nameof(FpsCounterEnabled));
+                }
+            }
+        }
+
         private string _statusText = "Checking display…";
         public string StatusText
         {
@@ -217,6 +249,27 @@ namespace SleepStrap.UI.ViewModels.Settings
             backup.Clear();
         }
 
+        private static void EnableFpsCounter()
+        {
+            Dictionary<string, string> backup = App.Settings.Prop.RivalsFpsCounterFlagBackup;
+            if (!backup.ContainsKey(DisplayFpsFlag))
+                backup[DisplayFpsFlag] = App.FastFlags.GetValue(DisplayFpsFlag) ?? MissingFlagValue;
+
+            App.FastFlags.SetValue(DisplayFpsFlag, "True");
+        }
+
+        private static void DisableFpsCounter()
+        {
+            Dictionary<string, string> backup = App.Settings.Prop.RivalsFpsCounterFlagBackup;
+            if (backup.TryGetValue(DisplayFpsFlag, out string? previous) &&
+                String.Equals(App.FastFlags.GetValue(DisplayFpsFlag), "True", StringComparison.Ordinal))
+            {
+                App.FastFlags.SetValue(DisplayFpsFlag, previous == MissingFlagValue ? null : previous);
+            }
+
+            backup.Clear();
+        }
+
         private void RefreshStatus()
         {
             try
@@ -234,9 +287,13 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         private static string GetFpsStatus() => App.Settings.Prop.RivalsFpsLimit switch
         {
-            0 => "FPS uses the Roblox default.",
-            9999 => "FPS is unlimited.",
-            int limit => $"FPS limit: {limit}."
+            0 => $"FPS uses the Roblox default.{GetCounterStatus()}",
+            9999 => $"FPS is unlimited.{GetCounterStatus()}",
+            int limit => $"FPS limit: {limit}.{GetCounterStatus()}"
         };
+
+        private static string GetCounterStatus() => App.Settings.Prop.RivalsFpsCounterEnabled
+            ? " Counter: top right."
+            : "";
     }
 }

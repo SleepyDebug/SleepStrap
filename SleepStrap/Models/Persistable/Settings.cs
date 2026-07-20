@@ -64,5 +64,7 @@ namespace SleepStrap.Models.Persistable
         public int RivalsNativeFrequency { get; set; } = 0;
         public int RivalsFpsLimit { get; set; } = 0;
         public Dictionary<string, string> RivalsFpsFlagBackup { get; set; } = new();
+        public bool RivalsFpsCounterEnabled { get; set; } = false;
+        public Dictionary<string, string> RivalsFpsCounterFlagBackup { get; set; } = new();
     }
 }

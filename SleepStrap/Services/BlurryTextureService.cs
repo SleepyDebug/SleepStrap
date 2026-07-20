@@ -4,13 +4,16 @@ namespace SleepStrap.Services
     {
         private const string MissingValue = "__SLEEPSTRAP_FLAG_WAS_MISSING__";
 
-        // Keep this limited to Roblox's supported low-quality controls. Global mip skipping
-        // also affects skyboxes, while the old compositor flags are ignored by current clients.
+        // Force Roblox to sample lower mip levels while retaining its normal bilinear
+        // filtering. This produces a visible low-resolution blur instead of merely lowering
+        // the automatic quality preset. Flag ownership is isolated from sky/dark file mods.
         internal static IReadOnlyDictionary<string, string> ManagedFlags { get; } = new Dictionary<string, string>
         {
             ["DFFlagTextureQualityOverrideEnabled"] = "True",
             ["DFIntTextureQualityOverride"] = "0",
-            ["DFIntDebugFRMQualityLevelOverride"] = "1"
+            ["DFIntDebugFRMQualityLevelOverride"] = "1",
+            ["FIntDebugTextureManagerSkipMips"] = "4",
+            ["FIntTextureCompositorLowResFactor"] = "4"
         };
 
         // Values written by earlier SleepStrap builds. They are restored only when the saved
@@ -22,8 +25,6 @@ namespace SleepStrap.Services
             ["DFIntCSGLevelOfDetailSwitchingDistanceL12"] = "500",
             ["DFIntCSGLevelOfDetailSwitchingDistanceL23"] = "750",
             ["DFIntCSGLevelOfDetailSwitchingDistanceL34"] = "1000",
-            ["FIntDebugTextureManagerSkipMips"] = "8",
-            ["FIntTextureCompositorLowResFactor"] = "8",
             ["DFFlagSkipHighResolutiontextureMipsOnLowMemoryDevices2"] = "True",
             ["DFFlagUITexturePickMipLevels2"] = "True",
             ["FFlagUITextureUseDynamicRenderSettings"] = "True",

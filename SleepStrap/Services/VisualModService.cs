@@ -400,10 +400,14 @@ namespace SleepStrap.Services
         private static void ApplyRtxShine()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
+            Dictionary<string, string> embeddedTextures = GetDarkTextureResources()
+                .ToDictionary(item => item.RelativePath, item => item.ResourceName, StringComparer.OrdinalIgnoreCase);
             Dictionary<string, byte[]> polishedMetalMaps = new(StringComparer.OrdinalIgnoreCase);
             foreach (string fileName in new[] { "diffuse.dds", "normal.dds", "normaldetail.dds" })
             {
-                string metalResourceName = $"{TextureResourcePrefix}metal/{fileName}";
+                string metalPath = $"metal/{fileName}";
+                if (!embeddedTextures.TryGetValue(metalPath, out string? metalResourceName))
+                    throw new InvalidOperationException($"The embedded RTX material map '{fileName}' is missing.");
                 using Stream metalInput = assembly.GetManifestResourceStream(metalResourceName)
                     ?? throw new InvalidOperationException($"The embedded RTX material map '{fileName}' is missing.");
                 using MemoryStream metalBuffer = new();

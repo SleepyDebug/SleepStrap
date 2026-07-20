@@ -16,7 +16,7 @@
              Height="600"
              Background="{DynamicResource SleepStrapWindowBackgroundBrush}"
              ExtendsContentIntoTitleBar="True"
-             WindowBackdropType="Acrylic"
+             WindowBackdropType="Mica"
              WindowStartupLocation="CenterScreen"
              Closing="WpfUiWindow_Closing"
              Closed="WpfUiWindow_Closed">
@@ -67,7 +67,7 @@
             </Grid.ColumnDefinitions>
 
             <Border Grid.Row="0" Grid.Column="0" Margin="0,0,12,12" Padding="14,10" CornerRadius="10"
-                    Background="{DynamicResource SleepStrapGlassSurfaceBrush}" BorderBrush="{DynamicResource SleepStrapGlassBorderBrush}" BorderThickness="1">
+                    Background="{DynamicResource SleepStrapSurfaceBrush}" BorderBrush="{DynamicResource SleepStrapAccentBrush}" BorderThickness="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="32" />
@@ -78,7 +78,7 @@
                 </Grid>
             </Border>
 
-            <ui:NavigationFluent x:Name="RootNavigation" Grid.Row="1" Grid.Column="0" Margin="0,0,12,0" Background="Transparent" Frame="{Binding ElementName=RootFrame}" SelectedPageIndex="0">
+            <ui:NavigationFluent x:Name="RootNavigation" Grid.Row="1" Grid.Column="0" Margin="0,0,12,0" Frame="{Binding ElementName=RootFrame}" SelectedPageIndex="0">
                 <ui:NavigationFluent.Items>
                     <ui:NavigationItem Content="Skybox" PageType="{x:Type pages:SkyboxPage}" Icon="Cube24" Tag="skybox" />
                     <ui:NavigationItem Content="Textures" PageType="{x:Type pages:TexturesPage}" Icon="WrenchScrewdriver20" Tag="textures" />
@@ -88,17 +88,20 @@
                 </ui:NavigationFluent.Items>
             </ui:NavigationFluent>
 
-            <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Margin="0,0,12,0" Background="{DynamicResource SleepStrapGlassSurfaceBrush}">
+            <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <ui:InfoBar x:Name="AlertBar" Grid.Row="0" Padding="8" Visibility="Collapsed" IsOpen="True" Message="" Severity="Warning" IsClosable="False" />
-                <Frame x:Name="RootFrame" Grid.Row="1" Background="Transparent" />
+                <ui:InfoBar x:Name="AlertBar" Grid.Row="0" Margin="0,0,12,0" Padding="8" Visibility="Collapsed" IsOpen="True" Message="" Severity="Warning" IsClosable="False" />
+                <Frame x:Name="RootFrame" Grid.Row="1" />
             </Grid>
         </Grid>
 
-        <StatusBar x:Name="RootStatusBar" Grid.Row="2" Padding="14,10" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource SleepStrapGlassBorderBrush}" Background="{DynamicResource SleepStrapGlassSurfaceBrush}">
+        <StatusBar x:Name="RootStatusBar" Grid.Row="2" Padding="14,10" BorderThickness="0,1,0,0">
+            <StatusBar.Background>
+                <SolidColorBrush Color="{ui:ThemeResource ApplicationBackgroundColor}" Opacity="0" />
+            </StatusBar.Background>
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
