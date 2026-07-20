@@ -24,7 +24,7 @@ namespace SleepStrap
         public const string ProjectHelpLink = "https://github.com/SleepyDebug/SleepStrap#readme";
         public const string ProjectSupportLink = "https://github.com/SleepyDebug/SleepStrap/issues/new";
         public const string ProjectRemoteDataLink = "https://config.fishstrap.app/v1/Data.json";
-        public const bool SupportsSelfUpdates = false;
+        public const bool SupportsSelfUpdates = true;
 
         public const string RobloxPlayerAppName = "RobloxPlayerBeta.exe";
         public const string RobloxStudioAppName = "RobloxStudioBeta.exe";
@@ -181,7 +181,7 @@ namespace SleepStrap
             }
         }
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             const string LOG_IDENT = "App::OnStartup";
 
@@ -319,6 +319,14 @@ namespace SleepStrap
                 FastFlags.Load();
                 GlobalSettings.Load();
 
+                // Older SleepStrap builds hard-disabled this setting. Migrate those
+                // installations now that releases are published in the SleepStrap repo.
+                if (!Settings.Prop.CheckForUpdates)
+                {
+                    Settings.Prop.CheckForUpdates = true;
+                    Settings.Save();
+                }
+
                 if (!Locale.SupportedLocales.ContainsKey(Settings.Prop.Locale))
                 {
                     Settings.Prop.Locale = "nil";
@@ -330,7 +338,13 @@ namespace SleepStrap
                 if (!LaunchSettings.BypassUpdateCheck)
                     Installer.HandleUpgrade();
 
-                Task.Run(App.RemoteData.LoadData); // ok
+                if (await Services.AppUpdateService.CheckAndPromptAsync())
+                {
+                    SoftTerminate();
+                    return;
+                }
+
+                _ = Task.Run(App.RemoteData.LoadData); // ok
 
                 WindowsRegistry.RegisterApis(); // we want to register those early on
                                                 // so we wont have any issues with bloxshade

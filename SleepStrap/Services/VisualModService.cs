@@ -354,6 +354,22 @@ namespace SleepStrap.Services
                 SetRtxShine(true);
             else if (Directory.Exists(RtxShineBackupRoot) || App.Settings.Prop.RtxShineFlagBackup.Count > 0)
                 SetRtxShine(false);
+            else
+                RemoveOrphanedRtxFiles();
+        }
+
+        public static IReadOnlyList<string> GetManagedTextureModificationPaths()
+        {
+            return GetDarkTextureResources()
+                .Select(item => item.RelativePath)
+                .Append(RtxShineTexturePath)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .Select(path => Path.Combine(
+                    "PlatformContent",
+                    "pc",
+                    "textures",
+                    path.Replace('/', Path.DirectorySeparatorChar)))
+                .ToArray();
         }
 
         private static IReadOnlyList<string> GetSkyboxRelativePaths() => SkyboxFiles.Select(file => $"sky/{file}").ToArray();
@@ -423,12 +439,16 @@ namespace SleepStrap.Services
                 File.WriteAllBytes(materialDestination, polishedMetalMaps[fileName]);
             }
 
-            string resourceName = $"{TextureResourcePrefix}{RtxShineTexturePath}";
-            using Stream input = assembly.GetManifestResourceStream(resourceName)
-                ?? throw new InvalidOperationException("The embedded RTX shine lookup texture is missing.");
-            using MemoryStream buffer = new();
-            input.CopyTo(buffer);
-            byte[] texture = buffer.ToArray();
+            byte[] texture = CreateRtxShineLookupTexture();
+
+            string destination = GetTextureModPath(RtxShineTexturePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+            File.WriteAllBytes(destination, texture);
+        }
+
+        private static byte[] CreateRtxShineLookupTexture()
+        {
+            byte[] texture = ReadEmbeddedTexture(RtxShineTexturePath);
 
             const int ddsHeaderSize = 148;
             if (texture.Length < ddsHeaderSize ||
@@ -463,9 +483,67 @@ namespace SleepStrap.Services
                 texture[offset + 3] = (byte)(biasBits >> 8);
             }
 
-            string destination = GetTextureModPath(RtxShineTexturePath);
-            Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
-            File.WriteAllBytes(destination, texture);
+            return texture;
+        }
+
+        private static void RemoveOrphanedRtxFiles()
+        {
+            Dictionary<string, string> embeddedTextures = GetDarkTextureResources()
+                .ToDictionary(item => item.RelativePath, item => item.ResourceName, StringComparer.OrdinalIgnoreCase);
+            Dictionary<string, byte[]> metalMaps = new(StringComparer.OrdinalIgnoreCase);
+            foreach (string fileName in new[] { "diffuse.dds", "normal.dds", "normaldetail.dds" })
+            {
+                string metalPath = $"metal/{fileName}";
+                if (embeddedTextures.TryGetValue(metalPath, out string? resourceName))
+                    metalMaps[fileName] = ReadEmbeddedResource(resourceName);
+            }
+
+            foreach (string relativePath in GetRtxTexturePaths())
+            {
+                if (App.Settings.Prop.DarkTexturesEnabled &&
+                    !String.Equals(relativePath, RtxShineTexturePath, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                string destination = GetTextureModPath(relativePath);
+                if (!File.Exists(destination))
+                    continue;
+
+                byte[] current = File.ReadAllBytes(destination);
+                bool isOwned;
+                if (String.Equals(relativePath, RtxShineTexturePath, StringComparison.OrdinalIgnoreCase))
+                {
+                    byte[] original = ReadEmbeddedTexture(RtxShineTexturePath);
+                    byte[] shiny = CreateRtxShineLookupTexture();
+                    isOwned = current.SequenceEqual(original) || current.SequenceEqual(shiny);
+                }
+                else
+                {
+                    isOwned = metalMaps.TryGetValue(Path.GetFileName(relativePath), out byte[]? metalMap) &&
+                        current.SequenceEqual(metalMap);
+                }
+
+                if (!isOwned)
+                    continue;
+
+                Filesystem.AssertReadOnly(destination);
+                File.Delete(destination);
+            }
+        }
+
+        private static byte[] ReadEmbeddedTexture(string relativePath)
+        {
+            return ReadEmbeddedResource($"{TextureResourcePrefix}{relativePath}");
+        }
+
+        private static byte[] ReadEmbeddedResource(string resourceName)
+        {
+            using Stream input = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName)
+                ?? throw new InvalidOperationException($"The embedded texture '{resourceName}' is missing.");
+            using MemoryStream buffer = new();
+            input.CopyTo(buffer);
+            return buffer.ToArray();
         }
 
         private static void EnableRtxShineFlags()

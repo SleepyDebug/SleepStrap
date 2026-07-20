@@ -39,7 +39,17 @@ namespace SleepStrap
             if (idx != -1)
                 version = version[..idx];
 
-            return new Version(version);
+            if (Version.TryParse(version, out Version? parsed))
+                return parsed;
+
+            // SleepStrap releases historically used names such as "sleepstrap-6.7".
+            // Accept a numeric version embedded in the tag while still rejecting tags
+            // that do not identify a release version at all.
+            Match match = Regex.Match(version, @"(?<!\d)(\d+(?:\.\d+){1,3})(?!\d)");
+            if (match.Success && Version.TryParse(match.Groups[1].Value, out parsed))
+                return parsed;
+
+            throw new FormatException($"'{version}' does not contain a valid version number.");
         }
 
         /// <summary>

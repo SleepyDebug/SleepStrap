@@ -202,16 +202,6 @@ namespace SleepStrap
             if (connectionResult is not null)
                 HandleConnectionError(connectionResult);
 
-#if (!DEBUG || DEBUG_UPDATER) && !QA_BUILD
-            if (App.SupportsSelfUpdates && App.Settings.Prop.CheckForUpdates && !App.LaunchSettings.UpgradeFlag.Active)
-            {
-                bool updatePresent = await CheckForUpdates();
-                
-                if (updatePresent)
-                    return;
-            }
-#endif
-
             // ensure only one instance of the bootstrapper is running at the time
             // so that we don't have stuff like two updates happening simultaneously
 
@@ -911,114 +901,6 @@ namespace SleepStrap
         }
         #endregion
 
-        #region App Install
-        private async Task<bool> CheckForUpdates()
-        {
-            const string LOG_IDENT = "Bootstrapper::CheckForUpdates";
-
-            // don't update if there's another instance running (likely running in the background)
-            // i don't like this, but there isn't much better way of doing it /shrug
-            if (Process.GetProcessesByName(App.ProjectName).Length > 1)
-            {
-                App.Logger.WriteLine(LOG_IDENT, $"More than one SleepStrap instance running, aborting update check");
-                return false;
-            }
-
-            App.Logger.WriteLine(LOG_IDENT, "Checking for updates...");
-
-#if !DEBUG_UPDATER
-            var releaseInfo = await App.GetLatestRelease();
-
-            if (releaseInfo is null)
-                return false;
-
-            var versionComparison = Utilities.CompareVersions(App.Version, releaseInfo.TagName);
-
-            // check if we aren't using a deployed build, so we can update to one if a new version comes out
-            if (App.IsProductionBuild && versionComparison == VersionComparison.Equal || versionComparison == VersionComparison.GreaterThan)
-            {
-                App.Logger.WriteLine(LOG_IDENT, "No updates found");
-                return false;
-            }
-
-            if (Dialog is not null)
-                Dialog.CancelEnabled = false;
-
-            string version = releaseInfo.TagName;
-#else
-            string version = App.Version;
-#endif
-
-            SetStatus(Strings.Bootstrapper_Status_UpgradingSleepStrap);
-
-            try
-            {
-#if DEBUG_UPDATER
-                string downloadLocation = Path.Combine(Paths.TempUpdates, "SleepStrap.exe");
-
-                Directory.CreateDirectory(Paths.TempUpdates);
-
-                File.Copy(Paths.Process, downloadLocation, true);
-#else
-                var asset = releaseInfo.Assets![0];
-
-                string downloadLocation = Path.Combine(Paths.TempUpdates, asset.Name);
-
-                Directory.CreateDirectory(Paths.TempUpdates);
-
-                App.Logger.WriteLine(LOG_IDENT, $"Downloading {releaseInfo.TagName}...");
-
-                if (!File.Exists(downloadLocation))
-                {
-                    var response = await App.HttpClient.GetAsync(asset.BrowserDownloadUrl);
-
-                    await using var fileStream = new FileStream(downloadLocation, FileMode.OpenOrCreate, FileAccess.Write);
-                    await response.Content.CopyToAsync(fileStream);
-                }
-#endif
-
-                App.Logger.WriteLine(LOG_IDENT, $"Starting {version}...");
-
-                ProcessStartInfo startInfo = new()
-                {
-                    FileName = downloadLocation,
-                };
-
-                startInfo.ArgumentList.Add("-upgrade");
-
-                foreach (string arg in App.LaunchSettings.Args)
-                    startInfo.ArgumentList.Add(arg);
-
-                if (_launchMode == LaunchMode.Player && !startInfo.ArgumentList.Contains("-player"))
-                    startInfo.ArgumentList.Add("-player");
-                else if (_launchMode == LaunchMode.Studio && !startInfo.ArgumentList.Contains("-studio"))
-                    startInfo.ArgumentList.Add("-studio");
-
-                App.Settings.Save();
-
-                new InterProcessLock("AutoUpdater");
-
-                Process.Start(startInfo);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                App.Logger.WriteLine(LOG_IDENT, "An exception occurred when running the auto-updater");
-                App.Logger.WriteException(LOG_IDENT, ex);
-
-                Frontend.ShowMessageBox(
-                    string.Format(Strings.Bootstrapper_AutoUpdateFailed, version),
-                    MessageBoxImage.Information
-                );
-
-                Utilities.ShellExecute(App.ProjectDownloadLink);
-            }
-
-            return false;
-        }
-        #endregion
-
         #region Roblox Install
 
         private static bool TryDeleteRobloxInDirectory(string dir)
@@ -1511,25 +1393,54 @@ namespace SleepStrap
             // now check for files that have been deleted from the mod folder according to the manifest
 
             var fileRestoreMap = new Dictionary<string, List<string>>();
+            var currentModFiles = new HashSet<string>(modFolderFiles, StringComparer.OrdinalIgnoreCase);
+            var previouslyAppliedMods = new HashSet<string>(App.RobloxState.Prop.ModManifest, StringComparer.OrdinalIgnoreCase);
+            string managedTextureRepairMarker = Path.Combine(
+                Paths.SleepStrapData,
+                "State",
+                $"managed-texture-repair-v1-{Path.GetFileName(_latestVersionDirectory)}.complete");
+            bool repairManagedTextures = !File.Exists(managedTextureRepairMarker);
+            bool managedTextureRepairFailed = false;
 
-            foreach (string fileLocation in App.RobloxState.Prop.ModManifest)
+            // Builds before this repair could forget removed texture entries after an
+            // unsuccessful package restore. Reconcile every SleepStrap-owned texture once
+            // for the active Roblox version, while leaving currently enabled layers alone.
+            if (repairManagedTextures)
+                previouslyAppliedMods.UnionWith(VisualModService.GetManagedTextureModificationPaths());
+
+            foreach (string fileLocation in previouslyAppliedMods)
             {
-                if (modFolderFiles.Contains(fileLocation))
+                if (currentModFiles.Contains(fileLocation))
                     continue;
-                
-                var packageMapEntry = PackageDirectoryMap.SingleOrDefault(x => !String.IsNullOrEmpty(x.Value) && fileLocation.StartsWith(x.Value));
+
+                string versionFileLocation = Path.Combine(_latestVersionDirectory, fileLocation);
+                try
+                {
+                    if (File.Exists(versionFileLocation))
+                    {
+                        Filesystem.AssertReadOnly(versionFileLocation);
+                        File.Delete(versionFileLocation);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    App.Logger.WriteLine(LOG_IDENT, $"Failed to remove deployed modification ({fileLocation})");
+                    App.Logger.WriteException(LOG_IDENT, ex);
+                    modFolderFiles.Add(fileLocation);
+                    success = false;
+                    managedTextureRepairFailed = true;
+                    continue;
+                }
+
+                var packageMapEntry = PackageDirectoryMap.SingleOrDefault(x =>
+                    !String.IsNullOrEmpty(x.Value) &&
+                    fileLocation.StartsWith(x.Value, StringComparison.OrdinalIgnoreCase));
                 string packageName = packageMapEntry.Key;
 
                 // package doesn't exist, likely mistakenly placed file
                 if (String.IsNullOrEmpty(packageName))
                 {
                     App.Logger.WriteLine(LOG_IDENT, $"{fileLocation} was removed as a mod but does not belong to a package");
-
-                    string versionFileLocation = Path.Combine(_latestVersionDirectory, fileLocation);
-
-                    if (File.Exists(versionFileLocation))
-                        File.Delete(versionFileLocation);
-
                     continue;
                 }
 
@@ -1555,6 +1466,12 @@ namespace SleepStrap
                     await DownloadPackage(package);
                     ExtractPackage(package, entry.Value);
                 }
+            }
+
+            if (repairManagedTextures && !managedTextureRepairFailed)
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(managedTextureRepairMarker)!);
+                File.WriteAllText(managedTextureRepairMarker, App.Version);
             }
 
             // make sure we're not overwriting a new update

@@ -15,8 +15,8 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         public bool UpdateCheckingEnabled
         {
-            get => false;
-            set => App.Settings.Prop.CheckForUpdates = false;
+            get => App.Settings.Prop.CheckForUpdates;
+            set => App.Settings.Prop.CheckForUpdates = value;
         }
 
         private async Task LoadChannelDeployInfo(string channel)

@@ -24,6 +24,7 @@ SleepStrap is a purple Windows launcher for Roblox with skyboxes, texture preset
 - Clear, blurry, and polished-metal RTX-style visual modes
 - Montserrat-first selector for Roblox GUI and direct in-game text fonts
 - Rivals horizontal display stretching, FPS presets, and in-game FPS counter
+- Automatic GitHub release checks with a confirmation prompt before updating
 - Other page with Discord, version, attribution, and terms
 
 ## Build
