@@ -20,6 +20,7 @@ namespace SleepStrap
             
             { "User.MouseSensitivity", "{UserSettings}/float[@name='MouseSensitivity']"},
             { "User.VREnabled", "{UserSettings}/bool[@name='VREnabled']"},
+            { "User.PerformanceStatsVisible", "{UserSettings}/bool[@name='PerformanceStatsVisible']"},
 
             // mostly accessibility
             { "UI.Transparency", "{UserSettings}/float[@name='PreferredTransparency']" },

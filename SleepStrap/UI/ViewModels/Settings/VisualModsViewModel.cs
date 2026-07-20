@@ -10,6 +10,9 @@ namespace SleepStrap.UI.ViewModels.Settings
 {
     public class VisualModsViewModel : NotifyPropertyChangedViewModel
     {
+        public sealed record TexturePackChoice(string Name, string Preview);
+        public sealed record TextureEffectChoice(string Name);
+
         private bool _isBusy;
         private string _statusText = "Ready";
         private readonly List<FontChoice> _fontChoices;
@@ -107,6 +110,36 @@ namespace SleepStrap.UI.ViewModels.Settings
             private set { _statusText = value; OnPropertyChanged(nameof(StatusText)); }
         }
 
+        public IReadOnlyList<TexturePackChoice> TexturePackChoices { get; } = new[]
+        {
+            new TexturePackChoice("Basic", "pack://application:,,,/Resources/SleepStrap/Previews/Basic.png"),
+            new TexturePackChoice("Dark", "pack://application:,,,/Resources/SleepStrap/Previews/Dark.png")
+        };
+
+        public string SelectedTexturePack
+        {
+            get => App.Settings.Prop.DarkTexturesEnabled ? "Dark" : "Basic";
+            set
+            {
+                if (!TexturePackChoices.Any(choice => String.Equals(choice.Name, value, StringComparison.Ordinal)))
+                    return;
+
+                DarkTexturesEnabled = String.Equals(value, "Dark", StringComparison.Ordinal);
+            }
+        }
+
+        public string ActiveTexturePreview => App.Settings.Prop.DarkTexturesEnabled
+            ? "pack://application:,,,/Resources/SleepStrap/Previews/Dark.png"
+            : "pack://application:,,,/Resources/SleepStrap/Previews/Basic.png";
+
+        public string ActiveBlurPreview => App.Settings.Prop.DarkTexturesEnabled
+            ? "pack://application:,,,/Resources/SleepStrap/Previews/Dark.png"
+            : "pack://application:,,,/Resources/SleepStrap/Previews/BasicBlur.png";
+
+        public string ActiveRtxPreview => App.Settings.Prop.DarkTexturesEnabled
+            ? "pack://application:,,,/Resources/SleepStrap/Previews/DarkRtx.png"
+            : "pack://application:,,,/Resources/SleepStrap/Previews/BasicRtx.png";
+
         public bool DarkTexturesEnabled
         {
             get => App.Settings.Prop.DarkTexturesEnabled;
@@ -116,7 +149,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                     return;
                 if (!EnsureRiskAcknowledged())
                 {
-                    OnPropertyChanged(nameof(DarkTexturesEnabled));
+                    NotifyTexturePackSelectionChanged();
                     return;
                 }
                 try
@@ -126,6 +159,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                     VisualModService.SetDarkTextures(value);
                     App.Settings.Prop.DarkTexturesEnabled = value;
                     App.Settings.Save();
+                    NotifyTexturePackSelectionChanged();
                     OnPropertyChanged(nameof(DarkRtxPreviewVisibility));
                     StatusText = value ? "Dark textures are ready for the next launch." : "Basic Roblox textures restored.";
                 }
@@ -133,11 +167,20 @@ namespace SleepStrap.UI.ViewModels.Settings
                 {
                     App.Logger.WriteException("VisualModsViewModel::SetDarkTextures", ex);
                     Frontend.ShowMessageBox($"SleepStrap could not switch the texture pack.\n\n{ex.Message}", MessageBoxImage.Error);
-                    OnPropertyChanged(nameof(DarkTexturesEnabled));
+                    NotifyTexturePackSelectionChanged();
                     StatusText = "Texture switch failed.";
                 }
                 finally { IsBusy = false; }
             }
+        }
+
+        private void NotifyTexturePackSelectionChanged()
+        {
+            OnPropertyChanged(nameof(DarkTexturesEnabled));
+            OnPropertyChanged(nameof(SelectedTexturePack));
+            OnPropertyChanged(nameof(ActiveTexturePreview));
+            OnPropertyChanged(nameof(ActiveBlurPreview));
+            OnPropertyChanged(nameof(ActiveRtxPreview));
         }
 
         public bool BlurryTexturesEnabled
@@ -212,7 +255,12 @@ namespace SleepStrap.UI.ViewModels.Settings
             }
         }
 
-        public IReadOnlyList<string> TextureEffectChoices { get; } = new[] { "None", "Blurry", "RTX" };
+        public IReadOnlyList<TextureEffectChoice> TextureEffectChoices { get; } = new[]
+        {
+            new TextureEffectChoice("None"),
+            new TextureEffectChoice("Blur"),
+            new TextureEffectChoice("RTX")
+        };
 
         public Visibility DarkRtxPreviewVisibility =>
             App.Settings.Prop.DarkTexturesEnabled && App.Settings.Prop.RtxShineEnabled
@@ -223,15 +271,15 @@ namespace SleepStrap.UI.ViewModels.Settings
         {
             get => App.Settings.Prop.RtxShineEnabled
                 ? "RTX"
-                : App.Settings.Prop.BlurryTexturesEnabled ? "Blurry" : "None";
+                : App.Settings.Prop.BlurryTexturesEnabled ? "Blur" : "None";
             set
             {
-                if (!TextureEffectChoices.Contains(value) || IsBusy)
+                if (!TextureEffectChoices.Any(choice => String.Equals(choice.Name, value, StringComparison.Ordinal)) || IsBusy)
                     return;
 
                 bool oldBlur = App.Settings.Prop.BlurryTexturesEnabled;
                 bool oldRtx = App.Settings.Prop.RtxShineEnabled;
-                bool enableBlur = String.Equals(value, "Blurry", StringComparison.Ordinal);
+                bool enableBlur = String.Equals(value, "Blur", StringComparison.Ordinal);
                 bool enableRtx = String.Equals(value, "RTX", StringComparison.Ordinal);
 
                 if (oldBlur == enableBlur && oldRtx == enableRtx)
@@ -263,6 +311,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                     App.Settings.Prop.BlurryTexturesEnabled = enableBlur;
                     App.Settings.Prop.RtxShineEnabled = enableRtx;
                     App.Settings.Save();
+                    OnPropertyChanged(nameof(SelectedTextureEffect));
                     OnPropertyChanged(nameof(DarkRtxPreviewVisibility));
                     StatusText = enableBlur
                         ? "Blurry is ready for the next launch."

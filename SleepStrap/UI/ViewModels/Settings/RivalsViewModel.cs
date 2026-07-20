@@ -271,7 +271,7 @@ namespace SleepStrap.UI.ViewModels.Settings
         };
 
         private static string GetCounterStatus() => App.Settings.Prop.RivalsFpsCounterEnabled
-            ? " Counter: Roblox render overlay enabled."
+            ? " Counter: Roblox performance stats enabled."
             : "";
     }
 }

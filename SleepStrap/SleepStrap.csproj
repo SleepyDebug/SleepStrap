@@ -7,8 +7,8 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>SleepStrap.ico</ApplicationIcon>
-    <Version>6.7.3.0</Version>
-    <FileVersion>6.7.3.0</FileVersion>
+    <Version>6.7.4.0</Version>
+    <FileVersion>6.7.4.0</FileVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
@@ -95,6 +95,10 @@
       <LogicalName>SleepStrap.RivalsSkyboxFix/CacheHeader.bin</LogicalName>
     </EmbeddedResource>
     <Resource Include="Resources\SleepStrap\Previews\DarkRtx.png" />
+    <Resource Include="Resources\SleepStrap\Previews\Basic.png" />
+    <Resource Include="Resources\SleepStrap\Previews\Dark.png" />
+    <Resource Include="Resources\SleepStrap\Previews\BasicBlur.png" />
+    <Resource Include="Resources\SleepStrap\Previews\BasicRtx.png" />
   </ItemGroup>
 
   <ItemGroup>

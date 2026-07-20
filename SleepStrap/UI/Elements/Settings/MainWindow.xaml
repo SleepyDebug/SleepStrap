@@ -10,7 +10,7 @@
              xmlns:dmodels="clr-namespace:SleepStrap.UI.ViewModels.Settings"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance dmodels:MainWindowViewModel, IsDesignTimeCreatable=True}"
-             Title="{x:Static resources:Strings.Menu_Title}"
+             Title="{Binding WindowTitle}"
              MinWidth="920"
              Width="920"
              Height="600"
@@ -54,7 +54,7 @@
             Message="{x:Static resources:Strings.Menu_SettingsSaved_Message}"
             Appearance="Success" Icon="CheckmarkCircle32" Timeout="3000" Margin="200,0,200,20" Grid.RowSpan="10" Panel.ZIndex="9" />
 
-        <ui:TitleBar Padding="8" x:Name="RootTitleBar" Grid.Row="0" ForceShutdown="False" MinimizeToTray="False" UseSnapLayout="True" Title="{x:Static resources:Strings.Menu_Title}" Icon="pack://application:,,,/SleepStrap.ico" />
+        <ui:TitleBar Padding="8" x:Name="RootTitleBar" Grid.Row="0" ForceShutdown="False" MinimizeToTray="False" UseSnapLayout="True" Title="{Binding WindowTitle}" Icon="pack://application:,,,/SleepStrap.ico" />
 
         <Grid x:Name="RootGrid" Grid.Row="1" Margin="12,12,0,0" Visibility="Visible">
             <Grid.RowDefinitions>
@@ -74,7 +74,10 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Image Width="26" Height="26" Source="pack://application:,,,/SleepStrap.ico" RenderOptions.BitmapScalingMode="HighQuality" />
-                    <TextBlock Grid.Column="1" Text="SleepStrap" Margin="9,0,0,0" VerticalAlignment="Center" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource SleepStrapAccentBrush}" />
+                    <StackPanel Grid.Column="1" Margin="9,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="SleepStrap" FontSize="17" FontWeight="SemiBold" Foreground="{DynamicResource SleepStrapAccentBrush}" />
+                        <TextBlock Text="{Binding VersionText}" Margin="0,1,0,0" FontSize="10.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
                 </Grid>
             </Border>
 
