@@ -11,6 +11,12 @@ namespace SleepStrap.Services
         Utility
     }
 
+    public enum MacroWeaponLayout
+    {
+        Grid,
+        List
+    }
+
     public readonly record struct MacroPoint(int X, int Y);
 
     public static class MacroAutomationService
@@ -22,73 +28,104 @@ namespace SleepStrap.Services
         private const int RecordedScreenTop = 0;
         private const int RecordedScreenWidth = 1920;
         private const int RecordedScreenHeight = 1080;
-        private const int TargetClientWidth = 1920;
-        private const int TargetClientHeight = 1080;
         private const int SwRestore = 9;
-        private const uint SwpNoZOrder = 0x0004;
-        private const uint SwpNoActivate = 0x0010;
-        private const uint MonitorDefaultToNearest = 0x00000002;
-        private const int GwlStyle = -16;
-        private const int GwlExStyle = -20;
         private const uint MouseEventMove = 0x0001;
         private const uint MouseEventLeftDown = 0x0002;
         private const uint MouseEventLeftUp = 0x0004;
+        private const uint MouseEventWheel = 0x0800;
         private const uint MouseEventVirtualDesk = 0x4000;
         private const uint MouseEventAbsolute = 0x8000;
 
-        private static readonly IReadOnlyDictionary<MacroWeaponCategory, MacroPoint[]> Slots =
+        private static readonly IReadOnlyDictionary<MacroWeaponCategory, MacroPoint[]> GridSlots =
             new Dictionary<MacroWeaponCategory, MacroPoint[]>
             {
                 [MacroWeaponCategory.Primary] = new[]
                 {
-                    new MacroPoint(-1119, 577), new MacroPoint(-961, 569), new MacroPoint(-820, 574),
-                    new MacroPoint(-665, 574), new MacroPoint(-1259, 729), new MacroPoint(-1108, 715),
-                    new MacroPoint(-960, 721), new MacroPoint(-832, 718), new MacroPoint(-667, 722),
-                    new MacroPoint(-1267, 882), new MacroPoint(-1116, 856), new MacroPoint(-970, 862),
-                    new MacroPoint(-836, 861), new MacroPoint(-648, 860), new MacroPoint(-1261, 1032)
+                    new MacroPoint(-1115, 571), new MacroPoint(-970, 566), new MacroPoint(-824, 572),
+                    new MacroPoint(-682, 576), new MacroPoint(-1267, 726), new MacroPoint(-1114, 725),
+                    new MacroPoint(-965, 720), new MacroPoint(-817, 712), new MacroPoint(-657, 725),
+                    new MacroPoint(-1269, 863), new MacroPoint(-1111, 865), new MacroPoint(-964, 869),
+                    new MacroPoint(-817, 862), new MacroPoint(-680, 860), new MacroPoint(-1268, 1013)
                 },
                 [MacroWeaponCategory.Secondary] = new[]
                 {
-                    new MacroPoint(-1119, 598), new MacroPoint(-945, 578), new MacroPoint(-816, 589),
-                    new MacroPoint(-669, 583), new MacroPoint(-1276, 738), new MacroPoint(-1077, 713),
-                    new MacroPoint(-959, 719), new MacroPoint(-804, 716), new MacroPoint(-665, 721),
-                    new MacroPoint(-1271, 895), new MacroPoint(-1110, 890)
+                    new MacroPoint(-1116, 574), new MacroPoint(-966, 575), new MacroPoint(-821, 569),
+                    new MacroPoint(-673, 566), new MacroPoint(-1263, 719), new MacroPoint(-1111, 717),
+                    new MacroPoint(-966, 718), new MacroPoint(-821, 724), new MacroPoint(-666, 714),
+                    new MacroPoint(-1264, 876), new MacroPoint(-1105, 875)
                 },
                 [MacroWeaponCategory.Melee] = new[]
                 {
-                    new MacroPoint(-1121, 587), new MacroPoint(-994, 578), new MacroPoint(-814, 578),
-                    new MacroPoint(-663, 581), new MacroPoint(-1277, 726), new MacroPoint(-1117, 733),
-                    new MacroPoint(-978, 727), new MacroPoint(-803, 730), new MacroPoint(-662, 730),
-                    new MacroPoint(-1260, 865)
+                    new MacroPoint(-1115, 575), new MacroPoint(-968, 581), new MacroPoint(-832, 581),
+                    new MacroPoint(-672, 571), new MacroPoint(-1266, 721), new MacroPoint(-1109, 719),
+                    new MacroPoint(-970, 719), new MacroPoint(-812, 716), new MacroPoint(-676, 718),
+                    new MacroPoint(-1244, 867)
                 },
                 [MacroWeaponCategory.Utility] = new[]
                 {
-                    new MacroPoint(-1109, 582), new MacroPoint(-991, 576), new MacroPoint(-806, 572),
-                    new MacroPoint(-666, 571), new MacroPoint(-1261, 735), new MacroPoint(-1135, 724),
-                    new MacroPoint(-959, 735), new MacroPoint(-760, 737), new MacroPoint(-684, 747),
-                    new MacroPoint(-1259, 880), new MacroPoint(-1143, 877), new MacroPoint(-951, 870)
+                    new MacroPoint(-1100, 569), new MacroPoint(-974, 577), new MacroPoint(-814, 587),
+                    new MacroPoint(-687, 587), new MacroPoint(-1261, 734), new MacroPoint(-1101, 719),
+                    new MacroPoint(-977, 732), new MacroPoint(-793, 731), new MacroPoint(-679, 722),
+                    new MacroPoint(-1265, 859), new MacroPoint(-1106, 857), new MacroPoint(-965, 858)
+                }
+            };
+
+        private static readonly IReadOnlyDictionary<MacroWeaponCategory, MacroPoint[]> ListSlots =
+            new Dictionary<MacroWeaponCategory, MacroPoint[]>
+            {
+                [MacroWeaponCategory.Primary] = new[]
+                {
+                    new MacroPoint(-968, 492), new MacroPoint(-958, 577), new MacroPoint(-969, 671),
+                    new MacroPoint(-965, 740), new MacroPoint(-984, 830), new MacroPoint(-980, 914),
+                    new MacroPoint(-974, 997), new MacroPoint(-969, 437), new MacroPoint(-963, 531),
+                    new MacroPoint(-960, 602), new MacroPoint(-953, 691), new MacroPoint(-950, 788),
+                    new MacroPoint(-952, 877), new MacroPoint(-949, 950), new MacroPoint(-957, 1030)
+                },
+                [MacroWeaponCategory.Secondary] = new[]
+                {
+                    new MacroPoint(-962, 477), new MacroPoint(-957, 571), new MacroPoint(-965, 657),
+                    new MacroPoint(-956, 741), new MacroPoint(-972, 827), new MacroPoint(-989, 902),
+                    new MacroPoint(-955, 992), new MacroPoint(-969, 774), new MacroPoint(-969, 858),
+                    new MacroPoint(-972, 949), new MacroPoint(-953, 1022)
+                },
+                [MacroWeaponCategory.Melee] = new[]
+                {
+                    new MacroPoint(-962, 489), new MacroPoint(-955, 570), new MacroPoint(-954, 655),
+                    new MacroPoint(-954, 740), new MacroPoint(-968, 826), new MacroPoint(-960, 901),
+                    new MacroPoint(-962, 1005), new MacroPoint(-970, 850), new MacroPoint(-958, 932),
+                    new MacroPoint(-959, 1024)
+                },
+                [MacroWeaponCategory.Utility] = new[]
+                {
+                    new MacroPoint(-953, 480), new MacroPoint(-968, 570), new MacroPoint(-960, 643),
+                    new MacroPoint(-974, 738), new MacroPoint(-968, 828), new MacroPoint(-952, 914),
+                    new MacroPoint(-990, 1009), new MacroPoint(-973, 680), new MacroPoint(-975, 774),
+                    new MacroPoint(-966, 855), new MacroPoint(-971, 942), new MacroPoint(-990, 1043)
                 }
             };
 
         public static MacroPoint ResolveSlot(
             MacroWeaponCategory category,
             int originalIndex,
-            IEnumerable<int> missingIndices)
+            IEnumerable<int> missingIndices,
+            MacroWeaponLayout layout)
         {
+            IReadOnlyDictionary<MacroWeaponCategory, MacroPoint[]> slots =
+                layout == MacroWeaponLayout.List ? ListSlots : GridSlots;
             int shift = missingIndices.Count(index => index < originalIndex);
-            int effectiveIndex = Math.Clamp(originalIndex - shift, 0, Slots[category].Length - 1);
-            return Slots[category][effectiveIndex];
+            int effectiveIndex = Math.Clamp(originalIndex - shift, 0, slots[category].Length - 1);
+            int positionIndex = effectiveIndex;
+            return slots[category][positionIndex];
         }
 
         public static async Task RunLoadoutAsync(
             IReadOnlyList<(MacroWeaponCategory Category, int OriginalIndex, IReadOnlyList<int> MissingIndices)> selections,
+            MacroWeaponLayout layout,
             CancellationToken cancellationToken)
         {
             IntPtr robloxWindow = FindRobloxWindow();
             if (robloxWindow == IntPtr.Zero)
                 throw new InvalidOperationException("Roblox is not running.");
-
-            await NormalizeRobloxWindowAsync(robloxWindow, cancellationToken);
 
             // Do not send SW_RESTORE to a fullscreen or maximized Roblox window. Windows can
             // interpret that as a request to leave its current presentation state.
@@ -121,8 +158,14 @@ namespace SleepStrap.Services
                         await Task.Delay(650, cancellationToken);
 
                     var selection = selections[index];
-                    MacroPoint point = ResolveSlot(selection.Category, selection.OriginalIndex, selection.MissingIndices);
+                    MacroPoint point = ResolveSlot(selection.Category, selection.OriginalIndex, selection.MissingIndices, layout);
                     point = MapRecordedPointToWindow(point, robloxWindow);
+                    if (layout == MacroWeaponLayout.List)
+                    {
+                        int missingBefore = selection.MissingIndices.Count(missing => missing < selection.OriginalIndex);
+                        int effectiveIndex = Math.Max(0, selection.OriginalIndex - missingBefore);
+                        await PrepareListScrollAsync(point, effectiveIndex >= 7, cancellationToken);
+                    }
                     await MoveAndClickExactPointAsync(point, cancellationToken);
                     await Task.Delay(index < 3 ? 180 : 250, cancellationToken);
                 }
@@ -225,6 +268,41 @@ namespace SleepStrap.Services
             }
         }
 
+        private static async Task PrepareListScrollAsync(MacroPoint point, bool scrollToBottom, CancellationToken cancellationToken)
+        {
+            App.Logger.WriteLine(
+                "MacroAutomationService",
+                $"Normalizing List layout at {point.X}, {point.Y}; target edge: {(scrollToBottom ? "bottom" : "top")}");
+            if (!SetCursorPos(point.X, point.Y))
+                throw new InvalidOperationException("SleepStrap could not position the cursor over the List layout.");
+
+            // Normalize every category to the top first. RIVALS preserves some List
+            // scroll positions between openings, so relying on the current offset can
+            // select the wrong weapon even when the recorded point is correct.
+            await Task.Delay(90, cancellationToken);
+            for (int notch = 0; notch < 24; notch++)
+            {
+                SendMouseWheel(120);
+                await Task.Delay(24, cancellationToken);
+            }
+
+            await Task.Delay(220, cancellationToken);
+            if (!scrollToBottom)
+                return;
+
+            // Every recorded weapon from slot eight onward was captured with its
+            // category at the bottom edge. Deliberately overscroll so no wheel input
+            // dropped by RIVALS can leave the list between pages.
+            for (int notch = 0; notch < 30; notch++)
+            {
+                SendMouseWheel(-120);
+                await Task.Delay(28, cancellationToken);
+            }
+
+            // Let the animated list settle before the exact recorded click.
+            await Task.Delay(420, cancellationToken);
+        }
+
         private static async Task ClickRecordedPointAsync(IntPtr window, MacroPoint recordedPoint, int waitAfter, CancellationToken cancellationToken)
         {
             await MoveAndClickExactPointAsync(MapRecordedPointToWindow(recordedPoint, window), cancellationToken);
@@ -278,66 +356,6 @@ namespace SleepStrap.Services
             return new MacroPoint(mappedX, mappedY);
         }
 
-        private static async Task NormalizeRobloxWindowAsync(IntPtr window, CancellationToken cancellationToken)
-        {
-            if (!GetClientRect(window, out RECT currentClient))
-                return;
-
-            int currentWidth = currentClient.Right - currentClient.Left;
-            int currentHeight = currentClient.Bottom - currentClient.Top;
-            if (currentWidth == TargetClientWidth && currentHeight == TargetClientHeight)
-                return;
-
-            // Restore down rather than minimize to the taskbar: a minimized window cannot
-            // receive the selector hotkey or clicks. The coordinate mapper below still
-            // scales to the final client size if the monitor cannot fit full 1080p.
-            ShowWindowAsync(window, SwRestore);
-            await Task.Delay(150, cancellationToken);
-
-            IntPtr monitor = MonitorFromWindow(window, MonitorDefaultToNearest);
-            MONITORINFO monitorInfo = new() { Size = Marshal.SizeOf<MONITORINFO>() };
-            if (monitor == IntPtr.Zero || !GetMonitorInfo(monitor, ref monitorInfo))
-                return;
-
-            int style = GetWindowLong(window, GwlStyle);
-            int extendedStyle = GetWindowLong(window, GwlExStyle);
-            RECT targetFrame = new() { Right = TargetClientWidth, Bottom = TargetClientHeight };
-            if (!AdjustWindowRectEx(ref targetFrame, style, false, extendedStyle))
-                return;
-
-            int chromeWidth = (targetFrame.Right - targetFrame.Left) - TargetClientWidth;
-            int chromeHeight = (targetFrame.Bottom - targetFrame.Top) - TargetClientHeight;
-            int workWidth = monitorInfo.Work.Right - monitorInfo.Work.Left;
-            int workHeight = monitorInfo.Work.Bottom - monitorInfo.Work.Top;
-            int availableClientWidth = Math.Max(640, workWidth - Math.Max(0, chromeWidth));
-            int availableClientHeight = Math.Max(360, workHeight - Math.Max(0, chromeHeight));
-            double scale = Math.Min(
-                1d,
-                Math.Min(availableClientWidth / (double)TargetClientWidth, availableClientHeight / (double)TargetClientHeight));
-            int targetClientWidth = Math.Max(640, (int)Math.Floor(TargetClientWidth * scale / 2d) * 2);
-            int targetClientHeight = Math.Max(360, (int)Math.Floor(TargetClientHeight * scale / 2d) * 2);
-
-            targetFrame = new RECT { Right = targetClientWidth, Bottom = targetClientHeight };
-            if (!AdjustWindowRectEx(ref targetFrame, style, false, extendedStyle))
-                return;
-
-            int outerWidth = targetFrame.Right - targetFrame.Left;
-            int outerHeight = targetFrame.Bottom - targetFrame.Top;
-            int x = monitorInfo.Work.Left + Math.Max(0, (workWidth - outerWidth) / 2);
-            int y = monitorInfo.Work.Top + Math.Max(0, (workHeight - outerHeight) / 2);
-            if (!SetWindowPos(window, IntPtr.Zero, x, y, outerWidth, outerHeight, SwpNoZOrder | SwpNoActivate))
-                return;
-
-            await Task.Delay(150, cancellationToken);
-            if (GetClientRect(window, out RECT resizedClient))
-            {
-                App.Logger.WriteLine(
-                    "MacroAutomationService",
-                    $"Restored and scaled Roblox client from {currentWidth}x{currentHeight} to " +
-                    $"{resizedClient.Right - resizedClient.Left}x{resizedClient.Bottom - resizedClient.Top}");
-            }
-        }
-
         private static void SendMouseButton(uint flags)
         {
             INPUT[] inputs =
@@ -354,6 +372,28 @@ namespace SleepStrap.Services
 
             if (SendInput(1, inputs, Marshal.SizeOf<INPUT>()) != 1)
                 throw new Win32Exception(Marshal.GetLastWin32Error(), "Windows rejected the simulated mouse click.");
+        }
+
+        private static void SendMouseWheel(int delta)
+        {
+            INPUT[] inputs =
+            {
+                new INPUT
+                {
+                    Type = 0,
+                    Data = new INPUTUNION
+                    {
+                        Mouse = new MOUSEINPUT
+                        {
+                            MouseData = unchecked((uint)delta),
+                            Flags = MouseEventWheel
+                        }
+                    }
+                }
+            };
+
+            if (SendInput(1, inputs, Marshal.SizeOf<INPUT>()) != 1)
+                throw new Win32Exception(Marshal.GetLastWin32Error(), "Windows rejected the simulated List scroll.");
         }
 
         private static void SendMouseAtPoint(MacroPoint point, uint buttonFlags)
@@ -445,15 +485,6 @@ namespace SleepStrap.Services
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct MONITORINFO
-        {
-            public int Size;
-            public RECT Monitor;
-            public RECT Work;
-            public uint Flags;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
         private struct INPUT
         {
             public uint Type;
@@ -513,21 +544,6 @@ namespace SleepStrap.Services
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool ClientToScreen(IntPtr window, ref POINT point);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool SetWindowPos(IntPtr window, IntPtr insertAfter, int x, int y, int width, int height, uint flags);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern bool AdjustWindowRectEx(ref RECT rectangle, int style, bool hasMenu, int extendedStyle);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern int GetWindowLong(IntPtr window, int index);
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr MonitorFromWindow(IntPtr window, uint flags);
-
-        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        private static extern bool GetMonitorInfo(IntPtr monitor, ref MONITORINFO monitorInfo);
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern uint SendInput(uint inputCount, INPUT[] inputs, int inputSize);

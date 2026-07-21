@@ -8,18 +8,14 @@
       mc:Ignorable="d" d:DataContext="{d:DesignInstance dmodels:RivalsViewModel, IsDesignTimeCreatable=True}"
       d:DesignHeight="650" d:DesignWidth="800" Title="PC" Scrollable="True">
     <StackPanel Margin="0,0,14,20">
-        <Border Padding="18" CornerRadius="14" BorderThickness="0">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#442D1760" Offset="0" />
-                    <GradientStop Color="#662D1B69" Offset="0.55" />
-                    <GradientStop Color="#33211A3A" Offset="1" />
-                </LinearGradientBrush>
-            </Border.Background>
+        <Border Padding="18,14,18,12" CornerRadius="14" BorderThickness="0" Background="#C40A0A0C">
             <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                <TextBlock Text="PC" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
-                <ui:SymbolIcon Grid.Column="1" Symbol="PlaySettings20" FontSize="34" Foreground="#A78BFA" />
+                <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <TextBlock Text="PC" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <ui:SymbolIcon Grid.Column="1" Symbol="PlaySettings20" FontSize="34" Foreground="White" Opacity="0.72" />
+                </Grid>
+                <Border Grid.Row="1" Margin="0,12,0,0" Height="1"><Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,0"><GradientStop Color="#00FFFFFF" Offset="0" /><GradientStop Color="#CFFFFFFF" Offset="0.5" /><GradientStop Color="#00FFFFFF" Offset="1" /></LinearGradientBrush></Border.Background></Border>
             </Grid>
         </Border>
 
@@ -36,7 +32,7 @@
                 <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock Text="Off" HorizontalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                     <ui:ToggleSwitch IsChecked="{Binding StretchEnabled, Mode=TwoWay}" Margin="0,8" />
-                    <TextBlock Text="Stretched" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="#B99AFB" />
+                    <TextBlock Text="Stretched" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="White" />
                 </StackPanel>
             </Grid>
         </ui:CardExpander>

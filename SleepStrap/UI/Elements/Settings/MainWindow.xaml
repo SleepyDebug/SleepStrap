@@ -11,16 +11,87 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance dmodels:MainWindowViewModel, IsDesignTimeCreatable=True}"
              Title="{Binding WindowTitle}"
-             MinWidth="920"
-             Width="920"
-             Height="600"
-             Background="{DynamicResource SleepStrapWindowBackgroundBrush}"
+             MinWidth="940"
+             Width="980"
+             Height="640"
+             Background="Transparent"
              ExtendsContentIntoTitleBar="True"
              WindowBackdropType="Mica"
              WindowStartupLocation="CenterScreen"
              Closing="WpfUiWindow_Closing"
              Closed="WpfUiWindow_Closed">
-    <Grid Background="Transparent">
+    <base:WpfUiWindow.Resources>
+        <Style TargetType="{x:Type ui:CardExpander}" BasedOn="{StaticResource DefaultUiCardExpanderStyle}">
+            <Setter Property="Background" Value="#E60A0A0C" />
+            <Setter Property="BorderBrush" Value="#30FFFFFF" />
+            <Setter Property="Border.CornerRadius" Value="12" />
+        </Style>
+    </base:WpfUiWindow.Resources>
+    <Grid Background="#38000000" ClipToBounds="True">
+    <Rectangle x:Name="SpaceStarsFar" Margin="-260" IsHitTestVisible="False" Opacity="0.28">
+        <Rectangle.RenderTransform><TranslateTransform /></Rectangle.RenderTransform>
+        <Rectangle.Triggers>
+            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                <BeginStoryboard>
+                    <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="-70" To="90" Duration="0:0:44" />
+                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" From="-35" To="55" Duration="0:0:37" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Rectangle.Triggers>
+        <Rectangle.Fill>
+            <DrawingBrush TileMode="Tile" Viewport="0,0,230,170" ViewportUnits="Absolute">
+                <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                        <GeometryDrawing Brush="#00FFFFFF" Geometry="M0,0 H230 V170 H0 Z" />
+                        <GeometryDrawing Brush="#A8FFFFFF"><GeometryDrawing.Geometry><EllipseGeometry Center="24,29" RadiusX="1.1" RadiusY="1.1" /></GeometryDrawing.Geometry></GeometryDrawing>
+                        <GeometryDrawing Brush="#5CFFFFFF"><GeometryDrawing.Geometry><EllipseGeometry Center="89,18" RadiusX="0.7" RadiusY="0.7" /></GeometryDrawing.Geometry></GeometryDrawing>
+                        <GeometryDrawing Brush="#78FFFFFF"><GeometryDrawing.Geometry><EllipseGeometry Center="171,42" RadiusX="1.25" RadiusY="1.25" /></GeometryDrawing.Geometry></GeometryDrawing>
+                        <GeometryDrawing Brush="#70FFFFFF"><GeometryDrawing.Geometry><EllipseGeometry Center="211,96" RadiusX="0.85" RadiusY="0.85" /></GeometryDrawing.Geometry></GeometryDrawing>
+                        <GeometryDrawing Brush="#46FFFFFF"><GeometryDrawing.Geometry><EllipseGeometry Center="54,132" RadiusX="0.7" RadiusY="0.7" /></GeometryDrawing.Geometry></GeometryDrawing>
+                        <GeometryDrawing Brush="#66FFFFFF"><GeometryDrawing.Geometry><EllipseGeometry Center="132,151" RadiusX="1" RadiusY="1" /></GeometryDrawing.Geometry></GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingBrush.Drawing>
+            </DrawingBrush>
+        </Rectangle.Fill>
+    </Rectangle>
+    <Rectangle x:Name="SpaceStarsNear" Margin="-220" IsHitTestVisible="False" Opacity="0.22">
+        <Rectangle.RenderTransform><TranslateTransform /></Rectangle.RenderTransform>
+        <Rectangle.Triggers>
+            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                <BeginStoryboard>
+                    <Storyboard RepeatBehavior="Forever" AutoReverse="True">
+                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="65" To="-85" Duration="0:0:31" />
+                        <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)" From="40" To="-50" Duration="0:0:29" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Rectangle.Triggers>
+        <Rectangle.Fill>
+            <DrawingBrush TileMode="Tile" Viewport="0,0,310,240" ViewportUnits="Absolute">
+                <DrawingBrush.Drawing>
+                    <DrawingGroup>
+                        <GeometryDrawing Brush="#00FFFFFF" Geometry="M0,0 H310 V240 H0 Z" />
+                        <GeometryDrawing Brush="#B8FFFFFF"><GeometryDrawing.Geometry><EllipseGeometry Center="72,56" RadiusX="1.35" RadiusY="1.35" /></GeometryDrawing.Geometry></GeometryDrawing>
+                        <GeometryDrawing Brush="#80FFFFFF"><GeometryDrawing.Geometry><EllipseGeometry Center="265,91" RadiusX="1" RadiusY="1" /></GeometryDrawing.Geometry></GeometryDrawing>
+                        <GeometryDrawing Brush="#66FFFFFF"><GeometryDrawing.Geometry><EllipseGeometry Center="188,211" RadiusX="0.85" RadiusY="0.85" /></GeometryDrawing.Geometry></GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingBrush.Drawing>
+            </DrawingBrush>
+        </Rectangle.Fill>
+    </Rectangle>
+    <Ellipse Width="760" Height="520" Margin="-260,-310,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
+             IsHitTestVisible="False" Opacity="0.32">
+        <Ellipse.Fill>
+            <RadialGradientBrush>
+                <GradientStop Color="#24FFFFFF" Offset="0" />
+                <GradientStop Color="#0DFFFFFF" Offset="0.48" />
+                <GradientStop Color="#00FFFFFF" Offset="1" />
+            </RadialGradientBrush>
+        </Ellipse.Fill>
+    </Ellipse>
+    <Border Margin="8" CornerRadius="15" Background="#08FFFFFF" IsHitTestVisible="False" />
     <Grid x:Name="RootShell" Opacity="0">
         <Grid.RenderTransform>
             <TranslateTransform Y="10" />
@@ -82,7 +153,8 @@
                 </Grid>
             </Border>
 
-            <ui:NavigationFluent x:Name="RootNavigation" Grid.Row="1" Grid.Column="0" Margin="0,0,12,0" Frame="{Binding ElementName=RootFrame}" SelectedPageIndex="0">
+            <ui:NavigationFluent x:Name="RootNavigation" Grid.Row="1" Grid.Column="0" Margin="0,0,12,0"
+                                 Background="#D908080A" Frame="{Binding ElementName=RootFrame}" SelectedPageIndex="0">
                 <ui:NavigationFluent.Items>
                     <ui:NavigationItem Content="Skybox" PageType="{x:Type pages:SkyboxPage}" Icon="Cube24" Tag="skybox" />
                     <ui:NavigationItem Content="Textures" PageType="{x:Type pages:TexturesPage}" Icon="WrenchScrewdriver20" Tag="textures" />
@@ -93,12 +165,13 @@
                 </ui:NavigationFluent.Items>
             </ui:NavigationFluent>
 
-            <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
+            <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Margin="0,0,12,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <ui:InfoBar x:Name="AlertBar" Grid.Row="0" Margin="0,0,12,0" Padding="8" Visibility="Collapsed" IsOpen="True" Message="" Severity="Warning" IsClosable="False" />
+                <Border Grid.RowSpan="2" CornerRadius="14" Background="#70070709" IsHitTestVisible="False" />
+                <ui:InfoBar x:Name="AlertBar" Grid.Row="0" Padding="8" Visibility="Collapsed" IsOpen="True" Message="" Severity="Warning" IsClosable="False" />
                 <Frame x:Name="RootFrame" Grid.Row="1" />
             </Grid>
         </Grid>
@@ -131,25 +204,36 @@
         </StatusBar>
     </Grid>
 
-    <Grid x:Name="SettingsIntroOverlay" Panel.ZIndex="100" Background="{DynamicResource SleepStrapWindowBackgroundBrush}"
+    <Grid x:Name="SettingsIntroOverlay" Panel.ZIndex="100"
           Loaded="SettingsIntroOverlay_Loaded">
+        <Grid.Background>
+            <RadialGradientBrush Center="0.5,0.46" GradientOrigin="0.5,0.46" RadiusX="0.72" RadiusY="0.72">
+                <GradientStop Color="#F218181A" Offset="0" />
+                <GradientStop Color="#F20E0E10" Offset="0.62" />
+                <GradientStop Color="#F2070708" Offset="1" />
+            </RadialGradientBrush>
+        </Grid.Background>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Grid x:Name="SettingsIntroLogo" Width="112" Height="112" HorizontalAlignment="Center"
+            <Grid x:Name="SettingsIntroLogo" Width="120" Height="120" HorizontalAlignment="Center"
                   Opacity="0" RenderTransformOrigin="0.5,0.5">
                 <Grid.RenderTransform><ScaleTransform ScaleX="0.5" ScaleY="0.5" /></Grid.RenderTransform>
-                <Ellipse x:Name="SettingsIntroGlow" Margin="-28" Opacity="0.2">
+                <Ellipse x:Name="SettingsIntroGlow" Margin="-54" Opacity="0.2" IsHitTestVisible="False">
                     <Ellipse.Fill>
                         <RadialGradientBrush>
-                            <GradientStop Color="#AFFFFFFF" Offset="0" />
+                            <GradientStop Color="#A8FFFFFF" Offset="0" />
+                            <GradientStop Color="#42FFFFFF" Offset="0.42" />
                             <GradientStop Color="#00FFFFFF" Offset="1" />
                         </RadialGradientBrush>
                     </Ellipse.Fill>
                 </Ellipse>
-                <Border Background="#12FFFFFF" BorderThickness="0" CornerRadius="26">
-                    <Image Width="92" Height="92" Source="pack://application:,,,/SleepStrap.ico" RenderOptions.BitmapScalingMode="HighQuality" />
-                </Border>
+                <Image Width="104" Height="104" Source="pack://application:,,,/SleepStrap.ico"
+                       RenderOptions.BitmapScalingMode="HighQuality">
+                    <Image.Effect>
+                        <DropShadowEffect Color="#FFFFFFFF" BlurRadius="30" ShadowDepth="0" Opacity="0.62" />
+                    </Image.Effect>
+                </Image>
             </Grid>
-            <Grid Margin="0,18,0,0" ClipToBounds="True">
+            <Grid Margin="0,20,0,0" ClipToBounds="True">
                 <StackPanel x:Name="SettingsBrandLetters" Orientation="Horizontal">
                     <TextBlock Text="S" /><TextBlock Text="l" /><TextBlock Text="e" /><TextBlock Text="e" /><TextBlock Text="p" />
                     <TextBlock Text="S" Margin="4,0,0,0" /><TextBlock Text="t" /><TextBlock Text="r" /><TextBlock Text="a" /><TextBlock Text="p" />
@@ -165,6 +249,9 @@
                     <Rectangle.RenderTransform><TranslateTransform X="-80" /></Rectangle.RenderTransform>
                 </Rectangle>
             </Grid>
+            <TextBlock x:Name="SettingsIntroSubtitle" Text="SETTINGS, SIMPLIFIED" Margin="0,12,0,0"
+                       HorizontalAlignment="Center" FontSize="10" FontWeight="SemiBold"
+                       Foreground="#9CA3AF" Opacity="0" />
         </StackPanel>
     </Grid>
     </Grid>

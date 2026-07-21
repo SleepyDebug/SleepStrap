@@ -35,7 +35,7 @@
                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                     </StackPanel>
                     <Border HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,5,0"
-                            CornerRadius="8" Padding="5,2" Background="#D9B91C1C">
+                            CornerRadius="8" Padding="5,2" Background="#E6000000">
                         <TextBlock Text="Missing" FontSize="9" Foreground="White" />
                         <Border.Style>
                             <Style TargetType="Border">
@@ -54,22 +54,18 @@
     </ui:UiPage.Resources>
 
     <StackPanel Margin="0,0,14,20">
-        <Border Padding="18" CornerRadius="14" BorderThickness="0">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#442D1760" Offset="0" />
-                    <GradientStop Color="#662D1B69" Offset="0.55" />
-                    <GradientStop Color="#33211A3A" Offset="1" />
-                </LinearGradientBrush>
-            </Border.Background>
+        <Border Padding="18,14,18,12" CornerRadius="14" BorderThickness="0" Background="#C40A0A0C">
             <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                <TextBlock Text="Macro" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
-                <ui:SymbolIcon Grid.Column="1" Symbol="Keyboard24" FontSize="34" Foreground="#A78BFA" />
+                <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <TextBlock Text="Macro" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <ui:SymbolIcon Grid.Column="1" Symbol="Keyboard24" FontSize="34" Foreground="White" Opacity="0.72" />
+                </Grid>
+                <Border Grid.Row="1" Margin="0,12,0,0" Height="1"><Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,0"><GradientStop Color="#00FFFFFF" Offset="0" /><GradientStop Color="#CFFFFFFF" Offset="0.5" /><GradientStop Color="#00FFFFFF" Offset="1" /></LinearGradientBrush></Border.Background></Border>
             </Grid>
         </Border>
 
-        <ui:CardExpander Margin="0,14,0,0" IsExpanded="True">
+        <ui:CardExpander Margin="0,14,0,0" IsExpanded="False">
             <ui:CardExpander.Header>
                 <TextBlock Text="Calibration" FontSize="17" FontWeight="SemiBold" />
             </ui:CardExpander.Header>
@@ -103,6 +99,25 @@
                 <TextBlock Text="Loadout macro" FontSize="17" FontWeight="SemiBold" />
             </ui:CardExpander.Header>
             <StackPanel>
+                <Border Margin="0,0,0,14" Padding="14,11" CornerRadius="10" Background="#17FFFFFF" BorderThickness="0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Weapon layout" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding LayoutName}" Margin="0,2,0,0"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Grid" Margin="0,0,8,0" VerticalAlignment="Center" />
+                        <ui:ToggleSwitch IsChecked="{Binding UseListLayout, Mode=TwoWay}" />
+                        <TextBlock Text="List" Margin="8,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Grid>
+                </Border>
+
                 <UniformGrid Columns="2">
                     <StackPanel Margin="0,0,8,12">
                         <TextBlock Text="Primary" Margin="0,0,0,5" FontWeight="SemiBold" />
@@ -126,17 +141,19 @@
                     </StackPanel>
                 </UniformGrid>
 
-                <Border Height="1" Background="#24FFFFFF" Margin="0,2,0,12" />
+                <Border Height="1" Background="#18FFFFFF" Margin="0,2,0,12" />
                 <TextBlock Text="{Binding AutomationMasterText}" HorizontalAlignment="Center" Margin="0,0,0,10"
                            Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
-                <UniformGrid Columns="3" Margin="0,0,0,14">
-                    <CheckBox Content="Quick Respawn (Spam Space)" IsChecked="{Binding QuickRespawn, Mode=TwoWay}"
-                              HorizontalAlignment="Center" />
-                    <CheckBox Content="Auto Utility (Spam G)" IsChecked="{Binding AutoUtility, Mode=TwoWay}"
-                              HorizontalAlignment="Center" />
-                    <CheckBox Content="Auto Inspect (Spam V)" IsChecked="{Binding AutoInspect, Mode=TwoWay}"
-                              HorizontalAlignment="Center" />
-                </UniformGrid>
+                <Border Padding="12,10" CornerRadius="10" Background="#10FFFFFF" BorderThickness="0" Margin="0,0,0,14">
+                    <UniformGrid Columns="3">
+                        <CheckBox Content="Quick Respawn" IsChecked="{Binding QuickRespawn, Mode=TwoWay}"
+                                  ToolTip="Repeatedly presses Space" HorizontalAlignment="Center" />
+                        <CheckBox Content="Auto Utility" IsChecked="{Binding AutoUtility, Mode=TwoWay}"
+                                  ToolTip="Repeatedly presses G" HorizontalAlignment="Center" />
+                        <CheckBox Content="Auto Inspect" IsChecked="{Binding AutoInspect, Mode=TwoWay}"
+                                  ToolTip="Repeatedly presses V" HorizontalAlignment="Center" />
+                    </UniformGrid>
+                </Border>
 
                 <CheckBox Content="Auto Rejoin (1hr)" IsChecked="{Binding AutoRejoinEnabled, Mode=TwoWay}"
                           HorizontalAlignment="Center" Margin="0,0,0,14" />

@@ -121,6 +121,19 @@ namespace SleepStrap.UI.ViewModels.Settings
             ? "Automatic actions on — press ] to pause"
             : "Automatic actions paused — press ] to resume";
 
+        public bool UseListLayout
+        {
+            get => App.Settings.Prop.MacroUseListLayout;
+            set
+            {
+                App.Settings.Prop.MacroUseListLayout = value;
+                SaveAndNotify(nameof(UseListLayout));
+                OnPropertyChanged(nameof(LayoutName));
+            }
+        }
+
+        public string LayoutName => UseListLayout ? "List" : "Grid";
+
         public WeaponOption? SelectedPrimary
         {
             get => _selectedPrimary;
@@ -347,7 +360,8 @@ namespace SleepStrap.UI.ViewModels.Settings
 
                 while (AutomationMasterEnabled && !_macroCancellation.IsCancellationRequested)
                 {
-                    await MacroAutomationService.RunLoadoutAsync(selections, _macroCancellation.Token);
+                    MacroWeaponLayout layout = UseListLayout ? MacroWeaponLayout.List : MacroWeaponLayout.Grid;
+                    await MacroAutomationService.RunLoadoutAsync(selections, layout, _macroCancellation.Token);
                     if (AutomationMasterEnabled && !_macroCancellation.IsCancellationRequested)
                         await Task.Delay(250, _macroCancellation.Token);
                 }

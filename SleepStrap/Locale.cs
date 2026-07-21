@@ -131,7 +131,7 @@ namespace SleepStrap
                 }
 
 #if QA_BUILD
-                window.BorderBrush = System.Windows.Media.Brushes.Red;
+                window.BorderBrush = System.Windows.Media.Brushes.Black;
                 window.BorderThickness = new Thickness(4);
 #endif
             }));

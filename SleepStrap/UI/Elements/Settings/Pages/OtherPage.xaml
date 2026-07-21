@@ -7,21 +7,14 @@
       mc:Ignorable="d"
       d:DesignHeight="900" d:DesignWidth="800" Title="Other" Scrollable="True">
     <StackPanel Margin="0,0,14,20">
-        <Border Padding="18" CornerRadius="14" BorderThickness="0">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#442D1760" Offset="0" />
-                    <GradientStop Color="#662D1B69" Offset="0.55" />
-                    <GradientStop Color="#33211A3A" Offset="1" />
-                </LinearGradientBrush>
-            </Border.Background>
+        <Border Padding="18,14,18,12" CornerRadius="14" BorderThickness="0" Background="#C40A0A0C">
             <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                <StackPanel>
-                    <TextBlock Text="Other" FontSize="28" FontWeight="SemiBold" />
-                    <TextBlock Text="{Binding VersionText}" Margin="0,4,0,0" FontSize="13" Foreground="#C4B5FD" />
-                </StackPanel>
-                <ui:SymbolIcon Grid.Column="1" Symbol="Info24" FontSize="34" Foreground="#A78BFA" />
+                <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <StackPanel><TextBlock Text="Other" FontSize="28" FontWeight="SemiBold" /><TextBlock Text="{Binding VersionText}" Margin="0,4,0,0" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" /></StackPanel>
+                    <ui:SymbolIcon Grid.Column="1" Symbol="Info24" FontSize="34" Foreground="White" Opacity="0.72" />
+                </Grid>
+                <Border Grid.Row="1" Margin="0,12,0,0" Height="1"><Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,0"><GradientStop Color="#00FFFFFF" Offset="0" /><GradientStop Color="#CFFFFFFF" Offset="0.5" /><GradientStop Color="#00FFFFFF" Offset="1" /></LinearGradientBrush></Border.Background></Border>
             </Grid>
         </Border>
 

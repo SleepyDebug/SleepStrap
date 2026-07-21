@@ -1,13 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <LinearGradientBrush x:Key="SleepStrapWindowBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
-        <GradientStop Color="#E6F8F5FF" Offset="0" />
-        <GradientStop Color="#E6EEE7FF" Offset="0.52" />
-        <GradientStop Color="#E6FAF8FF" Offset="1" />
+        <GradientStop Color="#E6FAFAFA" Offset="0" />
+        <GradientStop Color="#E6EEEEEF" Offset="0.52" />
+        <GradientStop Color="#E6FFFFFF" Offset="1" />
     </LinearGradientBrush>
-    <SolidColorBrush x:Key="SleepStrapSurfaceBrush" Color="#B8F3EEFF" />
-    <SolidColorBrush x:Key="SleepStrapGlassSurfaceBrush" Color="#9AF3EEFF" />
-    <SolidColorBrush x:Key="SleepStrapAccentBrush" Color="#7C3AED" />
+    <SolidColorBrush x:Key="SleepStrapSurfaceBrush" Color="#B8F4F4F5" />
+    <SolidColorBrush x:Key="SleepStrapGlassSurfaceBrush" Color="#9AEEEEF0" />
+    <SolidColorBrush x:Key="SleepStrapAccentBrush" Color="#202124" />
     <SolidColorBrush x:Key="NewTextEditorBackground" Color="#FBF9FF" />
     <SolidColorBrush x:Key="NewTextEditorForeground" Color="Black" />
-    <SolidColorBrush x:Key="NewTextEditorLink" Color="#7C3AED" />
+    <SolidColorBrush x:Key="NewTextEditorLink" Color="#34363A" />
 </ResourceDictionary>

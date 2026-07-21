@@ -137,14 +137,18 @@ namespace SleepStrap.Services
         public static void EnsureSelectedSkyboxReady(bool applyRivalsFix = true)
         {
             string selected = App.Settings.Prop.CustomSkyboxSourceName;
-            if (!App.Settings.Prop.CustomSkyboxEnabled || !SkyboxGalleryService.IsPreset(selected))
+            if (!App.Settings.Prop.CustomSkyboxEnabled)
+            {
+                RemoveCustomSkybox();
+                return;
+            }
+
+            if (!SkyboxGalleryService.IsPreset(selected))
                 return;
 
-            bool cacheIsReady = HasCachedSkybox && SkyboxFiles.All(file => IsDdsTexture(Path.Combine(SkyboxCacheRoot, file)));
-            if (cacheIsReady)
-                ApplyCachedSkybox();
-            else
-                ApplyEmbeddedSkybox(SkyboxGalleryService.GetResourceFolder(selected), false);
+            // This runs during launch after Roblox has been closed. Rebuilding the
+            // chosen preset here prevents a previous sky from surviving in cache.
+            ApplyEmbeddedSkybox(SkyboxGalleryService.GetResourceFolder(selected), true);
 
             if (applyRivalsFix)
                 ApplyRivalsSkyboxCompatibilityFix();

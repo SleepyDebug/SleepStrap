@@ -53,15 +53,9 @@ namespace SleepStrap.UI.ViewModels.Settings
 
                     if (value.IsNone)
                     {
-                        int closedProcesses = VisualModService.CloseRobloxProcesses();
-                        VisualModService.RemoveCustomSkybox();
                         App.Settings.Prop.CustomSkyboxEnabled = false;
                         App.Settings.Prop.CustomSkyboxSourceName = "";
-                        StatusText = App.Settings.Prop.DarkTexturesEnabled
-                            ? "No gallery sky selected. The dark texture pack sky is active."
-                            : closedProcesses > 0
-                                ? $"Roblox was closed ({closedProcesses} processes). None selected; the original sky will be restored on launch."
-                                : "None selected. Roblox's original sky will be restored on launch.";
+                        StatusText = "None selected. The original sky will be restored when you click Launch Roblox.";
                     }
                     else
                     {
@@ -71,15 +65,9 @@ namespace SleepStrap.UI.ViewModels.Settings
                             return;
                         }
 
-                        int closedProcesses = VisualModService.CloseRobloxProcesses();
-                        VisualModService.ApplyEmbeddedSkybox(value.ResourceFolder);
-                        int updatedVersions = VisualModService.DeployCachedSkyboxToInstalledVersions();
-                        int patchedRivalsAssets = VisualModService.ApplyRivalsSkyboxCompatibilityFix();
                         App.Settings.Prop.CustomSkyboxEnabled = true;
                         App.Settings.Prop.CustomSkyboxSourceName = value.Name;
-                        StatusText = updatedVersions > 0
-                            ? $"Selected: {value.Name}. Replaced six sky files in {updatedVersions} Roblox version{(updatedVersions == 1 ? "" : "s")} and patched {patchedRivalsAssets} RIVALS sky assets{(closedProcesses > 0 ? $" after closing {closedProcesses} Roblox process{(closedProcesses == 1 ? "" : "es")}" : "")}."
-                            : $"Selected: {value.Name}. Six DDS sky files are ready and will be installed on the next Roblox launch.";
+                        StatusText = $"Selected: {value.Name}. It will be applied when you click Launch Roblox.";
                     }
 
                     _selectedSkybox = value;
