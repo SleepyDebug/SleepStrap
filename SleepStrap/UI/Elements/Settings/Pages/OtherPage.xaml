@@ -95,7 +95,7 @@
 
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="2. Fork and attribution." />
                     <LineBreak />
-                    <Run Text="SleepStrap is a fork derived from Fishstrap and Bloxstrap and also uses code, libraries, concepts, and assets from the wider open-source software community. Fishstrap, Bloxstrap, their contributors, and included third-party projects remain separate projects owned by their respective authors. Their retained license notices apply to the portions of software they cover. SleepStrap does not claim ownership of Roblox, Fishstrap, Bloxstrap, or third-party intellectual property." />
+                    <Run Text="SleepStrap is a fork derived from upstream open-source Roblox launcher projects and also uses code, libraries, concepts, and assets from the wider open-source software community. Those projects, their contributors, and included third-party projects remain separate works owned by their respective authors. Their retained license notices apply to the portions of software they cover. SleepStrap does not claim ownership of Roblox or third-party intellectual property." />
                     <LineBreak /><LineBreak />
 
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="3. Account enforcement and bans." />
@@ -125,7 +125,7 @@
 
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="8. Limitation of responsibility." />
                     <LineBreak />
-                    <Run Text="To the fullest extent allowed by applicable law, the SleepStrap maintainers, distributors, contributors, Fishstrap contributors, Bloxstrap contributors, and third-party component authors are not liable for direct, indirect, incidental, special, consequential, exemplary, or punitive losses arising from SleepStrap. This includes account penalties, lost data, lost revenue, lost purchases, lost opportunities, interruption, device problems, and claims by other people, even if someone was told such harm could occur." />
+                    <Run Text="To the fullest extent allowed by applicable law, the SleepStrap maintainers, distributors, contributors, upstream project contributors, and third-party component authors are not liable for direct, indirect, incidental, special, consequential, exemplary, or punitive losses arising from SleepStrap. This includes account penalties, lost data, lost revenue, lost purchases, lost opportunities, interruption, device problems, and claims by other people, even if someone was told such harm could occur." />
                     <LineBreak /><LineBreak />
 
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="9. Continuing to use SleepStrap." />
