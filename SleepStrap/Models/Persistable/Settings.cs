@@ -89,6 +89,7 @@ namespace SleepStrap.Models.Persistable
         public string MacroSecondaryWeapon { get; set; } = "Warper";
         public string MacroMeleeWeapon { get; set; } = "Maul";
         public string MacroUtilityWeapon { get; set; } = "Grappler";
+        public bool MacroUseListLayout { get; set; } = false;
         public bool MacroQuickRespawn { get; set; } = false;
         public bool MacroAutoUtility { get; set; } = false;
         public bool MacroAutoInspect { get; set; } = false;

@@ -8,18 +8,18 @@
       mc:Ignorable="d" d:DataContext="{d:DesignInstance dmodels:VisualModsViewModel, IsDesignTimeCreatable=True}"
       d:DesignHeight="620" d:DesignWidth="800" Title="Fonts" Scrollable="True">
     <StackPanel Margin="0,0,14,20">
-        <Border Padding="18" CornerRadius="14" BorderThickness="1" BorderBrush="#668B5CF6">
+        <Border Padding="18" CornerRadius="14" BorderThickness="1" BorderBrush="#66FFFFFF">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#442D1760" Offset="0" />
-                    <GradientStop Color="#662D1B69" Offset="0.55" />
-                    <GradientStop Color="#33211A3A" Offset="1" />
+                    <GradientStop Color="#4418181A" Offset="0" />
+                    <GradientStop Color="#66232326" Offset="0.55" />
+                    <GradientStop Color="#33101012" Offset="1" />
                 </LinearGradientBrush>
             </Border.Background>
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <TextBlock Text="Fonts" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
-                <ui:SymbolIcon Grid.Column="1" Symbol="TextFont24" FontSize="34" Foreground="#A78BFA" />
+                <ui:SymbolIcon Grid.Column="1" Symbol="TextFont24" FontSize="34" Foreground="White" />
             </Grid>
         </Border>
 
@@ -28,7 +28,7 @@
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <StackPanel Margin="0,0,24,0">
                     <TextBlock Text="All in-game fonts" FontSize="17" FontWeight="Medium" />
-                    <TextBlock Text="{Binding FontStatus}" Margin="0,8,0,0" FontSize="12" FontWeight="SemiBold" Foreground="#B99AFB" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding FontStatus}" Margin="0,8,0,0" FontSize="12" FontWeight="SemiBold" Foreground="White" TextWrapping="Wrap" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
                     <ComboBox Width="270" MaxDropDownHeight="330"

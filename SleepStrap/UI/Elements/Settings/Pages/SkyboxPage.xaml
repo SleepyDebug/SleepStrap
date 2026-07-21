@@ -8,18 +8,17 @@
       mc:Ignorable="d" d:DataContext="{d:DesignInstance dmodels:SkyboxViewModel, IsDesignTimeCreatable=True}"
       d:DesignHeight="760" d:DesignWidth="800" Title="Skybox" Scrollable="True">
     <StackPanel Margin="0,0,14,20">
-        <Border Padding="18" CornerRadius="14" BorderThickness="0">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#442D1760" Offset="0" />
-                    <GradientStop Color="#662D1B69" Offset="0.55" />
-                    <GradientStop Color="#33211A3A" Offset="1" />
-                </LinearGradientBrush>
-            </Border.Background>
+        <Border Padding="18,14,18,12" CornerRadius="14" BorderThickness="0" Background="#C40A0A0C">
             <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                <TextBlock Text="Skybox" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
-                <ui:SymbolIcon Grid.Column="1" Symbol="WeatherMoon24" FontSize="34" Foreground="#A78BFA" />
+                <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <TextBlock Text="Skybox" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <ui:SymbolIcon Grid.Column="1" Symbol="WeatherMoon24" FontSize="34" Foreground="White" Opacity="0.72" />
+                </Grid>
+                <Border Grid.Row="1" Margin="0,12,0,0" Height="1">
+                    <Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,0"><GradientStop Color="#00FFFFFF" Offset="0" /><GradientStop Color="#CFFFFFFF" Offset="0.5" /><GradientStop Color="#00FFFFFF" Offset="1" /></LinearGradientBrush></Border.Background>
+                </Border>
             </Grid>
         </Border>
 
@@ -68,41 +67,34 @@
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1" BorderBrush="#445C4B82" Background="#33231B38" ClipToBounds="True">
+                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1" BorderBrush="#3DFFFFFF" Background="#B30A0A0C" ClipToBounds="True">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="118" />
                                     <RowDefinition Height="38" />
                                 </Grid.RowDefinitions>
-                                <Grid Grid.Row="0" ClipToBounds="True">
-                                    <Image x:Name="PreviewImage" Source="{Binding Preview}" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality" />
-                                    <Border x:Name="NonePreview" Visibility="Collapsed">
+                                <Grid Grid.Row="0">
+                                    <Border x:Name="PreviewImage" CornerRadius="9,9,0,0">
+                                        <Border.Background>
+                                            <ImageBrush ImageSource="{Binding Preview}" Stretch="UniformToFill" />
+                                        </Border.Background>
+                                    </Border>
+                                    <Border x:Name="NonePreview" CornerRadius="9,9,0,0" Visibility="Collapsed">
                                         <Border.Background>
                                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                                <GradientStop Color="#3B2A55" Offset="0" />
-                                                <GradientStop Color="#17121F" Offset="1" />
+                                                <GradientStop Color="#303033" Offset="0" />
+                                                <GradientStop Color="#111113" Offset="1" />
                                             </LinearGradientBrush>
                                         </Border.Background>
-                                        <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="58" FontWeight="SemiBold" Foreground="#C4B5FD" />
+                                        <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="58" FontWeight="SemiBold" Foreground="White" />
                                     </Border>
                                 </Grid>
                                 <TextBlock Grid.Row="1" Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
                                 <Border x:Name="SelectedBadge" Grid.RowSpan="2" Width="28" Height="28" Margin="8"
                                         HorizontalAlignment="Right" VerticalAlignment="Top" CornerRadius="9"
-                                        Background="#E67C3AED" Visibility="Collapsed" Panel.ZIndex="7">
-                                    <ui:SymbolIcon Symbol="Checkmark24" Foreground="White" FontSize="17" />
+                                        Background="#E6FFFFFF" Visibility="Collapsed" Panel.ZIndex="7">
+                                    <ui:SymbolIcon Symbol="Checkmark24" Foreground="Black" FontSize="17" />
                                 </Border>
-                                <Rectangle x:Name="SelectionShine" Grid.RowSpan="2" Width="68" HorizontalAlignment="Left"
-                                           Panel.ZIndex="5" IsHitTestVisible="False" Opacity="0">
-                                    <Rectangle.Fill>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Color="#00FFFFFF" Offset="0" />
-                                            <GradientStop Color="#70FFFFFF" Offset="0.5" />
-                                            <GradientStop Color="#00FFFFFF" Offset="1" />
-                                        </LinearGradientBrush>
-                                    </Rectangle.Fill>
-                                    <Rectangle.RenderTransform><TranslateTransform X="-80" /></Rectangle.RenderTransform>
-                                </Rectangle>
                             </Grid>
                         </Border>
                         <DataTemplate.Triggers>
@@ -115,21 +107,6 @@
                                 <Setter TargetName="Card" Property="BorderThickness" Value="2" />
                                 <Setter TargetName="Card" Property="Background" Value="#33FFFFFF" />
                                 <Setter TargetName="SelectedBadge" Property="Visibility" Value="Visible" />
-                                <DataTrigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard>
-                                            <DoubleAnimation Storyboard.TargetName="SelectionShine" Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" From="-80" To="300" Duration="0:0:0.5">
-                                                <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseInOut" /></DoubleAnimation.EasingFunction>
-                                            </DoubleAnimation>
-                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="SelectionShine" Storyboard.TargetProperty="Opacity" Duration="0:0:0.5">
-                                                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
-                                                <LinearDoubleKeyFrame KeyTime="0:0:0.08" Value="1" />
-                                                <LinearDoubleKeyFrame KeyTime="0:0:0.41" Value="1" />
-                                                <LinearDoubleKeyFrame KeyTime="0:0:0.5" Value="0" />
-                                            </DoubleAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </DataTrigger.EnterActions>
                             </DataTrigger>
                         </DataTemplate.Triggers>
                     </DataTemplate>

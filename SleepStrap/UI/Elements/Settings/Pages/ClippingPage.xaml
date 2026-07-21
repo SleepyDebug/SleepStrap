@@ -14,7 +14,7 @@
             <Setter Property="Margin" Value="2" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Foreground" Value="White" />
-            <Setter Property="Background" Value="#661A1622" />
+            <Setter Property="Background" Value="#66171719" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
@@ -25,7 +25,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ButtonSurface" Property="Background" Value="#AA3A2F4E" />
+                                <Setter TargetName="ButtonSurface" Property="Background" Value="#AA3A3B3E" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="ButtonSurface" Property="Opacity" Value="0.72" />
@@ -37,18 +37,14 @@
         </Style>
     </ui:UiPage.Resources>
     <StackPanel Margin="0,0,14,24">
-        <Border Padding="18" CornerRadius="14" BorderThickness="0">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#442D1760" Offset="0" />
-                    <GradientStop Color="#662D1B69" Offset="0.55" />
-                    <GradientStop Color="#33211A3A" Offset="1" />
-                </LinearGradientBrush>
-            </Border.Background>
+        <Border Padding="18,14,18,12" CornerRadius="14" BorderThickness="0" Background="#C40A0A0C">
             <Grid>
-                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                <TextBlock Text="Clipping" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
-                <ui:SymbolIcon Grid.Column="1" Symbol="VideoClip24" FontSize="34" Foreground="#A78BFA" />
+                <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+                <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <TextBlock Text="Clipping" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <ui:SymbolIcon Grid.Column="1" Symbol="VideoClip24" FontSize="34" Foreground="White" Opacity="0.72" />
+                </Grid>
+                <Border Grid.Row="1" Margin="0,12,0,0" Height="1"><Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,0"><GradientStop Color="#00FFFFFF" Offset="0" /><GradientStop Color="#CFFFFFFF" Offset="0.5" /><GradientStop Color="#00FFFFFF" Offset="1" /></LinearGradientBrush></Border.Background></Border>
             </Grid>
         </Border>
 
@@ -163,7 +159,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border x:Name="ClipCard" Margin="5" CornerRadius="11" ClipToBounds="True" BorderThickness="0"
-                            Background="#33231B38" RenderTransformOrigin="0.5,0.5"
+                            Background="#26101012" RenderTransformOrigin="0.5,0.5"
                             MouseEnter="ClipCard_MouseEnter" MouseLeave="ClipCard_MouseLeave">
                         <Border.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
@@ -175,7 +171,7 @@
                                           MediaOpened="PreviewMedia_MediaOpened" MediaEnded="PreviewMedia_MediaEnded"
                                           Unloaded="PreviewMedia_Unloaded" />
                             <Border x:Name="HoverControls" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8" Padding="4"
-                                    CornerRadius="8" Background="#D9121018" Opacity="0">
+                                    CornerRadius="8" Background="#D9101012" Opacity="0">
                                 <StackPanel Orientation="Horizontal">
                                     <Button Style="{StaticResource ClipIconButton}" ToolTip="Delete clip" Click="DeleteClip_Click">
                                         <ui:SymbolIcon Symbol="Delete24" />
@@ -202,7 +198,7 @@
                     <DataTemplate.Triggers>
                         <Trigger SourceName="ClipCard" Property="IsMouseOver" Value="True">
                             <Setter TargetName="HoverControls" Property="Opacity" Value="1" />
-                            <Setter TargetName="ClipCard" Property="Background" Value="#55362B49" />
+                            <Setter TargetName="ClipCard" Property="Background" Value="#55343437" />
                             <Setter TargetName="ClipCard" Property="RenderTransform">
                                 <Setter.Value><ScaleTransform ScaleX="1.015" ScaleY="1.015" /></Setter.Value>
                             </Setter>

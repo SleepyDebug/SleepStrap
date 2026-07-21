@@ -78,6 +78,12 @@ namespace SleepStrap.UI.Elements.Settings
                 EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
             });
 
+            SettingsIntroSubtitle.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 0.9, TimeSpan.FromMilliseconds(320))
+            {
+                BeginTime = TimeSpan.FromMilliseconds(760),
+                EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+            });
+
             int index = 0;
             foreach (TextBlock letter in SettingsBrandLetters.Children.OfType<TextBlock>())
             {
@@ -122,8 +128,8 @@ namespace SleepStrap.UI.Elements.Settings
                 });
             }
 
-            await Task.Delay(1700);
-            var fade = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(320))
+            await Task.Delay(1500);
+            var fade = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(280))
             {
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
             };
@@ -143,6 +149,157 @@ namespace SleepStrap.UI.Elements.Settings
             var easing = new CubicEase { EasingMode = EasingMode.EaseOut };
             page.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(260)) { EasingFunction = easing });
             offset.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(12, 0, TimeSpan.FromMilliseconds(330)) { EasingFunction = easing });
+
+            page.Dispatcher.BeginInvoke(() => AnimatePageContents(page), System.Windows.Threading.DispatcherPriority.Loaded);
+        }
+
+        private static void AnimatePageContents(FrameworkElement page)
+        {
+            StackPanel? existingLetters = FindVisualChildren<StackPanel>(page)
+                .FirstOrDefault(panel => Equals(panel.Tag, "AnimatedPageTitleLetters"));
+            if (existingLetters is not null)
+            {
+                ReplayPageContents(existingLetters);
+                return;
+            }
+
+            TextBlock? title = FindVisualChildren<TextBlock>(page)
+                .FirstOrDefault(text => text.FontSize >= 27 && !String.IsNullOrWhiteSpace(text.Text));
+
+            if (title is null || VisualTreeHelper.GetParent(title) is not Panel titleParent)
+                return;
+
+            var letters = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                VerticalAlignment = title.VerticalAlignment,
+                HorizontalAlignment = title.HorizontalAlignment,
+                Tag = "AnimatedPageTitleLetters"
+            };
+
+            foreach (char character in title.Text)
+            {
+                var letter = new TextBlock
+                {
+                    Text = character == ' ' ? "\u00A0" : character.ToString(),
+                    FontFamily = title.FontFamily,
+                    FontSize = title.FontSize,
+                    FontWeight = title.FontWeight,
+                    FontStyle = title.FontStyle,
+                    Foreground = title.Foreground,
+                    Opacity = 0,
+                    RenderTransform = new TranslateTransform(0, 9)
+                };
+                letters.Children.Add(letter);
+            }
+
+            if (titleParent is Grid)
+            {
+                Grid.SetRow(letters, Grid.GetRow(title));
+                Grid.SetColumn(letters, Grid.GetColumn(title));
+                Grid.SetRowSpan(letters, Grid.GetRowSpan(title));
+                Grid.SetColumnSpan(letters, Grid.GetColumnSpan(title));
+                title.Visibility = Visibility.Collapsed;
+                titleParent.Children.Add(letters);
+            }
+            else if (titleParent is StackPanel stack)
+            {
+                int index = stack.Children.IndexOf(title);
+                stack.Children.RemoveAt(index);
+                stack.Children.Insert(index, letters);
+            }
+
+            ReplayPageContents(letters);
+        }
+
+        private static void ReplayPageContents(StackPanel letters)
+        {
+            var popEase = new BackEase { EasingMode = EasingMode.EaseOut, Amplitude = 0.28 };
+            for (int index = 0; index < letters.Children.Count; index++)
+            {
+                if (letters.Children[index] is not TextBlock letter || letter.RenderTransform is not TranslateTransform rise)
+                    continue;
+
+                letter.BeginAnimation(OpacityProperty, null);
+                rise.BeginAnimation(TranslateTransform.YProperty, null);
+                letter.Opacity = 0;
+                rise.Y = 9;
+                TimeSpan delay = TimeSpan.FromMilliseconds(65 + (index * 42));
+                letter.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(180)) { BeginTime = delay });
+                rise.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(9, 0, TimeSpan.FromMilliseconds(300))
+                {
+                    BeginTime = delay,
+                    EasingFunction = popEase
+                });
+            }
+
+            Grid? headerGrid = FindAncestor<Grid>(letters, grid => grid.Children.OfType<Border>().Any(border => border.Height == 1));
+            Border? titleLine = headerGrid?.Children.OfType<Border>().FirstOrDefault(border => border.Height == 1);
+            if (titleLine is not null)
+            {
+                titleLine.RenderTransformOrigin = new Point(0.5, 0.5);
+                var lineScale = titleLine.RenderTransform as ScaleTransform ?? new ScaleTransform();
+                lineScale.BeginAnimation(ScaleTransform.ScaleXProperty, null);
+                lineScale.ScaleX = 0;
+                lineScale.ScaleY = 1;
+                titleLine.RenderTransform = lineScale;
+                lineScale.BeginAnimation(ScaleTransform.ScaleXProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(520))
+                {
+                    BeginTime = TimeSpan.FromMilliseconds(150),
+                    EasingFunction = new QuarticEase { EasingMode = EasingMode.EaseOut }
+                });
+            }
+
+            Border? header = headerGrid is null ? null : FindAncestor<Border>(headerGrid);
+            if (header is null || VisualTreeHelper.GetParent(header) is not StackPanel pageSections)
+                return;
+
+            int sectionIndex = 0;
+            foreach (UIElement section in pageSections.Children.OfType<UIElement>().Skip(1))
+            {
+                section.BeginAnimation(OpacityProperty, null);
+                section.Opacity = 0;
+                var sectionOffset = section.RenderTransform as TranslateTransform ?? new TranslateTransform();
+                sectionOffset.BeginAnimation(TranslateTransform.YProperty, null);
+                sectionOffset.Y = 10;
+                section.RenderTransform = sectionOffset;
+                TimeSpan delay = TimeSpan.FromMilliseconds(210 + (sectionIndex++ * 65));
+                section.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(260))
+                {
+                    BeginTime = delay,
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                });
+                sectionOffset.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(10, 0, TimeSpan.FromMilliseconds(360))
+                {
+                    BeginTime = delay,
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                });
+            }
+        }
+
+        private static IEnumerable<T> FindVisualChildren<T>(DependencyObject root) where T : DependencyObject
+        {
+            for (int index = 0; index < VisualTreeHelper.GetChildrenCount(root); index++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(root, index);
+                if (child is T match)
+                    yield return match;
+
+                foreach (T descendant in FindVisualChildren<T>(child))
+                    yield return descendant;
+            }
+        }
+
+        private static T? FindAncestor<T>(DependencyObject start, Func<T, bool>? predicate = null) where T : DependencyObject
+        {
+            DependencyObject? current = VisualTreeHelper.GetParent(start);
+            while (current is not null)
+            {
+                if (current is T match && (predicate is null || predicate(match)))
+                    return match;
+                current = VisualTreeHelper.GetParent(current);
+            }
+            return null;
         }
 
         public void LoadState()
