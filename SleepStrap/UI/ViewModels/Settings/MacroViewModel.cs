@@ -70,11 +70,6 @@ namespace SleepStrap.UI.ViewModels.Settings
         private bool _isRunning;
         private bool _automationMasterEnabled = true;
         private bool _masterKeyWasDown;
-        private bool _usingAutoHotkeyActions;
-        private bool _quickLoadoutVisible;
-        private bool _quickHotkeyWasDown;
-        private bool _quickLoadoutRunning;
-        private bool _quickHotkeyCaptureActive;
         private CancellationTokenSource? _macroCancellation;
         private DateTime? _nextAutoRejoinUtc;
         private bool _autoRejoinInProgress;
@@ -82,10 +77,6 @@ namespace SleepStrap.UI.ViewModels.Settings
         private WeaponOption? _selectedSecondary;
         private WeaponOption? _selectedMelee;
         private WeaponOption? _selectedUtility;
-        private WeaponOption? _quickSelectedPrimary;
-        private WeaponOption? _quickSelectedSecondary;
-        private WeaponOption? _quickSelectedMelee;
-        private WeaponOption? _quickSelectedUtility;
 
         public ObservableCollection<WeaponOption> PrimaryWeapons { get; } = new();
         public ObservableCollection<WeaponOption> SecondaryWeapons { get; } = new();
@@ -98,20 +89,6 @@ namespace SleepStrap.UI.ViewModels.Settings
         public ObservableCollection<WeaponOption> AvailableUtility { get; } = new();
 
         public ICommand RunMacroCommand => _runMacroCommand;
-        public Visibility QuickLoadoutVisibility => _quickLoadoutVisible ? Visibility.Visible : Visibility.Collapsed;
-        public string QuickLoadoutHotkeyDisplay => FormatHotkey(
-            App.Settings.Prop.MacroQuickLoadoutHotkeyModifiers,
-            App.Settings.Prop.MacroQuickLoadoutHotkeyVirtualKey);
-
-        public bool QuickLoadoutEnabled
-        {
-            get => App.Settings.Prop.MacroQuickLoadoutEnabled;
-            set
-            {
-                App.Settings.Prop.MacroQuickLoadoutEnabled = value;
-                SaveAndNotify(nameof(QuickLoadoutEnabled));
-            }
-        }
 
         public bool IsRunning
         {
@@ -122,7 +99,6 @@ namespace SleepStrap.UI.ViewModels.Settings
                 OnPropertyChanged(nameof(IsRunning));
                 OnPropertyChanged(nameof(RunButtonText));
                 _runMacroCommand.NotifyCanExecuteChanged();
-                ReconfigureAutomaticActions();
             }
         }
 
@@ -138,7 +114,6 @@ namespace SleepStrap.UI.ViewModels.Settings
                 _automationMasterEnabled = value;
                 OnPropertyChanged(nameof(AutomationMasterEnabled));
                 OnPropertyChanged(nameof(AutomationMasterText));
-                ReconfigureAutomaticActions();
             }
         }
 
@@ -170,46 +145,22 @@ namespace SleepStrap.UI.ViewModels.Settings
             set => SetSelection(ref _selectedUtility, value, nameof(SelectedUtility), selected => App.Settings.Prop.MacroUtilityWeapon = selected.Name);
         }
 
-        public WeaponOption? QuickSelectedPrimary
-        {
-            get => _quickSelectedPrimary;
-            set => SetSelection(ref _quickSelectedPrimary, value, nameof(QuickSelectedPrimary), selected => App.Settings.Prop.MacroQuickLoadoutPrimaryWeapon = selected.Name);
-        }
-
-        public WeaponOption? QuickSelectedSecondary
-        {
-            get => _quickSelectedSecondary;
-            set => SetSelection(ref _quickSelectedSecondary, value, nameof(QuickSelectedSecondary), selected => App.Settings.Prop.MacroQuickLoadoutSecondaryWeapon = selected.Name);
-        }
-
-        public WeaponOption? QuickSelectedMelee
-        {
-            get => _quickSelectedMelee;
-            set => SetSelection(ref _quickSelectedMelee, value, nameof(QuickSelectedMelee), selected => App.Settings.Prop.MacroQuickLoadoutMeleeWeapon = selected.Name);
-        }
-
-        public WeaponOption? QuickSelectedUtility
-        {
-            get => _quickSelectedUtility;
-            set => SetSelection(ref _quickSelectedUtility, value, nameof(QuickSelectedUtility), selected => App.Settings.Prop.MacroQuickLoadoutUtilityWeapon = selected.Name);
-        }
-
         public bool QuickRespawn
         {
             get => App.Settings.Prop.MacroQuickRespawn;
-            set { App.Settings.Prop.MacroQuickRespawn = value; SaveAndNotify(nameof(QuickRespawn)); ReconfigureAutomaticActions(); }
+            set { App.Settings.Prop.MacroQuickRespawn = value; SaveAndNotify(nameof(QuickRespawn)); }
         }
 
         public bool AutoUtility
         {
             get => App.Settings.Prop.MacroAutoUtility;
-            set { App.Settings.Prop.MacroAutoUtility = value; SaveAndNotify(nameof(AutoUtility)); ReconfigureAutomaticActions(); }
+            set { App.Settings.Prop.MacroAutoUtility = value; SaveAndNotify(nameof(AutoUtility)); }
         }
 
         public bool AutoInspect
         {
             get => App.Settings.Prop.MacroAutoInspect;
-            set { App.Settings.Prop.MacroAutoInspect = value; SaveAndNotify(nameof(AutoInspect)); ReconfigureAutomaticActions(); }
+            set { App.Settings.Prop.MacroAutoInspect = value; SaveAndNotify(nameof(AutoInspect)); }
         }
 
         public bool AutoRejoinEnabled
@@ -270,18 +221,12 @@ namespace SleepStrap.UI.ViewModels.Settings
             _selectedSecondary = FindSaved(AvailableSecondary, App.Settings.Prop.MacroSecondaryWeapon);
             _selectedMelee = FindSaved(AvailableMelee, App.Settings.Prop.MacroMeleeWeapon);
             _selectedUtility = FindSaved(AvailableUtility, App.Settings.Prop.MacroUtilityWeapon);
-            _quickSelectedPrimary = FindSaved(AvailablePrimary, App.Settings.Prop.MacroQuickLoadoutPrimaryWeapon);
-            _quickSelectedSecondary = FindSaved(AvailableSecondary, App.Settings.Prop.MacroQuickLoadoutSecondaryWeapon);
-            _quickSelectedMelee = FindSaved(AvailableMelee, App.Settings.Prop.MacroQuickLoadoutMeleeWeapon);
-            _quickSelectedUtility = FindSaved(AvailableUtility, App.Settings.Prop.MacroQuickLoadoutUtilityWeapon);
-
             _runMacroCommand = new AsyncRelayCommand(RunMacroAsync, () => !IsRunning && AllSelectionsPresent());
             _automationTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
             _automationTimer.Tick += AutomationTimer_Tick;
             _automationTimer.Start();
             if (AutoRejoinEnabled)
                 _nextAutoRejoinUtc = DateTime.UtcNow.AddHours(1);
-            ReconfigureAutomaticActions();
         }
 
         private void AddCategory(
@@ -293,31 +238,6 @@ namespace SleepStrap.UI.ViewModels.Settings
             int index = 0;
             foreach ((string name, string image) in weapons)
                 destination.Add(new WeaponOption(name, category, index++, image, missing.Contains(name), MissingChanged));
-        }
-
-        public void RevealQuickLoadout()
-        {
-            if (_quickLoadoutVisible)
-                return;
-
-            _quickLoadoutVisible = true;
-            OnPropertyChanged(nameof(QuickLoadoutVisibility));
-        }
-
-        public void SetQuickLoadoutHotkey(int modifiers, int virtualKey)
-        {
-            App.Settings.Prop.MacroQuickLoadoutHotkeyModifiers = modifiers;
-            App.Settings.Prop.MacroQuickLoadoutHotkeyVirtualKey = virtualKey;
-            App.Settings.Save();
-            _quickHotkeyWasDown = false;
-            OnPropertyChanged(nameof(QuickLoadoutHotkeyDisplay));
-        }
-
-        public void SetQuickHotkeyCaptureActive(bool active)
-        {
-            _quickHotkeyCaptureActive = active;
-            if (active)
-                _quickHotkeyWasDown = false;
         }
 
         private void MissingChanged(WeaponOption changed)
@@ -387,21 +307,6 @@ namespace SleepStrap.UI.ViewModels.Settings
                     break;
             }
 
-            switch (removed.Category)
-            {
-                case MacroWeaponCategory.Primary when ReferenceEquals(_quickSelectedPrimary, removed):
-                    SetSelectionOrClear(ref _quickSelectedPrimary, replacement, nameof(QuickSelectedPrimary), value => App.Settings.Prop.MacroQuickLoadoutPrimaryWeapon = value);
-                    break;
-                case MacroWeaponCategory.Secondary when ReferenceEquals(_quickSelectedSecondary, removed):
-                    SetSelectionOrClear(ref _quickSelectedSecondary, replacement, nameof(QuickSelectedSecondary), value => App.Settings.Prop.MacroQuickLoadoutSecondaryWeapon = value);
-                    break;
-                case MacroWeaponCategory.Melee when ReferenceEquals(_quickSelectedMelee, removed):
-                    SetSelectionOrClear(ref _quickSelectedMelee, replacement, nameof(QuickSelectedMelee), value => App.Settings.Prop.MacroQuickLoadoutMeleeWeapon = value);
-                    break;
-                case MacroWeaponCategory.Utility when ReferenceEquals(_quickSelectedUtility, removed):
-                    SetSelectionOrClear(ref _quickSelectedUtility, replacement, nameof(QuickSelectedUtility), value => App.Settings.Prop.MacroQuickLoadoutUtilityWeapon = value);
-                    break;
-            }
         }
 
         private void RefreshEffectiveSlots()
@@ -475,11 +380,6 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         private void AutomationTimer_Tick(object? sender, EventArgs e)
         {
-            bool quickHotkeyDown = IsQuickLoadoutHotkeyDown();
-            if (quickHotkeyDown && !_quickHotkeyWasDown && !_quickLoadoutRunning && !IsRunning && AllQuickSelectionsPresent())
-                _ = RunQuickLoadoutAsync();
-            _quickHotkeyWasDown = quickHotkeyDown;
-
             bool masterKeyDown = MacroAutomationService.IsKeyDown(0xDD); // ] / OEM close bracket
             if (masterKeyDown && !_masterKeyWasDown)
             {
@@ -502,7 +402,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                 _ = RunHourlyAutoRejoinAsync();
             }
 
-            if (_usingAutoHotkeyActions || !AutomationMasterEnabled || !MacroAutomationService.IsRobloxForeground())
+            if (!AutomationMasterEnabled || _autoRejoinInProgress || !MacroAutomationService.IsRobloxForeground())
                 return;
 
             long now = Environment.TickCount64;
@@ -520,46 +420,6 @@ namespace SleepStrap.UI.ViewModels.Settings
             {
                 MacroAutomationService.TapKey(0x56); // V
                 _lastInspect = now;
-            }
-        }
-
-        private bool IsQuickLoadoutHotkeyDown()
-        {
-            if (!QuickLoadoutEnabled || _quickHotkeyCaptureActive)
-                return false;
-
-            int key = App.Settings.Prop.MacroQuickLoadoutHotkeyVirtualKey;
-            if (key == 0 || !MacroAutomationService.IsKeyDown(key))
-                return false;
-
-            int modifiers = App.Settings.Prop.MacroQuickLoadoutHotkeyModifiers;
-            if ((modifiers & 1) != 0 && !MacroAutomationService.IsKeyDown(0x12)) return false;
-            if ((modifiers & 2) != 0 && !MacroAutomationService.IsKeyDown(0x11)) return false;
-            if ((modifiers & 4) != 0 && !MacroAutomationService.IsKeyDown(0x10)) return false;
-            if ((modifiers & 8) != 0 && !MacroAutomationService.IsKeyDown(0x5B) && !MacroAutomationService.IsKeyDown(0x5C)) return false;
-            return true;
-        }
-
-        private async Task RunQuickLoadoutAsync()
-        {
-            _quickLoadoutRunning = true;
-            try
-            {
-                var selections = new[]
-                {
-                    CreateSelection(QuickSelectedPrimary!), CreateSelection(QuickSelectedSecondary!),
-                    CreateSelection(QuickSelectedMelee!), CreateSelection(QuickSelectedUtility!)
-                };
-                await MacroAutomationService.RunLoadoutAsync(selections, CancellationToken.None);
-            }
-            catch (Exception ex)
-            {
-                App.Logger.WriteException("MacroViewModel::RunQuickLoadout", ex);
-                Frontend.ShowMessageBox($"SleepStrap could not apply the quick loadout.\n\n{ex.Message}", MessageBoxImage.Error);
-            }
-            finally
-            {
-                _quickLoadoutRunning = false;
             }
         }
 
@@ -607,40 +467,16 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         private bool AllSelectionsPresent() => SelectedPrimary is not null && SelectedSecondary is not null && SelectedMelee is not null && SelectedUtility is not null;
 
-        private bool AllQuickSelectionsPresent() => QuickSelectedPrimary is not null && QuickSelectedSecondary is not null && QuickSelectedMelee is not null && QuickSelectedUtility is not null;
-
-        private static string FormatHotkey(int modifiers, int virtualKey)
-        {
-            var parts = new List<string>();
-            if ((modifiers & 2) != 0) parts.Add("Ctrl");
-            if ((modifiers & 1) != 0) parts.Add("Alt");
-            if ((modifiers & 4) != 0) parts.Add("Shift");
-            if ((modifiers & 8) != 0) parts.Add("Win");
-            Key key = KeyInterop.KeyFromVirtualKey(virtualKey);
-            parts.Add(key == Key.None ? $"0x{virtualKey:X2}" : key.ToString());
-            return String.Join(" + ", parts);
-        }
-
         private void SaveAndNotify(string propertyName)
         {
             App.Settings.Save();
             OnPropertyChanged(propertyName);
         }
 
-        private void ReconfigureAutomaticActions()
-        {
-            _usingAutoHotkeyActions = MacroAutomationService.ConfigureAutomaticActions(
-                QuickRespawn,
-                AutoUtility,
-                AutoInspect,
-                AutomationMasterEnabled && !_autoRejoinInProgress);
-        }
-
         private async Task RunHourlyAutoRejoinAsync()
         {
             bool resumeRepeatingLoadout = IsRunning;
             _autoRejoinInProgress = true;
-            ReconfigureAutomaticActions();
 
             try
             {
@@ -661,7 +497,6 @@ namespace SleepStrap.UI.ViewModels.Settings
             finally
             {
                 _autoRejoinInProgress = false;
-                ReconfigureAutomaticActions();
                 if (resumeRepeatingLoadout && AutomationMasterEnabled && AllSelectionsPresent())
                     _ = RunMacroAsync();
             }
@@ -671,7 +506,6 @@ namespace SleepStrap.UI.ViewModels.Settings
         {
             _automationTimer.Stop();
             _automationTimer.Tick -= AutomationTimer_Tick;
-            MacroAutomationService.StopAutomaticActions();
         }
     }
 }

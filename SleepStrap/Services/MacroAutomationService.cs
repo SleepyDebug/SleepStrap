@@ -30,10 +30,11 @@ namespace SleepStrap.Services
         private const uint MonitorDefaultToNearest = 0x00000002;
         private const int GwlStyle = -16;
         private const int GwlExStyle = -20;
-
-        private static readonly object AutomaticActionsLock = new();
-        private static Process? _automaticActionsProcess;
-        private static string? _automaticActionsScriptPath;
+        private const uint MouseEventMove = 0x0001;
+        private const uint MouseEventLeftDown = 0x0002;
+        private const uint MouseEventLeftUp = 0x0004;
+        private const uint MouseEventVirtualDesk = 0x4000;
+        private const uint MouseEventAbsolute = 0x8000;
 
         private static readonly IReadOnlyDictionary<MacroWeaponCategory, MacroPoint[]> Slots =
             new Dictionary<MacroWeaponCategory, MacroPoint[]>
@@ -166,88 +167,8 @@ namespace SleepStrap.Services
 
         public static bool IsKeyDown(int virtualKey) => (GetAsyncKeyState(virtualKey) & 0x8000) != 0;
 
-        public static bool ConfigureAutomaticActions(bool quickRespawn, bool autoUtility, bool autoInspect, bool enabled)
-        {
-            lock (AutomaticActionsLock)
-            {
-                StopAutomaticActionsCore();
-
-                if (!enabled || (!quickRespawn && !autoUtility && !autoInspect))
-                    return FindAutoHotkeyV2() is not null;
-
-                string? autoHotkey = FindAutoHotkeyV2();
-                if (autoHotkey is null)
-                    return false;
-
-                string scriptPath = Path.Combine(Path.GetTempPath(), $"SleepStrap-AutoActions-{Environment.ProcessId}.ahk");
-                string script =
-                    "#Requires AutoHotkey v2.0\r\n" +
-                    "#SingleInstance Off\r\n" +
-                    $"parentPid := {Environment.ProcessId}\r\n" +
-                    $"quickRespawn := {(quickRespawn ? "true" : "false")}\r\n" +
-                    $"autoUtility := {(autoUtility ? "true" : "false")}\r\n" +
-                    $"autoInspect := {(autoInspect ? "true" : "false")}\r\n" +
-                    "SetTimer WatchParent, 500\r\n" +
-                    "SetTimer SpamQuickRespawn, 75\r\n" +
-                    "SetTimer SpamAutoUtility, 120\r\n" +
-                    "SetTimer SpamAutoInspect, 180\r\n" +
-                    "WatchParent() {\r\n" +
-                    "    global parentPid\r\n" +
-                    "    if !ProcessExist(parentPid)\r\n" +
-                    "        ExitApp\r\n" +
-                    "}\r\n" +
-                    "RobloxActive() {\r\n" +
-                    "    return WinActive(\"ahk_exe RobloxPlayerBeta.exe\")\r\n" +
-                    "}\r\n" +
-                    "SpamQuickRespawn() {\r\n" +
-                    "    global quickRespawn\r\n" +
-                    "    if quickRespawn && RobloxActive()\r\n" +
-                    "        Send \"{Space}\"\r\n" +
-                    "}\r\n" +
-                    "SpamAutoUtility() {\r\n" +
-                    "    global autoUtility\r\n" +
-                    "    if autoUtility && RobloxActive()\r\n" +
-                    "        Send \"g\"\r\n" +
-                    "}\r\n" +
-                    "SpamAutoInspect() {\r\n" +
-                    "    global autoInspect\r\n" +
-                    "    if autoInspect && RobloxActive()\r\n" +
-                    "        Send \"v\"\r\n" +
-                    "}\r\n";
-
-                try
-                {
-                    File.WriteAllText(scriptPath, script, new UTF8Encoding(false));
-                    var startInfo = new ProcessStartInfo(autoHotkey)
-                    {
-                        UseShellExecute = false,
-                        CreateNoWindow = true,
-                        WindowStyle = ProcessWindowStyle.Hidden
-                    };
-                    startInfo.ArgumentList.Add("/ErrorStdOut");
-                    startInfo.ArgumentList.Add(scriptPath);
-
-                    _automaticActionsProcess = Process.Start(startInfo)
-                        ?? throw new InvalidOperationException("SleepStrap could not start automatic actions.");
-                    _automaticActionsScriptPath = scriptPath;
-                    App.Logger.WriteLine("MacroAutomationService", $"Started AutoHotkey automatic actions (Space={quickRespawn}, G={autoUtility}, V={autoInspect})");
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    App.Logger.WriteException("MacroAutomationService::ConfigureAutomaticActions", ex);
-                    try { File.Delete(scriptPath); } catch { }
-                    return false;
-                }
-            }
-        }
-
         public static async Task RunAutoRejoinAsync(CancellationToken cancellationToken)
         {
-            string? autoHotkey = FindAutoHotkeyV2();
-            if (autoHotkey is null)
-                throw new InvalidOperationException("Auto Rejoin requires AutoHotkey v2.");
-
             IntPtr robloxWindow = FindRobloxWindow();
             if (robloxWindow == IntPtr.Zero)
                 throw new InvalidOperationException("Roblox is not running.");
@@ -256,100 +177,23 @@ namespace SleepStrap.Services
                 ShowWindowAsync(robloxWindow, 9);
             ActivateWindow(robloxWindow);
 
-            string scriptPath = Path.Combine(Path.GetTempPath(), $"SleepStrap-AutoRejoin-{Guid.NewGuid():N}.ahk");
-            string script =
-                "#Requires AutoHotkey v2.0\r\n" +
-                "#SingleInstance Off\r\n" +
-                "CoordMode \"Mouse\", \"Screen\"\r\n" +
-                "WinActivate \"ahk_exe RobloxPlayerBeta.exe\"\r\n" +
-                "if !WinWaitActive(\"ahk_exe RobloxPlayerBeta.exe\",, 3)\r\n" +
-                "    ExitApp 2\r\n" +
-                "Send \"{Escape}\"\r\n" +
-                "Sleep 120\r\n" +
-                "Send \"l\"\r\n" +
-                "Sleep 120\r\n" +
-                "Send \"{Enter}\"\r\n" +
-                "Sleep 1400\r\n" +
-                "ClickPoint(-860, 694, 900) ; Disconnect\r\n" +
-                "ClickPoint(-1892, 159, 900) ; Home\r\n" +
-                "ClickPoint(-1735, 1031, 900) ; Select Rivals\r\n" +
-                "ClickPoint(-1011, 372, 1800) ; Join Rivals\r\n" +
-                "ClickPoint(-956, 954, 1200) ; Play\r\n" +
-                "MouseMove -240, 389, 0\r\n" +
-                "Sleep 80\r\n" +
-                "Click \"Down\"\r\n" +
-                "Sleep 120\r\n" +
-                "MouseMove -241, 951, 10\r\n" +
-                "Sleep 100\r\n" +
-                "Click \"Up\"\r\n" +
-                "Sleep 600\r\n" +
-                "ClickPoint(-977, 827, 700) ; Select FFA\r\n" +
-                "ClickPoint(-790, 836, 500) ; Join\r\n" +
-                "ExitApp\r\n" +
-                "ClickPoint(x, y, waitAfter) {\r\n" +
-                "    MouseMove x, y, 0\r\n" +
-                "    Sleep 60\r\n" +
-                "    Click \"Down\"\r\n" +
-                "    Sleep 35\r\n" +
-                "    Click \"Up\"\r\n" +
-                "    Sleep waitAfter\r\n" +
-                "}\r\n";
+            App.Logger.WriteLine("MacroAutomationService", "Starting built-in hourly Auto Rejoin sequence");
+            TapKey(0x1B); // Escape
+            await Task.Delay(120, cancellationToken);
+            TapKey(0x4C); // L
+            await Task.Delay(120, cancellationToken);
+            TapKey(0x0D); // Enter
+            await Task.Delay(1400, cancellationToken);
 
-            try
-            {
-                await File.WriteAllTextAsync(scriptPath, script, new UTF8Encoding(false), cancellationToken);
-                App.Logger.WriteLine("MacroAutomationService", "Starting hourly Auto Rejoin sequence");
-                var startInfo = new ProcessStartInfo(autoHotkey)
-                {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden
-                };
-                startInfo.ArgumentList.Add("/ErrorStdOut");
-                startInfo.ArgumentList.Add(scriptPath);
-
-                using Process process = Process.Start(startInfo)
-                    ?? throw new InvalidOperationException("SleepStrap could not start Auto Rejoin.");
-                await process.WaitForExitAsync(cancellationToken);
-                if (process.ExitCode != 0)
-                    throw new InvalidOperationException($"Auto Rejoin stopped with exit code {process.ExitCode}.");
-            }
-            finally
-            {
-                try { if (File.Exists(scriptPath)) File.Delete(scriptPath); } catch { }
-            }
-        }
-
-        public static void StopAutomaticActions()
-        {
-            lock (AutomaticActionsLock)
-                StopAutomaticActionsCore();
-        }
-
-        private static void StopAutomaticActionsCore()
-        {
-            try
-            {
-                if (_automaticActionsProcess is { HasExited: false })
-                    _automaticActionsProcess.Kill();
-            }
-            catch (Exception ex)
-            {
-                App.Logger.WriteException("MacroAutomationService::StopAutomaticActions", ex);
-            }
-            finally
-            {
-                _automaticActionsProcess?.Dispose();
-                _automaticActionsProcess = null;
-            }
-
-            try
-            {
-                if (_automaticActionsScriptPath is not null && File.Exists(_automaticActionsScriptPath))
-                    File.Delete(_automaticActionsScriptPath);
-            }
-            catch { }
-            _automaticActionsScriptPath = null;
+            await ClickRecordedPointAsync(robloxWindow, new MacroPoint(-860, 694), 900, cancellationToken); // Disconnect
+            await ClickRecordedPointAsync(robloxWindow, new MacroPoint(-1892, 159), 900, cancellationToken); // Home
+            await ClickRecordedPointAsync(robloxWindow, new MacroPoint(-1735, 1031), 900, cancellationToken); // Select Rivals
+            await ClickRecordedPointAsync(robloxWindow, new MacroPoint(-1011, 372), 1800, cancellationToken); // Join Rivals
+            await ClickRecordedPointAsync(robloxWindow, new MacroPoint(-956, 954), 1200, cancellationToken); // Play
+            await DragRecordedPointsAsync(robloxWindow, new MacroPoint(-240, 389), new MacroPoint(-241, 951), cancellationToken);
+            await Task.Delay(600, cancellationToken);
+            await ClickRecordedPointAsync(robloxWindow, new MacroPoint(-977, 827), 700, cancellationToken); // Select FFA
+            await ClickRecordedPointAsync(robloxWindow, new MacroPoint(-790, 836), 500, cancellationToken); // Join
         }
 
         public static void TapKey(byte virtualKey)
@@ -368,41 +212,42 @@ namespace SleepStrap.Services
 
         private static async Task MoveAndClickExactPointAsync(MacroPoint point, CancellationToken cancellationToken)
         {
-            string? autoHotkey = FindAutoHotkeyV2();
-            if (autoHotkey is not null)
-            {
-                await ClickWithAutoHotkeyAsync(autoHotkey, point, cancellationToken);
-                return;
-            }
-
             App.Logger.WriteLine("MacroAutomationService", $"Moving cursor to recorded screen point {point.X}, {point.Y}");
-            if (!SetCursorPos(point.X, point.Y))
-                throw new InvalidOperationException("SleepStrap could not move the cursor to the selected weapon.");
-
-            if (!GetCursorPos(out POINT actual) || actual.X != point.X || actual.Y != point.Y)
-                throw new InvalidOperationException($"Windows moved the cursor to {actual.X}, {actual.Y} instead of the recorded position {point.X}, {point.Y}.");
-
-            await Task.Delay(45, cancellationToken);
-
-            // The recorder only captures a hover position. Playback owns the click, so lock
-            // the cursor back onto that exact point immediately before pressing the button.
-            if (!SetCursorPos(point.X, point.Y) ||
-                !GetCursorPos(out actual) ||
-                actual.X != point.X ||
-                actual.Y != point.Y)
-            {
-                throw new InvalidOperationException($"The cursor left the recorded position before SleepStrap could click {point.X}, {point.Y}.");
-            }
-
             App.Logger.WriteLine("MacroAutomationService", $"Clicking recorded screen point {point.X}, {point.Y}");
-            SendMouseButton(0x0002);
+            SendMouseAtPoint(point, MouseEventLeftDown);
             try
             {
                 await Task.Delay(25, cancellationToken);
             }
             finally
             {
-                SendMouseButton(0x0004);
+                SendMouseButton(MouseEventLeftUp);
+            }
+        }
+
+        private static async Task ClickRecordedPointAsync(IntPtr window, MacroPoint recordedPoint, int waitAfter, CancellationToken cancellationToken)
+        {
+            await MoveAndClickExactPointAsync(MapRecordedPointToWindow(recordedPoint, window), cancellationToken);
+            await Task.Delay(waitAfter, cancellationToken);
+        }
+
+        private static async Task DragRecordedPointsAsync(IntPtr window, MacroPoint recordedStart, MacroPoint recordedEnd, CancellationToken cancellationToken)
+        {
+            MacroPoint start = MapRecordedPointToWindow(recordedStart, window);
+            MacroPoint end = MapRecordedPointToWindow(recordedEnd, window);
+            if (!SetCursorPos(start.X, start.Y))
+                throw new InvalidOperationException("SleepStrap could not start the Auto Rejoin drag.");
+            await Task.Delay(80, cancellationToken);
+            SendMouseButton(MouseEventLeftDown);
+            try
+            {
+                await Task.Delay(120, cancellationToken);
+                SetCursorPos(end.X, end.Y);
+                await Task.Delay(100, cancellationToken);
+            }
+            finally
+            {
+                SendMouseButton(MouseEventLeftUp);
             }
         }
 
@@ -493,67 +338,6 @@ namespace SleepStrap.Services
             }
         }
 
-        private static string? FindAutoHotkeyV2()
-        {
-            string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            string[] candidates =
-            {
-                Path.Combine(programFiles, "AutoHotkey", "v2", "AutoHotkey64.exe"),
-                Path.Combine(localAppData, "Programs", "AutoHotkey", "v2", "AutoHotkey64.exe")
-            };
-
-            return candidates.FirstOrDefault(File.Exists);
-        }
-
-        private static async Task ClickWithAutoHotkeyAsync(string autoHotkey, MacroPoint point, CancellationToken cancellationToken)
-        {
-            string scriptPath = Path.Combine(Path.GetTempPath(), $"SleepStrap-Macro-{Guid.NewGuid():N}.ahk");
-            string script =
-                "#Requires AutoHotkey v2.0\r\n" +
-                "#SingleInstance Off\r\n" +
-                "CoordMode \"Mouse\", \"Screen\"\r\n" +
-                $"MouseMove {point.X}, {point.Y}, 0\r\n" +
-                "Sleep 45\r\n" +
-                "Click \"Down\"\r\n" +
-                "Sleep 25\r\n" +
-                "Click \"Up\"\r\n" +
-                "ExitApp\r\n";
-
-            try
-            {
-                await File.WriteAllTextAsync(scriptPath, script, new UTF8Encoding(false), cancellationToken);
-                App.Logger.WriteLine("MacroAutomationService", $"AutoHotkey moving and clicking recorded screen point {point.X}, {point.Y}");
-
-                var startInfo = new ProcessStartInfo(autoHotkey)
-                {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden
-                };
-                startInfo.ArgumentList.Add("/ErrorStdOut");
-                startInfo.ArgumentList.Add(scriptPath);
-
-                using Process process = Process.Start(startInfo)
-                    ?? throw new InvalidOperationException("SleepStrap could not start AutoHotkey for the recorded click.");
-                await process.WaitForExitAsync(cancellationToken);
-                if (process.ExitCode != 0)
-                    throw new InvalidOperationException($"AutoHotkey could not click the recorded position (exit code {process.ExitCode}).");
-            }
-            finally
-            {
-                try
-                {
-                    if (File.Exists(scriptPath))
-                        File.Delete(scriptPath);
-                }
-                catch
-                {
-                    // The temporary script is harmless and Windows will clear the temp folder later.
-                }
-            }
-        }
-
         private static void SendMouseButton(uint flags)
         {
             INPUT[] inputs =
@@ -569,6 +353,41 @@ namespace SleepStrap.Services
             };
 
             if (SendInput(1, inputs, Marshal.SizeOf<INPUT>()) != 1)
+                throw new Win32Exception(Marshal.GetLastWin32Error(), "Windows rejected the simulated mouse click.");
+        }
+
+        private static void SendMouseAtPoint(MacroPoint point, uint buttonFlags)
+        {
+            int virtualLeft = GetSystemMetrics(76);
+            int virtualTop = GetSystemMetrics(77);
+            int virtualWidth = Math.Max(2, GetSystemMetrics(78));
+            int virtualHeight = Math.Max(2, GetSystemMetrics(79));
+            int absoluteX = (int)Math.Round((point.X - virtualLeft) * 65535d / (virtualWidth - 1));
+            int absoluteY = (int)Math.Round((point.Y - virtualTop) * 65535d / (virtualHeight - 1));
+
+            INPUT[] inputs =
+            {
+                new INPUT
+                {
+                    Type = 0,
+                    Data = new INPUTUNION
+                    {
+                        Mouse = new MOUSEINPUT
+                        {
+                            X = Math.Clamp(absoluteX, 0, 65535),
+                            Y = Math.Clamp(absoluteY, 0, 65535),
+                            Flags = MouseEventMove | MouseEventAbsolute | MouseEventVirtualDesk
+                        }
+                    }
+                },
+                new INPUT
+                {
+                    Type = 0,
+                    Data = new INPUTUNION { Mouse = new MOUSEINPUT { Flags = buttonFlags } }
+                }
+            };
+
+            if (SendInput((uint)inputs.Length, inputs, Marshal.SizeOf<INPUT>()) != (uint)inputs.Length)
                 throw new Win32Exception(Marshal.GetLastWin32Error(), "Windows rejected the simulated mouse click.");
         }
 
@@ -689,9 +508,6 @@ namespace SleepStrap.Services
         [DllImport("user32.dll")]
         private static extern bool SetCursorPos(int x, int y);
 
-        [DllImport("user32.dll")]
-        private static extern bool GetCursorPos(out POINT point);
-
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool GetClientRect(IntPtr window, out RECT rectangle);
 
@@ -715,6 +531,9 @@ namespace SleepStrap.Services
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern uint SendInput(uint inputCount, INPUT[] inputs, int inputSize);
+
+        [DllImport("user32.dll")]
+        private static extern int GetSystemMetrics(int index);
 
         [DllImport("user32.dll")]
         private static extern void keybd_event(byte virtualKey, byte scanCode, uint flags, UIntPtr extraInfo);
