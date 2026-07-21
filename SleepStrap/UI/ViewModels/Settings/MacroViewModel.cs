@@ -71,6 +71,10 @@ namespace SleepStrap.UI.ViewModels.Settings
         private bool _automationMasterEnabled = true;
         private bool _masterKeyWasDown;
         private bool _usingAutoHotkeyActions;
+        private bool _quickLoadoutVisible;
+        private bool _quickHotkeyWasDown;
+        private bool _quickLoadoutRunning;
+        private bool _quickHotkeyCaptureActive;
         private CancellationTokenSource? _macroCancellation;
         private DateTime? _nextAutoRejoinUtc;
         private bool _autoRejoinInProgress;
@@ -78,6 +82,10 @@ namespace SleepStrap.UI.ViewModels.Settings
         private WeaponOption? _selectedSecondary;
         private WeaponOption? _selectedMelee;
         private WeaponOption? _selectedUtility;
+        private WeaponOption? _quickSelectedPrimary;
+        private WeaponOption? _quickSelectedSecondary;
+        private WeaponOption? _quickSelectedMelee;
+        private WeaponOption? _quickSelectedUtility;
 
         public ObservableCollection<WeaponOption> PrimaryWeapons { get; } = new();
         public ObservableCollection<WeaponOption> SecondaryWeapons { get; } = new();
@@ -90,6 +98,10 @@ namespace SleepStrap.UI.ViewModels.Settings
         public ObservableCollection<WeaponOption> AvailableUtility { get; } = new();
 
         public ICommand RunMacroCommand => _runMacroCommand;
+        public Visibility QuickLoadoutVisibility => _quickLoadoutVisible ? Visibility.Visible : Visibility.Collapsed;
+        public string QuickLoadoutHotkeyDisplay => FormatHotkey(
+            App.Settings.Prop.MacroQuickLoadoutHotkeyModifiers,
+            App.Settings.Prop.MacroQuickLoadoutHotkeyVirtualKey);
 
         public bool IsRunning
         {
@@ -146,6 +158,30 @@ namespace SleepStrap.UI.ViewModels.Settings
         {
             get => _selectedUtility;
             set => SetSelection(ref _selectedUtility, value, nameof(SelectedUtility), selected => App.Settings.Prop.MacroUtilityWeapon = selected.Name);
+        }
+
+        public WeaponOption? QuickSelectedPrimary
+        {
+            get => _quickSelectedPrimary;
+            set => SetSelection(ref _quickSelectedPrimary, value, nameof(QuickSelectedPrimary), selected => App.Settings.Prop.MacroQuickLoadoutPrimaryWeapon = selected.Name);
+        }
+
+        public WeaponOption? QuickSelectedSecondary
+        {
+            get => _quickSelectedSecondary;
+            set => SetSelection(ref _quickSelectedSecondary, value, nameof(QuickSelectedSecondary), selected => App.Settings.Prop.MacroQuickLoadoutSecondaryWeapon = selected.Name);
+        }
+
+        public WeaponOption? QuickSelectedMelee
+        {
+            get => _quickSelectedMelee;
+            set => SetSelection(ref _quickSelectedMelee, value, nameof(QuickSelectedMelee), selected => App.Settings.Prop.MacroQuickLoadoutMeleeWeapon = selected.Name);
+        }
+
+        public WeaponOption? QuickSelectedUtility
+        {
+            get => _quickSelectedUtility;
+            set => SetSelection(ref _quickSelectedUtility, value, nameof(QuickSelectedUtility), selected => App.Settings.Prop.MacroQuickLoadoutUtilityWeapon = selected.Name);
         }
 
         public bool QuickRespawn
@@ -218,12 +254,16 @@ namespace SleepStrap.UI.ViewModels.Settings
                 ("Smoke Grenade", "SmokeGrenade Icon.png"), ("War Horn", "WarHorn Icon.png")
             });
 
-            RefreshAvailableWeapons(false);
+            RefreshAvailableWeapons();
             RefreshEffectiveSlots();
             _selectedPrimary = FindSaved(AvailablePrimary, App.Settings.Prop.MacroPrimaryWeapon);
             _selectedSecondary = FindSaved(AvailableSecondary, App.Settings.Prop.MacroSecondaryWeapon);
             _selectedMelee = FindSaved(AvailableMelee, App.Settings.Prop.MacroMeleeWeapon);
             _selectedUtility = FindSaved(AvailableUtility, App.Settings.Prop.MacroUtilityWeapon);
+            _quickSelectedPrimary = FindSaved(AvailablePrimary, App.Settings.Prop.MacroQuickLoadoutPrimaryWeapon);
+            _quickSelectedSecondary = FindSaved(AvailableSecondary, App.Settings.Prop.MacroQuickLoadoutSecondaryWeapon);
+            _quickSelectedMelee = FindSaved(AvailableMelee, App.Settings.Prop.MacroQuickLoadoutMeleeWeapon);
+            _quickSelectedUtility = FindSaved(AvailableUtility, App.Settings.Prop.MacroQuickLoadoutUtilityWeapon);
 
             _runMacroCommand = new AsyncRelayCommand(RunMacroAsync, () => !IsRunning && AllSelectionsPresent());
             _automationTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(50) };
@@ -245,6 +285,31 @@ namespace SleepStrap.UI.ViewModels.Settings
                 destination.Add(new WeaponOption(name, category, index++, image, missing.Contains(name), MissingChanged));
         }
 
+        public void RevealQuickLoadout()
+        {
+            if (_quickLoadoutVisible)
+                return;
+
+            _quickLoadoutVisible = true;
+            OnPropertyChanged(nameof(QuickLoadoutVisibility));
+        }
+
+        public void SetQuickLoadoutHotkey(int modifiers, int virtualKey)
+        {
+            App.Settings.Prop.MacroQuickLoadoutHotkeyModifiers = modifiers;
+            App.Settings.Prop.MacroQuickLoadoutHotkeyVirtualKey = virtualKey;
+            App.Settings.Save();
+            _quickHotkeyWasDown = false;
+            OnPropertyChanged(nameof(QuickLoadoutHotkeyDisplay));
+        }
+
+        public void SetQuickHotkeyCaptureActive(bool active)
+        {
+            _quickHotkeyCaptureActive = active;
+            if (active)
+                _quickHotkeyWasDown = false;
+        }
+
         private void MissingChanged(WeaponOption changed)
         {
             App.Settings.Prop.MacroMissingWeapons = AllWeapons()
@@ -252,32 +317,81 @@ namespace SleepStrap.UI.ViewModels.Settings
                 .Select(weapon => weapon.Name)
                 .ToList();
             RefreshEffectiveSlots();
-            RefreshAvailableWeapons(true);
+            SyncAvailableWeapons(AvailableWeapons(changed.Category), CategoryWeapons(changed.Category));
+
+            if (changed.IsMissing)
+                RepairSelectionIfRemoved(changed);
+
+            _runMacroCommand?.NotifyCanExecuteChanged();
             App.Settings.Save();
         }
 
-        private void RefreshAvailableWeapons(bool repairSelections)
+        private void RefreshAvailableWeapons()
         {
-            FillAvailable(AvailablePrimary, PrimaryWeapons);
-            FillAvailable(AvailableSecondary, SecondaryWeapons);
-            FillAvailable(AvailableMelee, MeleeWeapons);
-            FillAvailable(AvailableUtility, UtilityWeapons);
+            SyncAvailableWeapons(AvailablePrimary, PrimaryWeapons);
+            SyncAvailableWeapons(AvailableSecondary, SecondaryWeapons);
+            SyncAvailableWeapons(AvailableMelee, MeleeWeapons);
+            SyncAvailableWeapons(AvailableUtility, UtilityWeapons);
+        }
 
-            if (repairSelections)
+        private static void SyncAvailableWeapons(ObservableCollection<WeaponOption> destination, IEnumerable<WeaponOption> source)
+        {
+            WeaponOption[] wanted = source.Where(weapon => !weapon.IsMissing).ToArray();
+
+            for (int index = destination.Count - 1; index >= 0; index--)
             {
-                if (SelectedPrimary?.IsMissing != false) SelectedPrimary = AvailablePrimary.FirstOrDefault();
-                if (SelectedSecondary?.IsMissing != false) SelectedSecondary = AvailableSecondary.FirstOrDefault();
-                if (SelectedMelee?.IsMissing != false) SelectedMelee = AvailableMelee.FirstOrDefault();
-                if (SelectedUtility?.IsMissing != false) SelectedUtility = AvailableUtility.FirstOrDefault();
-                _runMacroCommand?.NotifyCanExecuteChanged();
+                if (!wanted.Contains(destination[index]))
+                    destination.RemoveAt(index);
+            }
+
+            for (int index = 0; index < wanted.Length; index++)
+            {
+                WeaponOption weapon = wanted[index];
+                int currentIndex = destination.IndexOf(weapon);
+                if (currentIndex < 0)
+                    destination.Insert(index, weapon);
+                else if (currentIndex != index)
+                    destination.Move(currentIndex, index);
             }
         }
 
-        private static void FillAvailable(ObservableCollection<WeaponOption> destination, IEnumerable<WeaponOption> source)
+        private void RepairSelectionIfRemoved(WeaponOption removed)
         {
-            destination.Clear();
-            foreach (WeaponOption weapon in source.Where(weapon => !weapon.IsMissing))
-                destination.Add(weapon);
+            WeaponOption? replacement = AvailableWeapons(removed.Category)
+                .FirstOrDefault(weapon => weapon.OriginalIndex > removed.OriginalIndex)
+                ?? AvailableWeapons(removed.Category).LastOrDefault();
+
+            switch (removed.Category)
+            {
+                case MacroWeaponCategory.Primary when ReferenceEquals(_selectedPrimary, removed):
+                    SetSelectionOrClear(ref _selectedPrimary, replacement, nameof(SelectedPrimary), value => App.Settings.Prop.MacroPrimaryWeapon = value);
+                    break;
+                case MacroWeaponCategory.Secondary when ReferenceEquals(_selectedSecondary, removed):
+                    SetSelectionOrClear(ref _selectedSecondary, replacement, nameof(SelectedSecondary), value => App.Settings.Prop.MacroSecondaryWeapon = value);
+                    break;
+                case MacroWeaponCategory.Melee when ReferenceEquals(_selectedMelee, removed):
+                    SetSelectionOrClear(ref _selectedMelee, replacement, nameof(SelectedMelee), value => App.Settings.Prop.MacroMeleeWeapon = value);
+                    break;
+                case MacroWeaponCategory.Utility when ReferenceEquals(_selectedUtility, removed):
+                    SetSelectionOrClear(ref _selectedUtility, replacement, nameof(SelectedUtility), value => App.Settings.Prop.MacroUtilityWeapon = value);
+                    break;
+            }
+
+            switch (removed.Category)
+            {
+                case MacroWeaponCategory.Primary when ReferenceEquals(_quickSelectedPrimary, removed):
+                    SetSelectionOrClear(ref _quickSelectedPrimary, replacement, nameof(QuickSelectedPrimary), value => App.Settings.Prop.MacroQuickLoadoutPrimaryWeapon = value);
+                    break;
+                case MacroWeaponCategory.Secondary when ReferenceEquals(_quickSelectedSecondary, removed):
+                    SetSelectionOrClear(ref _quickSelectedSecondary, replacement, nameof(QuickSelectedSecondary), value => App.Settings.Prop.MacroQuickLoadoutSecondaryWeapon = value);
+                    break;
+                case MacroWeaponCategory.Melee when ReferenceEquals(_quickSelectedMelee, removed):
+                    SetSelectionOrClear(ref _quickSelectedMelee, replacement, nameof(QuickSelectedMelee), value => App.Settings.Prop.MacroQuickLoadoutMeleeWeapon = value);
+                    break;
+                case MacroWeaponCategory.Utility when ReferenceEquals(_quickSelectedUtility, removed):
+                    SetSelectionOrClear(ref _quickSelectedUtility, replacement, nameof(QuickSelectedUtility), value => App.Settings.Prop.MacroQuickLoadoutUtilityWeapon = value);
+                    break;
+            }
         }
 
         private void RefreshEffectiveSlots()
@@ -351,6 +465,11 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         private void AutomationTimer_Tick(object? sender, EventArgs e)
         {
+            bool quickHotkeyDown = IsQuickLoadoutHotkeyDown();
+            if (quickHotkeyDown && !_quickHotkeyWasDown && !_quickLoadoutRunning && !IsRunning && AllQuickSelectionsPresent())
+                _ = RunQuickLoadoutAsync();
+            _quickHotkeyWasDown = quickHotkeyDown;
+
             bool masterKeyDown = MacroAutomationService.IsKeyDown(0xDD); // ] / OEM close bracket
             if (masterKeyDown && !_masterKeyWasDown)
             {
@@ -394,6 +513,46 @@ namespace SleepStrap.UI.ViewModels.Settings
             }
         }
 
+        private bool IsQuickLoadoutHotkeyDown()
+        {
+            if (_quickHotkeyCaptureActive)
+                return false;
+
+            int key = App.Settings.Prop.MacroQuickLoadoutHotkeyVirtualKey;
+            if (key == 0 || !MacroAutomationService.IsKeyDown(key))
+                return false;
+
+            int modifiers = App.Settings.Prop.MacroQuickLoadoutHotkeyModifiers;
+            if ((modifiers & 1) != 0 && !MacroAutomationService.IsKeyDown(0x12)) return false;
+            if ((modifiers & 2) != 0 && !MacroAutomationService.IsKeyDown(0x11)) return false;
+            if ((modifiers & 4) != 0 && !MacroAutomationService.IsKeyDown(0x10)) return false;
+            if ((modifiers & 8) != 0 && !MacroAutomationService.IsKeyDown(0x5B) && !MacroAutomationService.IsKeyDown(0x5C)) return false;
+            return true;
+        }
+
+        private async Task RunQuickLoadoutAsync()
+        {
+            _quickLoadoutRunning = true;
+            try
+            {
+                var selections = new[]
+                {
+                    CreateSelection(QuickSelectedPrimary!), CreateSelection(QuickSelectedSecondary!),
+                    CreateSelection(QuickSelectedMelee!), CreateSelection(QuickSelectedUtility!)
+                };
+                await MacroAutomationService.RunLoadoutAsync(selections, CancellationToken.None);
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("MacroViewModel::RunQuickLoadout", ex);
+                Frontend.ShowMessageBox($"SleepStrap could not apply the quick loadout.\n\n{ex.Message}", MessageBoxImage.Error);
+            }
+            finally
+            {
+                _quickLoadoutRunning = false;
+            }
+        }
+
         private void SetSelection(ref WeaponOption? field, WeaponOption? value, string propertyName, Action<WeaponOption> save)
         {
             if (value is null || ReferenceEquals(field, value))
@@ -403,6 +562,16 @@ namespace SleepStrap.UI.ViewModels.Settings
             App.Settings.Save();
             OnPropertyChanged(propertyName);
             _runMacroCommand?.NotifyCanExecuteChanged();
+        }
+
+        private void SetSelectionOrClear(ref WeaponOption? field, WeaponOption? value, string propertyName, Action<string> save)
+        {
+            if (ReferenceEquals(field, value))
+                return;
+
+            field = value;
+            save(value?.Name ?? String.Empty);
+            OnPropertyChanged(propertyName);
         }
 
         private static WeaponOption? FindSaved(IEnumerable<WeaponOption> options, string saved) =>
@@ -418,7 +587,29 @@ namespace SleepStrap.UI.ViewModels.Settings
             _ => UtilityWeapons
         };
 
+        private ObservableCollection<WeaponOption> AvailableWeapons(MacroWeaponCategory category) => category switch
+        {
+            MacroWeaponCategory.Primary => AvailablePrimary,
+            MacroWeaponCategory.Secondary => AvailableSecondary,
+            MacroWeaponCategory.Melee => AvailableMelee,
+            _ => AvailableUtility
+        };
+
         private bool AllSelectionsPresent() => SelectedPrimary is not null && SelectedSecondary is not null && SelectedMelee is not null && SelectedUtility is not null;
+
+        private bool AllQuickSelectionsPresent() => QuickSelectedPrimary is not null && QuickSelectedSecondary is not null && QuickSelectedMelee is not null && QuickSelectedUtility is not null;
+
+        private static string FormatHotkey(int modifiers, int virtualKey)
+        {
+            var parts = new List<string>();
+            if ((modifiers & 2) != 0) parts.Add("Ctrl");
+            if ((modifiers & 1) != 0) parts.Add("Alt");
+            if ((modifiers & 4) != 0) parts.Add("Shift");
+            if ((modifiers & 8) != 0) parts.Add("Win");
+            Key key = KeyInterop.KeyFromVirtualKey(virtualKey);
+            parts.Add(key == Key.None ? $"0x{virtualKey:X2}" : key.ToString());
+            return String.Join(" + ", parts);
+        }
 
         private void SaveAndNotify(string propertyName)
         {

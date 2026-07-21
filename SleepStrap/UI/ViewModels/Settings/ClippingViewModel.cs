@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 using Forms = System.Windows.Forms;
 
@@ -52,8 +53,10 @@ namespace SleepStrap.UI.ViewModels.Settings
         }
 
         private readonly FileSystemWatcher _clipWatcher;
+        private readonly DispatcherTimer _liveRefreshTimer;
         private bool _disposed;
         private int _refreshPending;
+        private string _clipSnapshot = String.Empty;
         private string _statusText = "Disabled";
 
         private static readonly HashSet<string> VideoExtensions = new(StringComparer.OrdinalIgnoreCase)
@@ -164,12 +167,34 @@ namespace SleepStrap.UI.ViewModels.Settings
             {
                 NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.Size,
                 IncludeSubdirectories = true,
-                EnableRaisingEvents = true
+                EnableRaisingEvents = false
             };
             _clipWatcher.Created += ClipsChanged;
             _clipWatcher.Changed += ClipsChanged;
             _clipWatcher.Deleted += ClipsChanged;
             _clipWatcher.Renamed += ClipsChanged;
+
+            _liveRefreshTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            _liveRefreshTimer.Tick += (_, _) => RefreshClips();
+        }
+
+        public void StartLiveUpdates()
+        {
+            if (_disposed)
+                return;
+
+            _clipWatcher.EnableRaisingEvents = true;
+            _liveRefreshTimer.Start();
+            RefreshClips(true);
+        }
+
+        public void StopLiveUpdates()
+        {
+            if (_disposed)
+                return;
+
+            _liveRefreshTimer.Stop();
+            _clipWatcher.EnableRaisingEvents = false;
         }
 
         public void SetHotkey(int modifiers, int virtualKey)
@@ -232,23 +257,26 @@ namespace SleepStrap.UI.ViewModels.Settings
             Process.Start(new ProcessStartInfo(Paths.Playbacks) { UseShellExecute = true });
         }
 
-        public void RefreshClips()
+        public void RefreshClips(bool force = false)
         {
             try
             {
-                string[] files = Directory.EnumerateFiles(Paths.Playbacks, "*.*", SearchOption.AllDirectories)
+                FileInfo[] files = Directory.EnumerateFiles(Paths.Playbacks, "*.*", SearchOption.AllDirectories)
                     .Where(path => VideoExtensions.Contains(Path.GetExtension(path)))
-                    .OrderByDescending(path =>
-                    {
-                        try { return File.GetLastWriteTime(path); }
-                        catch { return DateTime.MinValue; }
-                    })
+                    .Select(path => new FileInfo(path))
+                    .OrderByDescending(file => file.LastWriteTimeUtc)
                     .ToArray();
 
+                string snapshot = String.Join("\n", files.Select(file => $"{file.FullName}|{file.Length}|{file.LastWriteTimeUtc.Ticks}"));
+                if (!force && snapshot == _clipSnapshot)
+                    return;
+
+                _clipSnapshot = snapshot;
+
                 Clips.Clear();
-                foreach (string file in files)
+                foreach (FileInfo file in files)
                 {
-                    try { Clips.Add(new ClipItem(file)); }
+                    try { Clips.Add(new ClipItem(file.FullName)); }
                     catch (IOException ex) { App.Logger.WriteException("ClippingViewModel::RefreshClips", ex); }
                     catch (UnauthorizedAccessException ex) { App.Logger.WriteException("ClippingViewModel::RefreshClips", ex); }
                 }
@@ -329,6 +357,7 @@ namespace SleepStrap.UI.ViewModels.Settings
             if (_disposed)
                 return;
             _disposed = true;
+            _liveRefreshTimer.Stop();
             _clipWatcher.EnableRaisingEvents = false;
             _clipWatcher.Dispose();
         }

@@ -19,7 +19,8 @@ namespace SleepStrap.UI.Elements.Settings.Pages
             _viewModel = new ClippingViewModel();
             DataContext = _viewModel;
             InitializeComponent();
-            Unloaded += (_, _) => _viewModel.Dispose();
+            Loaded += (_, _) => _viewModel.StartLiveUpdates();
+            Unloaded += (_, _) => _viewModel.StopLiveUpdates();
         }
 
         private void HotkeyBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

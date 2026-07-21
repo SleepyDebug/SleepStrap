@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 using System.Windows.Interop;
 
 using ScreenRecorderLib;
@@ -34,6 +35,7 @@ namespace SleepStrap.Services
             Directory.CreateDirectory(Paths.Playbacks);
             Directory.CreateDirectory(GetBufferDirectory());
             RegisterHotkey();
+            App.Logger.WriteLine("ReplayBufferService::Start", "Starting the replay capture loop");
             _captureTask = Task.Run(() => CaptureLoopAsync(_stopToken.Token));
         }
 
@@ -44,7 +46,7 @@ namespace SleepStrap.Services
 
             Interlocked.Exchange(ref _saveRequested, 1);
             try { _rotateSignal.Release(); } catch (SemaphoreFullException) { }
-            Frontend.ShowBalloonTip("SleepStrap Clipping", "Saving replay…");
+            App.Logger.WriteLine("ReplayBufferService::SaveReplay", "Replay save requested");
         }
 
         private async Task CaptureLoopAsync(CancellationToken cancellationToken)
@@ -204,7 +206,7 @@ namespace SleepStrap.Services
 
                 if (selected.Count == 0)
                 {
-                    Frontend.ShowBalloonTip("SleepStrap Clipping", "The replay buffer is still warming up.");
+                    App.Logger.WriteLine("ReplayBufferService::SaveReplay", "Replay buffer is still warming up");
                     return;
                 }
 
@@ -242,12 +244,11 @@ namespace SleepStrap.Services
                 if (result != TranscodeFailureReason.None)
                     throw new InvalidOperationException($"Windows could not render the replay ({result}).");
 
-                Frontend.ShowBalloonTip("SleepStrap Clipping", $"Saved {Path.GetFileName(output.Path)}");
+                App.Logger.WriteLine("ReplayBufferService::SaveReplay", $"Saved {output.Path}");
             }
             catch (Exception ex)
             {
                 App.Logger.WriteException("ReplayBufferService::SaveReplay", ex);
-                Frontend.ShowBalloonTip("SleepStrap Clipping", "The replay could not be saved.", System.Windows.Forms.ToolTipIcon.Error);
             }
         }
 
@@ -278,7 +279,12 @@ namespace SleepStrap.Services
             uint modifiers = (uint)App.Settings.Prop.ClippingHotkeyModifiers | 0x4000; // MOD_NOREPEAT
             uint virtualKey = (uint)App.Settings.Prop.ClippingHotkeyVirtualKey;
             if (!RegisterHotKey(_hotkeyWindow.Handle, HotkeyId, modifiers, virtualKey))
-                App.Logger.WriteLine("ReplayBufferService::Hotkey", "The configured replay hotkey is already in use");
+            {
+                int error = Marshal.GetLastWin32Error();
+                throw new Win32Exception(error, "The configured replay hotkey could not be registered");
+            }
+
+            App.Logger.WriteLine("ReplayBufferService::Hotkey", $"Registered global replay hotkey modifiers=0x{modifiers:X} key=0x{virtualKey:X}");
         }
 
         private IntPtr HotkeyWindowHook(IntPtr hwnd, int message, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -286,6 +292,7 @@ namespace SleepStrap.Services
             if (message == 0x0312 && wParam.ToInt32() == HotkeyId)
             {
                 handled = true;
+                App.Logger.WriteLine("ReplayBufferService::Hotkey", "Global replay hotkey pressed");
                 SaveReplay();
             }
 
