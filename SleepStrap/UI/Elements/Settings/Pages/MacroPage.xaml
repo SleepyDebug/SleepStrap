@@ -104,7 +104,13 @@
                 <TextBlock Text="Loadout macro" FontSize="17" FontWeight="SemiBold" />
             </ui:CardExpander.Header>
             <StackPanel>
-                <UniformGrid Columns="2">
+                <Grid Margin="0,0,0,14">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <TextBlock Text="Enable Quick Loadout" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding QuickLoadoutEnabled, Mode=TwoWay}" />
+                </Grid>
+
+                <UniformGrid Columns="2" IsEnabled="{Binding QuickLoadoutEnabled}">
                     <StackPanel Margin="0,0,8,12">
                         <TextBlock Text="Primary" Margin="0,0,0,5" FontWeight="SemiBold" />
                         <ComboBox ItemsSource="{Binding AvailablePrimary}" SelectedItem="{Binding SelectedPrimary, Mode=TwoWay}"
@@ -175,8 +181,10 @@
                     </StackPanel>
                 </UniformGrid>
 
-                <TextBlock Text="Quick loadout hotkey" Margin="0,2,0,5" FontWeight="SemiBold" />
+                <TextBlock Text="Quick loadout hotkey" Margin="0,2,0,5" FontWeight="SemiBold"
+                           IsEnabled="{Binding QuickLoadoutEnabled}" />
                 <TextBox x:Name="QuickHotkeyBox" Height="38" IsReadOnly="True" Cursor="Hand"
+                         IsEnabled="{Binding QuickLoadoutEnabled}"
                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                          FontWeight="SemiBold" Text="{Binding QuickLoadoutHotkeyDisplay, Mode=OneWay}"
                          PreviewMouseLeftButtonDown="QuickHotkeyBox_PreviewMouseLeftButtonDown"

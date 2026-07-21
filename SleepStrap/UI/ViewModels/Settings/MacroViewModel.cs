@@ -103,6 +103,16 @@ namespace SleepStrap.UI.ViewModels.Settings
             App.Settings.Prop.MacroQuickLoadoutHotkeyModifiers,
             App.Settings.Prop.MacroQuickLoadoutHotkeyVirtualKey);
 
+        public bool QuickLoadoutEnabled
+        {
+            get => App.Settings.Prop.MacroQuickLoadoutEnabled;
+            set
+            {
+                App.Settings.Prop.MacroQuickLoadoutEnabled = value;
+                SaveAndNotify(nameof(QuickLoadoutEnabled));
+            }
+        }
+
         public bool IsRunning
         {
             get => _isRunning;
@@ -515,7 +525,7 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         private bool IsQuickLoadoutHotkeyDown()
         {
-            if (_quickHotkeyCaptureActive)
+            if (!QuickLoadoutEnabled || _quickHotkeyCaptureActive)
                 return false;
 
             int key = App.Settings.Prop.MacroQuickLoadoutHotkeyVirtualKey;

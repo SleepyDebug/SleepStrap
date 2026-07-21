@@ -22,6 +22,14 @@ namespace SleepStrap.Services
         private const int RecordedScreenTop = 0;
         private const int RecordedScreenWidth = 1920;
         private const int RecordedScreenHeight = 1080;
+        private const int TargetClientWidth = 1920;
+        private const int TargetClientHeight = 1080;
+        private const int SwRestore = 9;
+        private const uint SwpNoZOrder = 0x0004;
+        private const uint SwpNoActivate = 0x0010;
+        private const uint MonitorDefaultToNearest = 0x00000002;
+        private const int GwlStyle = -16;
+        private const int GwlExStyle = -20;
 
         private static readonly object AutomaticActionsLock = new();
         private static Process? _automaticActionsProcess;
@@ -79,10 +87,12 @@ namespace SleepStrap.Services
             if (robloxWindow == IntPtr.Zero)
                 throw new InvalidOperationException("Roblox is not running.");
 
+            await NormalizeRobloxWindowAsync(robloxWindow, cancellationToken);
+
             // Do not send SW_RESTORE to a fullscreen or maximized Roblox window. Windows can
             // interpret that as a request to leave its current presentation state.
             if (IsIconic(robloxWindow))
-                ShowWindowAsync(robloxWindow, 9);
+                ShowWindowAsync(robloxWindow, SwRestore);
             ActivateWindow(robloxWindow);
 
             DateTime activationDeadline = DateTime.UtcNow.AddSeconds(3);
@@ -423,6 +433,66 @@ namespace SleepStrap.Services
             return new MacroPoint(mappedX, mappedY);
         }
 
+        private static async Task NormalizeRobloxWindowAsync(IntPtr window, CancellationToken cancellationToken)
+        {
+            if (!GetClientRect(window, out RECT currentClient))
+                return;
+
+            int currentWidth = currentClient.Right - currentClient.Left;
+            int currentHeight = currentClient.Bottom - currentClient.Top;
+            if (currentWidth == TargetClientWidth && currentHeight == TargetClientHeight)
+                return;
+
+            // Restore down rather than minimize to the taskbar: a minimized window cannot
+            // receive the selector hotkey or clicks. The coordinate mapper below still
+            // scales to the final client size if the monitor cannot fit full 1080p.
+            ShowWindowAsync(window, SwRestore);
+            await Task.Delay(150, cancellationToken);
+
+            IntPtr monitor = MonitorFromWindow(window, MonitorDefaultToNearest);
+            MONITORINFO monitorInfo = new() { Size = Marshal.SizeOf<MONITORINFO>() };
+            if (monitor == IntPtr.Zero || !GetMonitorInfo(monitor, ref monitorInfo))
+                return;
+
+            int style = GetWindowLong(window, GwlStyle);
+            int extendedStyle = GetWindowLong(window, GwlExStyle);
+            RECT targetFrame = new() { Right = TargetClientWidth, Bottom = TargetClientHeight };
+            if (!AdjustWindowRectEx(ref targetFrame, style, false, extendedStyle))
+                return;
+
+            int chromeWidth = (targetFrame.Right - targetFrame.Left) - TargetClientWidth;
+            int chromeHeight = (targetFrame.Bottom - targetFrame.Top) - TargetClientHeight;
+            int workWidth = monitorInfo.Work.Right - monitorInfo.Work.Left;
+            int workHeight = monitorInfo.Work.Bottom - monitorInfo.Work.Top;
+            int availableClientWidth = Math.Max(640, workWidth - Math.Max(0, chromeWidth));
+            int availableClientHeight = Math.Max(360, workHeight - Math.Max(0, chromeHeight));
+            double scale = Math.Min(
+                1d,
+                Math.Min(availableClientWidth / (double)TargetClientWidth, availableClientHeight / (double)TargetClientHeight));
+            int targetClientWidth = Math.Max(640, (int)Math.Floor(TargetClientWidth * scale / 2d) * 2);
+            int targetClientHeight = Math.Max(360, (int)Math.Floor(TargetClientHeight * scale / 2d) * 2);
+
+            targetFrame = new RECT { Right = targetClientWidth, Bottom = targetClientHeight };
+            if (!AdjustWindowRectEx(ref targetFrame, style, false, extendedStyle))
+                return;
+
+            int outerWidth = targetFrame.Right - targetFrame.Left;
+            int outerHeight = targetFrame.Bottom - targetFrame.Top;
+            int x = monitorInfo.Work.Left + Math.Max(0, (workWidth - outerWidth) / 2);
+            int y = monitorInfo.Work.Top + Math.Max(0, (workHeight - outerHeight) / 2);
+            if (!SetWindowPos(window, IntPtr.Zero, x, y, outerWidth, outerHeight, SwpNoZOrder | SwpNoActivate))
+                return;
+
+            await Task.Delay(150, cancellationToken);
+            if (GetClientRect(window, out RECT resizedClient))
+            {
+                App.Logger.WriteLine(
+                    "MacroAutomationService",
+                    $"Restored and scaled Roblox client from {currentWidth}x{currentHeight} to " +
+                    $"{resizedClient.Right - resizedClient.Left}x{resizedClient.Bottom - resizedClient.Top}");
+            }
+        }
+
         private static string? FindAutoHotkeyV2()
         {
             string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
@@ -556,6 +626,15 @@ namespace SleepStrap.Services
         }
 
         [StructLayout(LayoutKind.Sequential)]
+        private struct MONITORINFO
+        {
+            public int Size;
+            public RECT Monitor;
+            public RECT Work;
+            public uint Flags;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
         private struct INPUT
         {
             public uint Type;
@@ -618,6 +697,21 @@ namespace SleepStrap.Services
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool ClientToScreen(IntPtr window, ref POINT point);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool SetWindowPos(IntPtr window, IntPtr insertAfter, int x, int y, int width, int height, uint flags);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool AdjustWindowRectEx(ref RECT rectangle, int style, bool hasMenu, int extendedStyle);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int GetWindowLong(IntPtr window, int index);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr MonitorFromWindow(IntPtr window, uint flags);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern bool GetMonitorInfo(IntPtr monitor, ref MONITORINFO monitorInfo);
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern uint SendInput(uint inputCount, INPUT[] inputs, int inputSize);
