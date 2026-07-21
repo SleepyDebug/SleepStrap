@@ -26,7 +26,9 @@ namespace SleepStrap.UI.ViewModels.Settings
             else
             {
                 _selectedSkybox = SkyboxChoices.FirstOrDefault(x =>
-                    !x.IsNone && String.Equals(x.Name, App.Settings.Prop.CustomSkyboxSourceName, StringComparison.OrdinalIgnoreCase));
+                    !x.IsNone &&
+                    (String.Equals(x.Name, App.Settings.Prop.CustomSkyboxSourceName, StringComparison.OrdinalIgnoreCase) ||
+                     String.Equals(x.ResourceFolder, App.Settings.Prop.CustomSkyboxSourceName, StringComparison.OrdinalIgnoreCase)));
                 _statusText = _selectedSkybox is null
                     ? "A legacy imported sky is active. Pick a preset or None to replace it."
                     : $"Selected: {_selectedSkybox.Name}.";

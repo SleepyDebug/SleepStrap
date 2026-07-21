@@ -9,6 +9,7 @@ namespace SleepStrap.UI.ViewModels.Settings
         private const string MissingFlagValue = "__SLEEPSTRAP_FLAG_WAS_MISSING__";
         private const string TargetFpsFlag = "DFIntTaskSchedulerTargetFps";
         private const string UnlockFpsFlag = "FFlagTaskSchedulerLimitTargetFpsTo2402";
+        private const int StretchPercent = 75;
 
         public sealed record StretchPreset(string Name, int Percent)
         {
@@ -161,7 +162,7 @@ namespace SleepStrap.UI.ViewModels.Settings
             App.Settings.Prop.RivalsNativeFrequency = native.Frequency;
 
             DisplayStretchService.DisplayMode applied = DisplayStretchService.ApplyHorizontalStretch(
-                App.Settings.Prop.RivalsStretchPercent,
+                StretchPercent,
                 native);
 
             App.Settings.Prop.RivalsStretchEnabled = true;

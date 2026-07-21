@@ -17,7 +17,11 @@ namespace SleepStrap.Services
         };
 
         public static bool IsPreset(string name) =>
-            PresetNames.Contains(name, StringComparer.OrdinalIgnoreCase);
+            PresetNames.Contains(name, StringComparer.OrdinalIgnoreCase) ||
+            String.Equals(name, "Zoff", StringComparison.OrdinalIgnoreCase);
+
+        public static string GetResourceFolder(string name) =>
+            String.Equals(name, "Zoff", StringComparison.OrdinalIgnoreCase) ? "Pandora" : name;
 
         public static IReadOnlyList<SkyboxChoice> GetChoices()
         {
@@ -27,7 +31,10 @@ namespace SleepStrap.Services
             };
 
             foreach (string name in PresetNames)
-                choices.Add(new SkyboxChoice(name, name, LoadPreview(name)));
+            {
+                string displayName = String.Equals(name, "Pandora", StringComparison.OrdinalIgnoreCase) ? "Zoff" : name;
+                choices.Add(new SkyboxChoice(displayName, name, LoadPreview(name)));
+            }
 
             return choices;
         }
