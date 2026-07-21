@@ -1,10 +1,10 @@
-# SleepStrap 6.9.4
+# SleepStrap 6.9.5
 
 ![SleepStrap icon](SleepStrap/SleepStrap.png)
 
 SleepStrap is a purple Windows launcher for Roblox with skyboxes, texture presets, visual modes, fonts, and Rivals display tools.
 
-[Download SleepStrap 6.9.4](https://github.com/SleepyDebug/SleepStrap/releases/tag/sleepstrap-6.9.4) · [Discord](https://discord.gg/W3CMjx8C7s) · [Report an issue](https://github.com/SleepyDebug/SleepStrap/issues)
+[Download SleepStrap 6.9.5](https://github.com/SleepyDebug/SleepStrap/releases/tag/sleepstrap-6.9.5) · [Discord](https://discord.gg/W3CMjx8C7s) · [Report an issue](https://github.com/SleepyDebug/SleepStrap/issues)
 
 ## Repository layout
 
