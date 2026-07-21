@@ -94,6 +94,12 @@ namespace SleepStrap.UI.Elements.Settings.Pages
         {
             MediaElement? media = FindMedia((DependencyObject)sender);
             if (media is null) return;
+            if (((FrameworkElement)sender).DataContext is not ClippingViewModel.ClipItem clip)
+                return;
+
+            media.Tag = true;
+            if (media.Source is null)
+                media.Source = clip.MediaUri;
             media.Position = TimeSpan.Zero;
             media.Play();
         }
@@ -102,24 +108,48 @@ namespace SleepStrap.UI.Elements.Settings.Pages
         {
             MediaElement? media = FindMedia((DependencyObject)sender);
             if (media is null) return;
-            media.Pause();
-            media.Position = TimeSpan.Zero;
+            ReleasePreview(media);
         }
-
-        private void PreviewMedia_Loaded(object sender, RoutedEventArgs e) => ((MediaElement)sender).Play();
 
         private void PreviewMedia_MediaOpened(object sender, RoutedEventArgs e)
         {
             var media = (MediaElement)sender;
-            media.Position = TimeSpan.FromSeconds(1);
-            media.Pause();
+            if (media.Tag is true)
+            {
+                media.Position = TimeSpan.Zero;
+                media.Play();
+            }
+            else
+            {
+                ReleasePreview(media);
+            }
         }
 
         private void PreviewMedia_MediaEnded(object sender, RoutedEventArgs e)
         {
             var media = (MediaElement)sender;
             media.Position = TimeSpan.Zero;
-            media.Play();
+            if (media.Tag is true)
+                media.Play();
+            else
+                ReleasePreview(media);
+        }
+
+        private void PreviewMedia_Unloaded(object sender, RoutedEventArgs e) => ReleasePreview((MediaElement)sender);
+
+        private static void ReleasePreview(MediaElement media)
+        {
+            media.Tag = false;
+            try
+            {
+                media.Stop();
+                media.Close();
+                media.Source = null;
+            }
+            catch (InvalidOperationException)
+            {
+                // Media Foundation can already be shutting down during navigation.
+            }
         }
 
         private void DeleteClip_Click(object sender, RoutedEventArgs e)

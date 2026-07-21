@@ -50,6 +50,11 @@ namespace SleepStrap
                 App.Logger.WriteLine(LOG_IDENT, "Opening uninstaller");
                 LaunchUninstaller();
             }
+            else if (App.LaunchSettings.ClippingFlag.Active)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Opening persistent clipping service");
+                Services.ClippingHostService.RunHostMode();
+            }
             else if (App.LaunchSettings.MenuFlag.Active)
             {
                 App.Logger.WriteLine(LOG_IDENT, "Opening settings");

@@ -43,5 +43,6 @@ namespace SleepStrap.UI.ViewModels.Settings
                 }
             }
         }
+
     }
 }

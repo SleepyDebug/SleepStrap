@@ -44,6 +44,7 @@ namespace SleepStrap.Services
 
             Interlocked.Exchange(ref _saveRequested, 1);
             try { _rotateSignal.Release(); } catch (SemaphoreFullException) { }
+            Frontend.ShowBalloonTip("SleepStrap Clipping", "Saving replay…");
         }
 
         private async Task CaptureLoopAsync(CancellationToken cancellationToken)
@@ -118,6 +119,11 @@ namespace SleepStrap.Services
             if (String.IsNullOrWhiteSpace(display))
                 display = System.Windows.Forms.Screen.PrimaryScreen?.DeviceName ?? @"\\.\DISPLAY1";
             var source = new DisplayRecordingSource(display);
+            // ScreenRecorderLib 6.6 can access-violate when Windows Graphics Capture
+            // is initialized from the background watcher. Desktop Duplication is the
+            // stable display backend here; software encoding below keeps it isolated
+            // from Roblox's hardware encoder resources.
+            source.RecorderApi = RecorderApi.DesktopDuplication;
             source.IsCursorCaptureEnabled = true;
             source.IsBorderRequired = false;
             ScreenRecorderLib.ScreenSize outputSize = GetCaptureSize(display);
@@ -161,7 +167,9 @@ namespace SleepStrap.Services
                     Bitrate = 45_000_000,
                     Quality = 95,
                     IsFixedFramerate = true,
-                    IsHardwareEncodingEnabled = true,
+                    // Keep the encoder off Roblox's GPU context. Quality remains high,
+                    // but capture can no longer force a hardware encoder reset in-game.
+                    IsHardwareEncodingEnabled = false,
                     IsLowLatencyEnabled = false,
                     IsFragmentedMp4Enabled = false,
                     IsMp4FastStartEnabled = false

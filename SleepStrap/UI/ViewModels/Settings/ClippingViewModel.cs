@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 
-using ScreenRecorderLib;
+using Forms = System.Windows.Forms;
 
 namespace SleepStrap.UI.ViewModels.Settings
 {
@@ -75,7 +75,11 @@ namespace SleepStrap.UI.ViewModels.Settings
                     return;
                 App.Settings.Prop.ClippingEnabled = value;
                 App.Settings.Save();
-                StatusText = value ? "Ready — starts automatically while Roblox is running" : "Disabled";
+                if (value)
+                    Services.ClippingHostService.EnsureStarted();
+                else
+                    Services.ClippingHostService.Stop();
+                StatusText = value ? "Ready — Alt + X is active system-wide" : "Disabled";
                 OnPropertyChanged(nameof(ClippingEnabled));
                 OnPropertyChanged(nameof(AdvancedVisibility));
             }
@@ -153,7 +157,7 @@ namespace SleepStrap.UI.ViewModels.Settings
         {
             Directory.CreateDirectory(Paths.Playbacks);
             (Displays, Speakers, Microphones) = LoadDevices();
-            _statusText = ClippingEnabled ? "Ready — starts automatically while Roblox is running" : "Disabled";
+            _statusText = ClippingEnabled ? "Ready — Alt + X is active system-wide" : "Disabled";
             RefreshClips();
 
             _clipWatcher = new FileSystemWatcher(Paths.Playbacks, "*.*")
@@ -173,6 +177,7 @@ namespace SleepStrap.UI.ViewModels.Settings
             App.Settings.Prop.ClippingHotkeyModifiers = modifiers;
             App.Settings.Prop.ClippingHotkeyVirtualKey = virtualKey;
             App.Settings.Save();
+            Services.ClippingHostService.Restart();
             OnPropertyChanged(nameof(HotkeyDisplay));
             StatusText = $"Save hotkey set to {HotkeyDisplay}";
         }
@@ -229,16 +234,31 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         public void RefreshClips()
         {
-            string[] files = Directory.EnumerateFiles(Paths.Playbacks, "*.*", SearchOption.AllDirectories)
-                .Where(path => VideoExtensions.Contains(Path.GetExtension(path)))
-                .OrderByDescending(File.GetLastWriteTime)
-                .ToArray();
+            try
+            {
+                string[] files = Directory.EnumerateFiles(Paths.Playbacks, "*.*", SearchOption.AllDirectories)
+                    .Where(path => VideoExtensions.Contains(Path.GetExtension(path)))
+                    .OrderByDescending(path =>
+                    {
+                        try { return File.GetLastWriteTime(path); }
+                        catch { return DateTime.MinValue; }
+                    })
+                    .ToArray();
 
-            Clips.Clear();
-            foreach (string file in files)
-                Clips.Add(new ClipItem(file));
-            OnPropertyChanged(nameof(EmptyVisibility));
-            OnPropertyChanged(nameof(ClipCountText));
+                Clips.Clear();
+                foreach (string file in files)
+                {
+                    try { Clips.Add(new ClipItem(file)); }
+                    catch (IOException ex) { App.Logger.WriteException("ClippingViewModel::RefreshClips", ex); }
+                    catch (UnauthorizedAccessException ex) { App.Logger.WriteException("ClippingViewModel::RefreshClips", ex); }
+                }
+                OnPropertyChanged(nameof(EmptyVisibility));
+                OnPropertyChanged(nameof(ClipCountText));
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("ClippingViewModel::RefreshClips", ex);
+            }
         }
 
         private void ClipsChanged(object sender, FileSystemEventArgs e)
@@ -249,7 +269,11 @@ namespace SleepStrap.UI.ViewModels.Settings
             Application.Current.Dispatcher.BeginInvoke(async () =>
             {
                 await Task.Delay(250);
-                try { RefreshClips(); }
+                try
+                {
+                    if (!_disposed)
+                        RefreshClips();
+                }
                 finally { Interlocked.Exchange(ref _refreshPending, 0); }
             });
         }
@@ -262,12 +286,17 @@ namespace SleepStrap.UI.ViewModels.Settings
 
             try
             {
-                foreach (RecordableDisplay display in Recorder.GetDisplays())
-                    displays.Add(new DeviceChoice(display.FriendlyName, display.DeviceName));
-                foreach (AudioDevice device in Recorder.GetSystemAudioDevices(AudioDeviceSource.OutputDevices))
-                    speakers.Add(new DeviceChoice(device.FriendlyName, device.DeviceName));
-                foreach (AudioDevice device in Recorder.GetSystemAudioDevices(AudioDeviceSource.InputDevices))
-                    microphones.Add(new DeviceChoice(device.FriendlyName, device.DeviceName));
+                int monitorNumber = 1;
+                foreach (Forms.Screen screen in Forms.Screen.AllScreens)
+                {
+                    if (screen.Primary)
+                        continue;
+
+                    monitorNumber++;
+                    displays.Add(new DeviceChoice(
+                        $"Monitor {monitorNumber} ({screen.Bounds.Width}×{screen.Bounds.Height})",
+                        screen.DeviceName));
+                }
             }
             catch (Exception ex)
             {

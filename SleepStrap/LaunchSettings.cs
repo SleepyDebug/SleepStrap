@@ -44,10 +44,12 @@ namespace SleepStrap
 
         public LaunchFlag BloxshadeFlag { get; } = new("bloxshade");
 
+        public LaunchFlag ClippingFlag { get; } = new("clipping");
+
 #if DEBUG
         public bool BypassUpdateCheck => true;
 #else
-        public bool BypassUpdateCheck => UninstallFlag.Active || WatcherFlag.Active;
+        public bool BypassUpdateCheck => UninstallFlag.Active || WatcherFlag.Active || ClippingFlag.Active;
 #endif
 
         public LaunchMode RobloxLaunchMode { get; set; } = LaunchMode.None;

@@ -82,5 +82,16 @@ namespace SleepStrap.Models.Persistable
         public bool ClippingMicrophoneEnabled { get; set; } = false;
         public string ClippingMicrophoneDevice { get; set; } = "";
         public int ClippingMicrophoneVolume { get; set; } = 70;
+
+        // SleepStrap RIVALS loadout macro
+        public List<string> MacroMissingWeapons { get; set; } = new();
+        public string MacroPrimaryWeapon { get; set; } = "Distortion";
+        public string MacroSecondaryWeapon { get; set; } = "Warper";
+        public string MacroMeleeWeapon { get; set; } = "Maul";
+        public string MacroUtilityWeapon { get; set; } = "Grappler";
+        public bool MacroQuickRespawn { get; set; } = false;
+        public bool MacroAutoUtility { get; set; } = false;
+        public bool MacroAutoInspect { get; set; } = false;
+        public bool MacroAutoRejoinHourly { get; set; } = false;
     }
 }

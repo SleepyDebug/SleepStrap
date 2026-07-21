@@ -338,7 +338,7 @@ namespace SleepStrap
                 if (!LaunchSettings.BypassUpdateCheck)
                     Installer.HandleUpgrade();
 
-                if (await Services.AppUpdateService.CheckAndPromptAsync())
+                if (!LaunchSettings.ClippingFlag.Active && await Services.AppUpdateService.CheckAndPromptAsync())
                 {
                     SoftTerminate();
                     return;
@@ -348,6 +348,12 @@ namespace SleepStrap
 
                 WindowsRegistry.RegisterApis(); // we want to register those early on
                                                 // so we wont have any issues with bloxshade
+
+                if (!LaunchSettings.ClippingFlag.Active)
+                    Services.ClippingHostService.StopRemovedSleePlayer();
+
+                if (!LaunchSettings.ClippingFlag.Active && Settings.Prop.ClippingEnabled)
+                    Services.ClippingHostService.EnsureStarted();
 
                 LaunchHandler.ProcessLaunchArgs();
             }
