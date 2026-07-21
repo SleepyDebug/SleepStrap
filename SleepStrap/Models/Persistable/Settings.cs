@@ -95,6 +95,7 @@ namespace SleepStrap.Models.Persistable
         public string MacroQuickLoadoutUtilityWeapon { get; set; } = "Grappler";
         public int MacroQuickLoadoutHotkeyModifiers { get; set; } = 3; // Ctrl + Alt
         public int MacroQuickLoadoutHotkeyVirtualKey { get; set; } = 0x51; // Q
+        public bool MacroQuickLoadoutEnabled { get; set; } = true;
         public bool MacroQuickRespawn { get; set; } = false;
         public bool MacroAutoUtility { get; set; } = false;
         public bool MacroAutoInspect { get; set; } = false;
