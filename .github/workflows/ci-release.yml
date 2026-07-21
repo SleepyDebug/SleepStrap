@@ -15,10 +15,10 @@ jobs:
         dotnet-version: '6.0.x'
 
     - name: Restore dependencies
-      run: dotnet restore -p:Platform=x64
+      run: dotnet restore .\SleepStrap\SleepStrap.csproj -p:Platform=x64
 
     - name: Build
-      run: dotnet build -c Release -p:Platform=x64 --no-restore
+      run: dotnet build .\SleepStrap\SleepStrap.csproj -c Release -p:Platform=x64 --no-restore
 
     - name: Publish
       run: dotnet publish -p:Platform=x64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:CommitHash=${{ github.sha }} -p:CommitRef=${{ github.ref_type }}/${{ github.ref_name }} -r win-x64 -c Release --self-contained true .\SleepStrap\SleepStrap.csproj
