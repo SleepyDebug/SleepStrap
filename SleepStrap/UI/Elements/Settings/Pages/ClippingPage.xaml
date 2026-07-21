@@ -58,7 +58,7 @@
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <StackPanel>
                     <TextBlock Text="Enable clipping" FontSize="18" FontWeight="SemiBold" />
-                    <TextBlock Text="Replay buffer runs while Roblox is open" Margin="0,4,0,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="Alt + X stays active in the background after clipping is enabled" Margin="0,4,0,0" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                 </StackPanel>
                 <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding ClippingEnabled, Mode=TwoWay}" VerticalAlignment="Center" />
             </Grid>
@@ -170,9 +170,10 @@
                         </Border.RenderTransform>
                         <Grid>
                             <Grid.RowDefinitions><RowDefinition Height="190" /><RowDefinition Height="58" /></Grid.RowDefinitions>
-                            <MediaElement x:Name="PreviewMedia" Source="{Binding MediaUri}" LoadedBehavior="Manual" UnloadedBehavior="Manual"
+                            <MediaElement x:Name="PreviewMedia" LoadedBehavior="Manual" UnloadedBehavior="Manual"
                                           ScrubbingEnabled="True" Stretch="UniformToFill" Volume="0"
-                                          Loaded="PreviewMedia_Loaded" MediaOpened="PreviewMedia_MediaOpened" MediaEnded="PreviewMedia_MediaEnded" />
+                                          MediaOpened="PreviewMedia_MediaOpened" MediaEnded="PreviewMedia_MediaEnded"
+                                          Unloaded="PreviewMedia_Unloaded" />
                             <Border x:Name="HoverControls" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="8" Padding="4"
                                     CornerRadius="8" Background="#D9121018" Opacity="0">
                                 <StackPanel Orientation="Horizontal">

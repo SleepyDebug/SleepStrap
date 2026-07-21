@@ -46,7 +46,7 @@ namespace SleepStrap.UI.Elements.Settings
             if (lastPage == typeof(FontsPage))
                 lastPage = typeof(TexturesPage);
 
-            Type[] visiblePages = { typeof(SkyboxPage), typeof(TexturesPage), typeof(RivalsPage), typeof(ClippingPage), typeof(OtherPage) };
+            Type[] visiblePages = { typeof(SkyboxPage), typeof(TexturesPage), typeof(RivalsPage), typeof(MacroPage), typeof(ClippingPage), typeof(OtherPage) };
             if (lastPage != null && visiblePages.Contains(lastPage))
                 SafeNavigate(lastPage);
 

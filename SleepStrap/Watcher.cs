@@ -13,8 +13,6 @@ namespace SleepStrap
         
         private readonly NotifyIconWrapper? _notifyIcon;
 
-        private readonly ReplayBufferService? _replayBuffer;
-
         public readonly ActivityWatcher? ActivityWatcher;
 
         public readonly DiscordRichPresence? RichPresence;
@@ -74,11 +72,6 @@ namespace SleepStrap
 
             _notifyIcon = new(this);
 
-            if (App.Settings.Prop.ClippingEnabled)
-            {
-                _replayBuffer = new ReplayBufferService();
-                _replayBuffer.Start();
-            }
         }
 
         public void KillRobloxProcess() => CloseProcess(_watcherData!.ProcessId, true);
@@ -136,7 +129,6 @@ namespace SleepStrap
             App.Logger.WriteLine("Watcher::Dispose", "Disposing Watcher");
 
             _notifyIcon?.Dispose();
-            _replayBuffer?.Dispose();
             RichPresence?.Dispose();
 
             App.State.Prop.WatcherRunning = false;

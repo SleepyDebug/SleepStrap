@@ -49,7 +49,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                     return;
 
                 if (value && Frontend.ShowMessageBox(
-                    "Rivals stretch temporarily changes the primary Windows display resolution. This affects the whole desktop until you turn it off. It does not inject into Roblox.\n\nFor the stretched result, set your GPU scaling mode to Full-screen. Continue?",
+                    "PC stretch temporarily changes the primary Windows display resolution. This affects the whole desktop until you turn it off. It does not inject into Roblox.\n\nFor the stretched result, set your GPU scaling mode to Full-screen. Continue?",
                     MessageBoxImage.Information,
                     MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                 {

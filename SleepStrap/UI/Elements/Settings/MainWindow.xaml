@@ -86,7 +86,8 @@
                 <ui:NavigationFluent.Items>
                     <ui:NavigationItem Content="Skybox" PageType="{x:Type pages:SkyboxPage}" Icon="Cube24" Tag="skybox" />
                     <ui:NavigationItem Content="Textures" PageType="{x:Type pages:TexturesPage}" Icon="WrenchScrewdriver20" Tag="textures" />
-                    <ui:NavigationItem Content="Rivals" PageType="{x:Type pages:RivalsPage}" Icon="PlaySettings20" Tag="rivals" />
+                    <ui:NavigationItem Content="PC" PageType="{x:Type pages:RivalsPage}" Icon="PlaySettings20" Tag="pc" />
+                    <ui:NavigationItem Content="Macro" PageType="{x:Type pages:MacroPage}" Icon="Keyboard24" Tag="macro" />
                     <ui:NavigationItem Content="Clipping" PageType="{x:Type pages:ClippingPage}" Icon="VideoClip24" Tag="clipping" />
                     <ui:NavigationItem Content="Other" PageType="{x:Type pages:OtherPage}" Icon="MoreHorizontal24" Tag="other" />
                 </ui:NavigationFluent.Items>
