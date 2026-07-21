@@ -15,6 +15,14 @@ namespace SleepStrap.Services
 
     public static class MacroAutomationService
     {
+        // The supplied RIVALS recording was captured on a 1920x1080 monitor positioned
+        // immediately left of the primary display. Convert those desktop coordinates
+        // into the active Roblox client area so the macro works on any monitor layout.
+        private const int RecordedScreenLeft = -1920;
+        private const int RecordedScreenTop = 0;
+        private const int RecordedScreenWidth = 1920;
+        private const int RecordedScreenHeight = 1080;
+
         private static readonly object AutomaticActionsLock = new();
         private static Process? _automaticActionsProcess;
         private static string? _automaticActionsScriptPath;
@@ -103,6 +111,7 @@ namespace SleepStrap.Services
 
                     var selection = selections[index];
                     MacroPoint point = ResolveSlot(selection.Category, selection.OriginalIndex, selection.MissingIndices);
+                    point = MapRecordedPointToWindow(point, robloxWindow);
                     await MoveAndClickExactPointAsync(point, cancellationToken);
                     await Task.Delay(index < 3 ? 180 : 250, cancellationToken);
                 }
@@ -387,6 +396,33 @@ namespace SleepStrap.Services
             }
         }
 
+        private static MacroPoint MapRecordedPointToWindow(MacroPoint recordedPoint, IntPtr window)
+        {
+            if (!GetClientRect(window, out RECT clientRect))
+                throw new Win32Exception(Marshal.GetLastWin32Error(), "Windows could not read the Roblox window size.");
+
+            POINT clientOrigin = new() { X = clientRect.Left, Y = clientRect.Top };
+            if (!ClientToScreen(window, ref clientOrigin))
+                throw new Win32Exception(Marshal.GetLastWin32Error(), "Windows could not locate the Roblox window.");
+
+            int clientWidth = clientRect.Right - clientRect.Left;
+            int clientHeight = clientRect.Bottom - clientRect.Top;
+            if (clientWidth <= 0 || clientHeight <= 0)
+                throw new InvalidOperationException("The Roblox window has no usable client area.");
+
+            double relativeX = (recordedPoint.X - RecordedScreenLeft) / (double)RecordedScreenWidth;
+            double relativeY = (recordedPoint.Y - RecordedScreenTop) / (double)RecordedScreenHeight;
+            int mappedX = clientOrigin.X + (int)Math.Round(relativeX * clientWidth);
+            int mappedY = clientOrigin.Y + (int)Math.Round(relativeY * clientHeight);
+
+            mappedX = Math.Clamp(mappedX, clientOrigin.X, clientOrigin.X + clientWidth - 1);
+            mappedY = Math.Clamp(mappedY, clientOrigin.Y, clientOrigin.Y + clientHeight - 1);
+            App.Logger.WriteLine(
+                "MacroAutomationService",
+                $"Mapped recorded point {recordedPoint.X}, {recordedPoint.Y} to Roblox client point {mappedX}, {mappedY}");
+            return new MacroPoint(mappedX, mappedY);
+        }
+
         private static string? FindAutoHotkeyV2()
         {
             string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
@@ -511,6 +547,15 @@ namespace SleepStrap.Services
         }
 
         [StructLayout(LayoutKind.Sequential)]
+        private struct RECT
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
         private struct INPUT
         {
             public uint Type;
@@ -567,6 +612,12 @@ namespace SleepStrap.Services
 
         [DllImport("user32.dll")]
         private static extern bool GetCursorPos(out POINT point);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool GetClientRect(IntPtr window, out RECT rectangle);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool ClientToScreen(IntPtr window, ref POINT point);
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern uint SendInput(uint inputCount, INPUT[] inputs, int inputSize);

@@ -32,13 +32,7 @@
             </ui:CardExpander.Header>
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
-                <StackPanel Margin="0,0,22,0">
-                    <TextBlock Text="Strength" Margin="0,0,0,5" FontSize="12" FontWeight="SemiBold" />
-                    <ComboBox Width="230" HorizontalAlignment="Left"
-                              ItemsSource="{Binding StretchPresets}"
-                              SelectedValuePath="Percent"
-                              SelectedValue="{Binding SelectedStretchPercent, Mode=TwoWay}" />
-                </StackPanel>
+                <TextBlock Text="Stretch display" FontSize="14" VerticalAlignment="Center" />
                 <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
                     <TextBlock Text="Off" HorizontalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                     <ui:ToggleSwitch IsChecked="{Binding StretchEnabled, Mode=TwoWay}" Margin="0,8" />

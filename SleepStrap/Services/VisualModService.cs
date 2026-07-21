@@ -144,7 +144,7 @@ namespace SleepStrap.Services
             if (cacheIsReady)
                 ApplyCachedSkybox();
             else
-                ApplyEmbeddedSkybox(selected, false);
+                ApplyEmbeddedSkybox(SkyboxGalleryService.GetResourceFolder(selected), false);
 
             if (applyRivalsFix)
                 ApplyRivalsSkyboxCompatibilityFix();
@@ -426,16 +426,94 @@ namespace SleepStrap.Services
 
         private static void ApplyDarkTextures()
         {
-            Assembly assembly = Assembly.GetExecutingAssembly();
             foreach (var item in GetDarkTextureResources())
             {
                 string destination = GetTextureModPath(item.RelativePath);
                 Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
-                using Stream input = assembly.GetManifestResourceStream(item.ResourceName)
-                    ?? throw new InvalidOperationException($"Missing embedded texture '{item.ResourceName}'.");
-                using FileStream output = File.Create(destination);
-                input.CopyTo(output);
+                byte[] texture = ReadEmbeddedResource(item.ResourceName);
+
+                // The supplied dark diffuse maps contain only their largest mip level.
+                // Roblox selects smaller mips at lower graphics quality and otherwise
+                // falls back to its stock-looking material. Build the missing BC1 mip
+                // chain so the dark pack remains active at every quality level.
+                if (String.Equals(Path.GetFileName(item.RelativePath), "diffuse.dds", StringComparison.OrdinalIgnoreCase))
+                    texture = EnsureBc1MipChain(texture);
+
+                File.WriteAllBytes(destination, texture);
             }
+        }
+
+        private static byte[] EnsureBc1MipChain(byte[] texture)
+        {
+            const int ddsHeaderSize = 128;
+            const int ddsMipMapCountFlag = 0x00020000;
+            const int ddsCapsComplex = 0x00000008;
+            const int ddsCapsMipMap = 0x00400000;
+            const int dxt1FourCc = 0x31545844;
+
+            if (texture.Length < ddsHeaderSize ||
+                texture[0] != (byte)'D' || texture[1] != (byte)'D' ||
+                texture[2] != (byte)'S' || texture[3] != (byte)' ' ||
+                BitConverter.ToInt32(texture, 84) != dxt1FourCc)
+            {
+                return texture;
+            }
+
+            int width = BitConverter.ToInt32(texture, 16);
+            int height = BitConverter.ToInt32(texture, 12);
+            int existingMipCount = Math.Max(1, BitConverter.ToInt32(texture, 28));
+            int expectedMipCount = 1 + (int)Math.Floor(Math.Log2(Math.Max(width, height)));
+            if (width <= 0 || height <= 0 || existingMipCount >= expectedMipCount)
+                return texture;
+
+            int topBlockWidth = Math.Max(1, (width + 3) / 4);
+            int topBlockHeight = Math.Max(1, (height + 3) / 4);
+            int topLevelBytes = checked(topBlockWidth * topBlockHeight * 8);
+            if (texture.Length < ddsHeaderSize + topLevelBytes)
+                return texture;
+
+            using MemoryStream output = new(texture.Length + (topLevelBytes / 3));
+            output.Write(texture, 0, ddsHeaderSize + topLevelBytes);
+
+            byte[] parentBlocks = texture.AsSpan(ddsHeaderSize, topLevelBytes).ToArray();
+            int parentBlockWidth = topBlockWidth;
+            int parentBlockHeight = topBlockHeight;
+            int mipWidth = width;
+            int mipHeight = height;
+
+            for (int mip = 1; mip < expectedMipCount; mip++)
+            {
+                mipWidth = Math.Max(1, mipWidth / 2);
+                mipHeight = Math.Max(1, mipHeight / 2);
+                int blockWidth = Math.Max(1, (mipWidth + 3) / 4);
+                int blockHeight = Math.Max(1, (mipHeight + 3) / 4);
+                byte[] mipBlocks = new byte[checked(blockWidth * blockHeight * 8)];
+
+                for (int y = 0; y < blockHeight; y++)
+                {
+                    for (int x = 0; x < blockWidth; x++)
+                    {
+                        int sourceX = Math.Min(parentBlockWidth - 1, x * 2);
+                        int sourceY = Math.Min(parentBlockHeight - 1, y * 2);
+                        int sourceOffset = (sourceY * parentBlockWidth + sourceX) * 8;
+                        int destinationOffset = (y * blockWidth + x) * 8;
+                        Buffer.BlockCopy(parentBlocks, sourceOffset, mipBlocks, destinationOffset, 8);
+                    }
+                }
+
+                output.Write(mipBlocks);
+                parentBlocks = mipBlocks;
+                parentBlockWidth = blockWidth;
+                parentBlockHeight = blockHeight;
+            }
+
+            byte[] completeTexture = output.ToArray();
+            int flags = BitConverter.ToInt32(completeTexture, 8) | ddsMipMapCountFlag;
+            int caps = BitConverter.ToInt32(completeTexture, 108) | ddsCapsComplex | ddsCapsMipMap;
+            BitConverter.GetBytes(flags).CopyTo(completeTexture, 8);
+            BitConverter.GetBytes(expectedMipCount).CopyTo(completeTexture, 28);
+            BitConverter.GetBytes(caps).CopyTo(completeTexture, 108);
+            return completeTexture;
         }
 
         private static void ApplyBasicTextures()
