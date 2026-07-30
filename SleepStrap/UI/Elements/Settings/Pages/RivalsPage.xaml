@@ -7,6 +7,7 @@
       xmlns:dmodels="clr-namespace:SleepStrap.UI.ViewModels.Settings"
       mc:Ignorable="d" d:DataContext="{d:DesignInstance dmodels:RivalsViewModel, IsDesignTimeCreatable=True}"
       d:DesignHeight="650" d:DesignWidth="800" Title="PC" Scrollable="True">
+    <Grid>
     <StackPanel Margin="0,0,14,20">
         <Border Padding="18,14,18,12" CornerRadius="14" BorderThickness="0" Background="#C40A0A0C">
             <Grid>
@@ -75,13 +76,7 @@
                 </StackPanel>
                 <Border Grid.Column="1" Width="78" Height="58" Margin="0,0,14,0" CornerRadius="8" ClipToBounds="True"
                         BorderBrush="#55FFFFFF" BorderThickness="1"
-                        ToolTipService.InitialShowDelay="100" ToolTipService.ShowDuration="60000">
-                    <Border.ToolTip>
-                        <ToolTip Placement="Mouse" HasDropShadow="True" Padding="0" Background="#F0080A12" BorderThickness="0">
-                            <Image Source="pack://application:,,,/Resources/SleepStrap/Previews/Blur.png"
-                                   Width="1000" Height="760" Stretch="Uniform" />
-                        </ToolTip>
-                    </Border.ToolTip>
+                        MouseEnter="BlurPreview_MouseEnter">
                     <Image Source="pack://application:,,,/Resources/SleepStrap/Previews/Blur.png" Stretch="UniformToFill" />
                 </Border>
                 <ui:ToggleSwitch Grid.Column="2"
@@ -92,4 +87,13 @@
         </ui:CardExpander>
 
     </StackPanel>
+    <Border x:Name="BlurPreviewOverlay" Visibility="Collapsed" Panel.ZIndex="100"
+            Background="#F0080A12" MouseLeave="BlurPreviewOverlay_MouseLeave"
+            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid>
+            <Image Source="pack://application:,,,/Resources/SleepStrap/Previews/Blur.png" Stretch="Uniform" Margin="24" />
+            <TextBlock Text="Blur preview" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28" FontSize="15" FontWeight="SemiBold" />
+        </Grid>
+    </Border>
+    </Grid>
 </ui:UiPage>
