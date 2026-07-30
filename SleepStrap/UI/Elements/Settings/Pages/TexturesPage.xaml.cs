@@ -12,7 +12,6 @@ namespace SleepStrap.UI.Elements.Settings.Pages
         {
             DataContext = new VisualModsViewModel();
             InitializeComponent();
-            FontColorPopup.PlacementTarget = FontColorButton;
             Loaded += (_, _) => { BuildFontColorWheel(); UpdateFontColorUi(); };
         }
 

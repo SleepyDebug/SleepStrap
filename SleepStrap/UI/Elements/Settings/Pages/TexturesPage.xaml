@@ -189,7 +189,7 @@
                             <TextBlock x:Name="FontColorValue" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
-                    <Popup x:Name="FontColorPopup" Placement="Bottom" StaysOpen="False" AllowsTransparency="True">
+                    <Popup x:Name="FontColorPopup" StaysOpen="False" AllowsTransparency="True">
                         <Border Background="#F2121216" CornerRadius="12" Padding="14" BorderBrush="#55FFFFFF" BorderThickness="1">
                             <StackPanel>
                                 <Image x:Name="FontColorWheel" Width="220" Height="220" MouseLeftButtonDown="FontColorWheel_MouseLeftButtonDown" />
