@@ -105,7 +105,6 @@
     <Resource Include="Resources\SleepStrap\Previews\Basic.png" />
     <Resource Include="Resources\SleepStrap\Previews\Dark.png" />
     <Resource Include="Resources\SleepStrap\Previews\BasicRtx.png" />
-    <Resource Include="Resources\SleepStrap\Previews\Rtx.png" />
     <Resource Include="Resources\SleepStrap\Previews\Blur.png" />
     <Resource Include="Resources\SleepStrap\WeaponImages\**\*.png" />
   </ItemGroup>

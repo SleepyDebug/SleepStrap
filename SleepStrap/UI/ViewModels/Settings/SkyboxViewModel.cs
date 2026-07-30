@@ -71,14 +71,6 @@ namespace SleepStrap.UI.ViewModels.Settings
             }
         }
 
-        private void MoveSelectedToTop(SkyboxChoice choice)
-        {
-            int target = choice.IsFavorite ? 0 : SkyboxChoices.Count(x => x.IsFavorite);
-            int index = SkyboxChoices.IndexOf(choice);
-            if (index >= 0 && index != target)
-                SkyboxChoices.Move(index, target);
-        }
-
         public SkyboxChoice? SelectedSkybox
         {
             get => _selectedSkybox;
@@ -112,8 +104,6 @@ namespace SleepStrap.UI.ViewModels.Settings
                     }
 
                     _selectedSkybox = value;
-                    if (!value.IsNone)
-                        MoveSelectedToTop(value);
                     App.Settings.Save();
                     OnPropertyChanged(nameof(SelectedSkybox));
                 }

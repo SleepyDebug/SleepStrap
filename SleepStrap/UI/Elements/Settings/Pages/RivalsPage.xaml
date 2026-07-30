@@ -74,7 +74,14 @@
                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                 </StackPanel>
                 <Border Grid.Column="1" Width="78" Height="58" Margin="0,0,14,0" CornerRadius="8" ClipToBounds="True"
-                        BorderBrush="#55FFFFFF" BorderThickness="1">
+                        BorderBrush="#55FFFFFF" BorderThickness="1"
+                        ToolTipService.InitialShowDelay="100" ToolTipService.ShowDuration="60000">
+                    <Border.ToolTip>
+                        <ToolTip Placement="Mouse" HasDropShadow="True" Padding="0" Background="#F0080A12" BorderThickness="0">
+                            <Image Source="pack://application:,,,/Resources/SleepStrap/Previews/Blur.png"
+                                   Width="1000" Height="760" Stretch="Uniform" />
+                        </ToolTip>
+                    </Border.ToolTip>
                     <Image Source="pack://application:,,,/Resources/SleepStrap/Previews/Blur.png" Stretch="UniformToFill" />
                 </Border>
                 <ui:ToggleSwitch Grid.Column="2"

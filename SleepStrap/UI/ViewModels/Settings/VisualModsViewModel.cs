@@ -150,7 +150,9 @@ namespace SleepStrap.UI.ViewModels.Settings
             ? "pack://application:,,,/Resources/SleepStrap/Previews/Dark.png"
             : "pack://application:,,,/Resources/SleepStrap/Previews/Basic.png";
 
-        public string ActiveRtxPreview => "pack://application:,,,/Resources/SleepStrap/Previews/Rtx.png";
+        public string ActiveRtxPreview => App.Settings.Prop.DarkTexturesEnabled
+            ? "pack://application:,,,/Resources/SleepStrap/Previews/DarkRtx.png"
+            : "pack://application:,,,/Resources/SleepStrap/Previews/BasicRtx.png";
 
         public bool DarkTexturesEnabled
         {
