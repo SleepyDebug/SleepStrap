@@ -59,7 +59,7 @@
             <ui:CardExpander.Header>
                 <StackPanel>
                     <TextBlock Text="Blurred textures" FontSize="17" FontWeight="SemiBold" />
-                    <TextBlock Text="NVIDIA Roblox VR profile" Margin="0,3,0,0" FontSize="12"
+                    <TextBlock Text="Disabled for safety" Margin="0,3,0,0" FontSize="12"
                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                 </StackPanel>
             </ui:CardExpander.Header>
@@ -70,7 +70,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="Driver texture blur" FontSize="14" />
+                    <TextBlock Text="Driver texture blur (disabled)" FontSize="14" />
                     <TextBlock Text="{Binding NvidiaBlurStatus}" Margin="0,4,12,0" FontSize="12"
                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                 </StackPanel>
