@@ -62,6 +62,10 @@ namespace SleepStrap.UI.Elements.Settings
             RootNavigation.Navigated += OnNavigation!;
             RootFrame.Navigated += AnimatePageNavigation;
 
+            Dispatcher.BeginInvoke(
+                System.Windows.Threading.DispatcherPriority.ApplicationIdle,
+                new Action(ChangelogService.ShowIfNewVersion));
+
             void OnNavigation(object? sender, RoutedNavigationEventArgs e)
             {
                 INavigationItem? currentPage = RootNavigation.Current;

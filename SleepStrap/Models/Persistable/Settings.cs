@@ -14,6 +14,7 @@ namespace SleepStrap.Models.Persistable
         public bool DeveloperMode { get; set; } = false;
         public bool ForceLocalData { get; set; } = false;
         public bool CheckForUpdates { get; set; } = true;
+        public string LastShownChangelogVersion { get; set; } = "";
         public bool MultiInstanceLaunching { get; set; } = false;
         public bool ConfirmLaunches { get; set; } = true;
         public string Locale { get; set; } = "nil";
