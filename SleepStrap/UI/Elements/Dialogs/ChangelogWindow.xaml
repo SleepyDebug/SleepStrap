@@ -1,0 +1,32 @@
+<Window x:Class="SleepStrap.UI.Elements.Dialogs.ChangelogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ShowInTaskbar="False" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterOwner">
+    <Border Width="520" Padding="28" CornerRadius="18" Background="#F00B0D12"
+            BorderBrush="#50FFFFFF" BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="28" ShadowDepth="8" Opacity="0.55" Color="Black" />
+        </Border.Effect>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Image Source="/SleepStrap.ico" Width="48" Height="48" Margin="0,0,14,0" />
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="SleepStrap" FontSize="25" FontWeight="SemiBold" Foreground="White" />
+                    <TextBlock x:Name="VersionText" Margin="0,2,0,0" FontSize="13" Foreground="#B8FFFFFF" />
+                </StackPanel>
+            </StackPanel>
+            <Border Margin="0,22,0,18" Height="1" Background="#45FFFFFF" />
+            <TextBlock Text="What's new" FontSize="20" FontWeight="SemiBold" Foreground="White" />
+            <StackPanel Margin="0,14,0,0">
+                <TextBlock Text="• Added Favoriting" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="• Text Colors (beta)" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="• Gradient Background" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="• Cool stuff" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+            </StackPanel>
+            <TextBlock Text="Made by sleepy :)" Margin="0,22,0,20" FontSize="14" Foreground="#B8FFFFFF" />
+            <Button Content="OK WHATEVER" Click="OkWhatever_Click" Height="40" HorizontalAlignment="Stretch"
+                    Background="#F2FFFFFF" Foreground="#FF0A0A0C" BorderThickness="0" FontWeight="SemiBold" />
+        </StackPanel>
+    </Border>
+</Window>

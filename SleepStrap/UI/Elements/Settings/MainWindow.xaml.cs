@@ -64,7 +64,7 @@ namespace SleepStrap.UI.Elements.Settings
 
             Dispatcher.BeginInvoke(
                 System.Windows.Threading.DispatcherPriority.ApplicationIdle,
-                new Action(ChangelogService.ShowIfNewVersion));
+                new Action(() => ChangelogService.ShowIfNewVersion(this)));
 
             void OnNavigation(object? sender, RoutedNavigationEventArgs e)
             {
