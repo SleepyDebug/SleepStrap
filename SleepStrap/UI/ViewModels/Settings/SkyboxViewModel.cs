@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 using CommunityToolkit.Mvvm.Input;
 
@@ -15,7 +16,14 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         public SkyboxViewModel()
         {
-            SkyboxChoices = SkyboxGalleryService.GetChoices();
+            SkyboxChoices = new ObservableCollection<SkyboxChoice>(SkyboxGalleryService.GetChoices());
+            for (int index = 0; index < SkyboxChoices.Count; index++)
+                SkyboxChoices[index].OriginalIndex = index;
+            foreach (SkyboxChoice choice in SkyboxChoices)
+                choice.IsFavorite = !choice.IsNone && App.Settings.Prop.FavoriteSkyboxes.Any(x =>
+                    String.Equals(x, choice.Name, StringComparison.OrdinalIgnoreCase) ||
+                    String.Equals(x, choice.ResourceFolder, StringComparison.OrdinalIgnoreCase));
+            ReorderFavoritesAndOriginals();
             OpenModsFolderCommand = new RelayCommand(OpenModsFolder);
 
             if (!App.Settings.Prop.CustomSkyboxEnabled)
@@ -35,8 +43,41 @@ namespace SleepStrap.UI.ViewModels.Settings
             }
         }
 
-        public IReadOnlyList<SkyboxChoice> SkyboxChoices { get; }
+        public ObservableCollection<SkyboxChoice> SkyboxChoices { get; }
         public ICommand OpenModsFolderCommand { get; }
+
+        public void ToggleFavorite(SkyboxChoice? choice)
+        {
+            if (choice is null || choice.IsNone || IsBusy)
+                return;
+
+            choice.IsFavorite = !choice.IsFavorite;
+            App.Settings.Prop.FavoriteSkyboxes = SkyboxChoices.Where(x => x.IsFavorite).Select(x => x.Name).ToList();
+            App.Settings.Save();
+            ReorderFavoritesAndOriginals();
+        }
+
+        private void ReorderFavoritesAndOriginals()
+        {
+            List<SkyboxChoice> ordered = SkyboxChoices
+                .OrderByDescending(x => x.IsFavorite)
+                .ThenBy(x => x.OriginalIndex)
+                .ToList();
+            for (int target = 0; target < ordered.Count; target++)
+            {
+                int index = SkyboxChoices.IndexOf(ordered[target]);
+                if (index >= 0 && index != target)
+                    SkyboxChoices.Move(index, target);
+            }
+        }
+
+        private void MoveSelectedToTop(SkyboxChoice choice)
+        {
+            int target = choice.IsFavorite ? 0 : SkyboxChoices.Count(x => x.IsFavorite);
+            int index = SkyboxChoices.IndexOf(choice);
+            if (index >= 0 && index != target)
+                SkyboxChoices.Move(index, target);
+        }
 
         public SkyboxChoice? SelectedSkybox
         {
@@ -71,6 +112,8 @@ namespace SleepStrap.UI.ViewModels.Settings
                     }
 
                     _selectedSkybox = value;
+                    if (!value.IsNone)
+                        MoveSelectedToTop(value);
                     App.Settings.Save();
                     OnPropertyChanged(nameof(SelectedSkybox));
                 }

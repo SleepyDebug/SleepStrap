@@ -60,8 +60,8 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1" BorderBrush="#3DFFFFFF"
-                                Background="#B30A0A0C" ClipToBounds="True">
+                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1"
+                                BorderBrush="#3DFFFFFF" Background="#B30A0A0C" ClipToBounds="True">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="166" />
@@ -116,8 +116,8 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1" BorderBrush="#3DFFFFFF"
-                                Background="#B30A0A0C" ClipToBounds="True">
+                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1"
+                                BorderBrush="#3DFFFFFF" Background="#B30A0A0C" ClipToBounds="True">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="142" />

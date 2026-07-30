@@ -7,13 +7,16 @@ namespace SleepStrap.Services
     {
         private const string ResourcePrefix = "SleepStrap.Skyboxes/";
 
+        // Keep the gallery grouped by the dominant color of each sky.
         private static readonly string[] PresetNames =
         {
-            "Aurora", "Beautiful", "Blue", "Chill gray", "Chill pink",
-            "ChromaKey", "Cyan", "Emo", "Goodnight", "Hades", "Hazy",
-            "Light Blue", "Light pink", "Moonlight", "NeonSky", "NeonSky2",
-            "Night", "Orange", "Overcast", "Pandora", "Pink Sunrise", "Red",
-            "Space Blue", "Spooky", "Universe"
+            "Red", "Hades",
+            "Orange", "Hazy",
+            "Aurora", "ChromaKey", "Spooky",
+            "Night", "Moonlight", "Beautiful", "Blue", "Space Blue", "Pandora", "NeonSky", "NeonSky2", "Goodnight", "Cyan", "Light Blue",
+            "Chill pink", "Light pink", "Universe", "Pink Sunrise",
+            "Chill gray", "Overcast",
+            "Emo"
         };
 
         public static bool IsPreset(string name) =>

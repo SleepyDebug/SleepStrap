@@ -10,6 +10,8 @@ namespace SleepStrap.UI.ViewModels.Settings
         private const string TargetFpsFlag = "DFIntTaskSchedulerTargetFps";
         private const string UnlockFpsFlag = "FFlagTaskSchedulerLimitTargetFpsTo2402";
         private const int StretchPercent = 75;
+        private bool _isChangingNvidiaBlur;
+        private string _nvidiaBlurStatus = String.Empty;
 
         public sealed record StretchPreset(string Name, int Percent)
         {
@@ -137,6 +139,42 @@ namespace SleepStrap.UI.ViewModels.Settings
             }
         }
 
+        public bool NvidiaBlurredTexturesEnabled
+        {
+            get => App.Settings.Prop.NvidiaBlurredTexturesEnabled;
+            set
+            {
+                if (value == App.Settings.Prop.NvidiaBlurredTexturesEnabled ||
+                    _isChangingNvidiaBlur)
+                {
+                    return;
+                }
+
+                if (value && Frontend.ShowMessageBox(
+                    "This changes six settings in the NVIDIA \"Roblox VR\" driver profile and requires administrator approval. SleepStrap will back up the current values and restore them when you turn this off.\n\nContinue?",
+                    MessageBoxImage.Information,
+                    MessageBoxButton.YesNo) != MessageBoxResult.Yes)
+                {
+                    OnPropertyChanged(nameof(NvidiaBlurredTexturesEnabled));
+                    return;
+                }
+
+                _ = SetNvidiaBlurredTexturesAsync(value);
+            }
+        }
+
+        public bool CanChangeNvidiaBlur => !_isChangingNvidiaBlur;
+
+        public string NvidiaBlurStatus
+        {
+            get => _nvidiaBlurStatus;
+            private set
+            {
+                _nvidiaBlurStatus = value;
+                OnPropertyChanged(nameof(NvidiaBlurStatus));
+            }
+        }
+
         private string _statusText = "Checking display…";
         public string StatusText
         {
@@ -151,7 +189,66 @@ namespace SleepStrap.UI.ViewModels.Settings
         public RivalsViewModel()
         {
             RemoveLegacyFpsCounter();
+            NvidiaBlurStatus = NvidiaBlurredTexturesEnabled
+                ? "Enabled for the NVIDIA Roblox VR profile"
+                : "Uses the current NVIDIA driver settings";
             RefreshStatus();
+        }
+
+        private async Task SetNvidiaBlurredTexturesAsync(bool enable)
+        {
+            _isChangingNvidiaBlur = true;
+            OnPropertyChanged(nameof(CanChangeNvidiaBlur));
+            OnPropertyChanged(nameof(NvidiaBlurredTexturesEnabled));
+            NvidiaBlurStatus = enable ? "Applying NVIDIA profile..." : "Restoring NVIDIA profile...";
+
+            try
+            {
+                NvidiaBlurElevationBridge.HelperResult result =
+                    await NvidiaBlurElevationBridge.RunElevatedAsync(
+                        enable,
+                        App.Settings.Prop.NvidiaBlurredTexturesProfileBackup);
+
+                if (!result.Success)
+                {
+                    throw new InvalidOperationException(
+                        String.IsNullOrWhiteSpace(result.Error)
+                            ? "The NVIDIA profile helper failed."
+                            : result.Error);
+                }
+
+                if (enable)
+                {
+                    App.Settings.Prop.NvidiaBlurredTexturesProfileBackup =
+                        new Dictionary<string, string>(result.Backup, StringComparer.OrdinalIgnoreCase);
+                }
+                else
+                {
+                    App.Settings.Prop.NvidiaBlurredTexturesProfileBackup.Clear();
+                }
+
+                App.Settings.Prop.NvidiaBlurredTexturesEnabled = enable;
+                App.Settings.Save();
+                NvidiaBlurStatus = enable
+                    ? "Enabled - rejoin Roblox to apply"
+                    : "NVIDIA driver settings restored";
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("RivalsViewModel::SetNvidiaBlurredTextures", ex);
+                NvidiaBlurStatus = NvidiaBlurredTexturesEnabled
+                    ? "Enabled for the NVIDIA Roblox VR profile"
+                    : "NVIDIA profile was not changed";
+                Frontend.ShowMessageBox(
+                    $"SleepStrap could not change the NVIDIA texture settings.\n\n{ex.Message}",
+                    MessageBoxImage.Error);
+            }
+            finally
+            {
+                _isChangingNvidiaBlur = false;
+                OnPropertyChanged(nameof(CanChangeNvidiaBlur));
+                OnPropertyChanged(nameof(NvidiaBlurredTexturesEnabled));
+            }
         }
 
         private void EnableStretch()

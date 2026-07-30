@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
+using SleepStrap.Services;
 using SleepStrap.UI.ViewModels.Settings;
 
 namespace SleepStrap.UI.Elements.Settings.Pages
@@ -19,8 +20,18 @@ namespace SleepStrap.UI.Elements.Settings.Pages
             _viewModel = new ClippingViewModel();
             DataContext = _viewModel;
             InitializeComponent();
+            ReplayBufferService.ClipSaved += ReplayBufferService_ClipSaved;
             Loaded += (_, _) => _viewModel.StartLiveUpdates();
-            Unloaded += (_, _) => _viewModel.StopLiveUpdates();
+            Unloaded += (_, _) =>
+            {
+                _viewModel.StopLiveUpdates();
+                ReplayBufferService.ClipSaved -= ReplayBufferService_ClipSaved;
+            };
+        }
+
+        private void ReplayBufferService_ClipSaved(object? sender, string path)
+        {
+            Dispatcher.BeginInvoke(() => ClipSavedSnackbar.Show());
         }
 
         private void HotkeyBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

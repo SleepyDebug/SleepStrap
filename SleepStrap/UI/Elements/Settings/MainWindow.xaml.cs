@@ -9,6 +9,7 @@ using Wpf.Ui.Controls.Interfaces;
 using Wpf.Ui.Mvvm.Contracts;
 
 using SleepStrap.UI.ViewModels.Settings;
+using SleepStrap.Services;
 using Wpf.Ui.Common;
 using Wpf.Ui.Controls;
 using SleepStrap.UI.Elements.Settings.Pages;
@@ -21,6 +22,8 @@ namespace SleepStrap.UI.Elements.Settings
     public partial class MainWindow : INavigationWindow
     {
         private Models.Persistable.WindowState _state => App.State.Prop.SettingsWindow;
+        private readonly System.Windows.Threading.DispatcherTimer _skyBackdropTimer = new() { Interval = TimeSpan.FromMilliseconds(160) };
+        private string _lastSkyBackdrop = "";
 
         public MainWindow(bool showAlreadyRunningWarning)
         {
@@ -32,6 +35,10 @@ namespace SleepStrap.UI.Elements.Settings
             DataContext = viewModel;
 
             InitializeComponent();
+
+            _skyBackdropTimer.Tick += (_, _) => UpdateSkyBackdrop();
+            _skyBackdropTimer.Start();
+            UpdateSkyBackdrop();
 
             App.Logger.WriteLine("MainWindow", "Initializing settings window");
 
@@ -46,7 +53,9 @@ namespace SleepStrap.UI.Elements.Settings
             if (lastPage == typeof(FontsPage))
                 lastPage = typeof(TexturesPage);
 
-            Type[] visiblePages = { typeof(SkyboxPage), typeof(TexturesPage), typeof(RivalsPage), typeof(MacroPage), typeof(ClippingPage), typeof(OtherPage) };
+            // Macro remains in the source tree for future work, but is intentionally
+            // excluded from navigation and saved-page restoration for now.
+            Type[] visiblePages = { typeof(SkyboxPage), typeof(TexturesPage), typeof(RivalsPage), typeof(ClippingPage), typeof(OtherPage) };
             if (lastPage != null && visiblePages.Contains(lastPage))
                 SafeNavigate(lastPage);
 
@@ -61,10 +70,58 @@ namespace SleepStrap.UI.Elements.Settings
             }
         }
 
+        private void UpdateSkyBackdrop()
+        {
+            string selected = App.Settings.Prop.CustomSkyboxEnabled
+                ? App.Settings.Prop.CustomSkyboxSourceName
+                : "";
+            if (String.Equals(selected, _lastSkyBackdrop, StringComparison.OrdinalIgnoreCase))
+                return;
+
+            _lastSkyBackdrop = selected;
+            Color sky = SkyboxThemeService.GetColor(selected);
+            var brush = SkyBackdrop.Background as LinearGradientBrush;
+            if (brush is null)
+            {
+                brush = new LinearGradientBrush(Colors.Black, Colors.Black, new Point(0, 0), new Point(0, 1));
+                SkyBackdrop.Background = brush;
+            }
+            else if (brush.IsFrozen)
+            {
+                brush = brush.Clone();
+                SkyBackdrop.Background = brush;
+            }
+
+            GradientStop bottom = brush.GradientStops.Count > 1
+                ? brush.GradientStops[1]
+                : new GradientStop(Colors.Black, 1);
+            if (brush.GradientStops.Count == 0)
+                brush.GradientStops.Add(new GradientStop(Colors.Black, 0));
+            if (brush.GradientStops.Count == 1)
+                brush.GradientStops.Add(bottom);
+
+            var fadeToBlack = new ColorAnimation(Colors.Black, TimeSpan.FromMilliseconds(180))
+            {
+                EasingFunction = new SineEase { EasingMode = EasingMode.EaseInOut }
+            };
+            fadeToBlack.Completed += (_, _) =>
+            {
+                bottom.BeginAnimation(GradientStop.ColorProperty, new ColorAnimation(
+                    Color.FromArgb(255, sky.R, sky.G, sky.B), TimeSpan.FromMilliseconds(460))
+                {
+                    EasingFunction = new CubicEase { EasingMode = EasingMode.EaseOut }
+                });
+            };
+            bottom.BeginAnimation(GradientStop.ColorProperty, fadeToBlack);
+        }
+
         private async void SettingsIntroOverlay_Loaded(object sender, RoutedEventArgs e)
         {
-            var pop = new BackEase { EasingMode = EasingMode.EaseOut, Amplitude = 0.5 };
-            SettingsIntroLogo.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(260)));
+            var pop = new CubicEase { EasingMode = EasingMode.EaseOut };
+            SettingsIntroLogo.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(420))
+            {
+                EasingFunction = new SineEase { EasingMode = EasingMode.EaseOut }
+            });
             if (SettingsIntroLogo.RenderTransform is ScaleTransform logoScale)
             {
                 logoScale.BeginAnimation(ScaleTransform.ScaleXProperty, new DoubleAnimation(0.5, 1, TimeSpan.FromMilliseconds(580)) { EasingFunction = pop });
@@ -101,9 +158,9 @@ namespace SleepStrap.UI.Elements.Settings
 
                 TimeSpan delay = TimeSpan.FromMilliseconds(150 + index * 68);
                 letter.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(180)) { BeginTime = delay });
-                scale.BeginAnimation(ScaleTransform.ScaleXProperty, new DoubleAnimation(0.58, 1, TimeSpan.FromMilliseconds(410)) { BeginTime = delay, EasingFunction = pop });
-                scale.BeginAnimation(ScaleTransform.ScaleYProperty, new DoubleAnimation(0.58, 1, TimeSpan.FromMilliseconds(410)) { BeginTime = delay, EasingFunction = pop });
-                rise.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(24, 0, TimeSpan.FromMilliseconds(410)) { BeginTime = delay, EasingFunction = pop });
+                scale.BeginAnimation(ScaleTransform.ScaleXProperty, new DoubleAnimation(0.58, 1, TimeSpan.FromMilliseconds(480)) { BeginTime = delay, EasingFunction = pop });
+                scale.BeginAnimation(ScaleTransform.ScaleYProperty, new DoubleAnimation(0.58, 1, TimeSpan.FromMilliseconds(480)) { BeginTime = delay, EasingFunction = pop });
+                rise.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(24, 0, TimeSpan.FromMilliseconds(480)) { BeginTime = delay, EasingFunction = pop });
                 index++;
             }
 
@@ -146,9 +203,9 @@ namespace SleepStrap.UI.Elements.Settings
             var offset = new TranslateTransform(0, 12);
             page.RenderTransform = offset;
 
-            var easing = new CubicEase { EasingMode = EasingMode.EaseOut };
-            page.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(260)) { EasingFunction = easing });
-            offset.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(12, 0, TimeSpan.FromMilliseconds(330)) { EasingFunction = easing });
+            var easing = new SineEase { EasingMode = EasingMode.EaseOut };
+            page.BeginAnimation(OpacityProperty, new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(360)) { EasingFunction = easing });
+            offset.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(12, 0, TimeSpan.FromMilliseconds(440)) { EasingFunction = easing });
 
             page.Dispatcher.BeginInvoke(() => AnimatePageContents(page), System.Windows.Threading.DispatcherPriority.Loaded);
         }
@@ -374,6 +431,7 @@ namespace SleepStrap.UI.Elements.Settings
 
         private void WpfUiWindow_Closed(object sender, EventArgs e)
         {
+            _skyBackdropTimer.Stop();
             if (App.LaunchSettings.TestModeFlag.Active)
                 LaunchHandler.LaunchRoblox(LaunchMode.Player);
             else

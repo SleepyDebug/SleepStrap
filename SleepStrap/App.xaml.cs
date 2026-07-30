@@ -185,6 +185,12 @@ namespace SleepStrap
         {
             const string LOG_IDENT = "App::OnStartup";
 
+            if (Services.NvidiaBlurElevationBridge.TryHandleElevatedHelper(e.Args))
+            {
+                Shutdown();
+                return;
+            }
+
             Locale.Initialize();
 
             base.OnStartup(e);

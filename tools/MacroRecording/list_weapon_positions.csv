@@ -1,0 +1,49 @@
+﻿category,index,weapon,x,y
+Primary,1,Distortion,-968,492
+Primary,2,Permafrost,-958,577
+Primary,3,Energy Rifle,-969,671
+Primary,4,Flamethrower,-965,740
+Primary,5,Grenade Launcher,-984,830
+Primary,6,Minigun,-980,914
+Primary,7,Paintball Gun,-974,997
+Primary,8,Assault Rifle,-969,437
+Primary,9,Bow,-963,531
+Primary,10,Burst Rifle,-960,602
+Primary,11,Crossbow,-953,691
+Primary,12,Gunblade,-950,788
+Primary,13,RPG,-952,877
+Primary,14,Shotgun,-949,950
+Primary,15,Sniper,-957,1030
+Secondary,1,Warper,-962,477
+Secondary,2,Energy Pistols,-957,571
+Secondary,3,Exogun,-965,657
+Secondary,4,Slingshot,-956,741
+Secondary,5,Daggers,-972,827
+Secondary,6,Flare Gun,-989,902
+Secondary,7,Handgun,-955,992
+Secondary,8,Revolver,-969,774
+Secondary,9,Shorty,-969,858
+Secondary,10,Spray,-972,949
+Secondary,11,Uzi,-953,1022
+Melee,1,Maul,-962,489
+Melee,2,Spear,-955,570
+Melee,3,Trowel,-954,655
+Melee,4,Battle Axe,-954,740
+Melee,5,Chainsaw,-968,826
+Melee,6,Fists,-960,901
+Melee,7,Katana,-962,1005
+Melee,8,Knife,-970,850
+Melee,9,Riot Shield,-958,932
+Melee,10,Scythe,-959,1024
+Utility,1,Grappler,-953,480
+Utility,2,Medkit,-968,570
+Utility,3,Subspace Tripmine,-960,643
+Utility,4,Warpstone,-974,738
+Utility,5,Flashbang,-968,828
+Utility,6,Freeze Ray,-952,914
+Utility,7,Grenade,-990,1009
+Utility,8,Jump Pad,-973,680
+Utility,9,Molotov,-975,774
+Utility,10,Satchel,-966,855
+Utility,11,Smoke Grenade,-971,942
+Utility,12,War Horn,-990,1043

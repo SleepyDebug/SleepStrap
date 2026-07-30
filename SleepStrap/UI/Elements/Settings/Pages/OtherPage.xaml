@@ -127,5 +127,16 @@
                 </TextBlock>
             </StackPanel>
         </ui:CardExpander>
+
+        <Border Margin="0,14,0,0" Padding="18" CornerRadius="12" Background="{DynamicResource SleepStrapGlassSurfaceBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="Reset settings" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Restore SleepStrap's defaults" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+                <ui:Button Grid.Column="1" Content="Reset" Icon="ArrowReset20" Command="{Binding ResetSettingsCommand}" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
     </StackPanel>
 </ui:UiPage>

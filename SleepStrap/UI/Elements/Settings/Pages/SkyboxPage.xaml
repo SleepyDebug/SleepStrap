@@ -16,9 +16,7 @@
                     <TextBlock Text="Skybox" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
                     <ui:SymbolIcon Grid.Column="1" Symbol="WeatherMoon24" FontSize="34" Foreground="White" Opacity="0.72" />
                 </Grid>
-                <Border Grid.Row="1" Margin="0,12,0,0" Height="1">
-                    <Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,0"><GradientStop Color="#00FFFFFF" Offset="0" /><GradientStop Color="#CFFFFFFF" Offset="0.5" /><GradientStop Color="#00FFFFFF" Offset="1" /></LinearGradientBrush></Border.Background>
-                </Border>
+                <Border Grid.Row="1" Margin="0,12,0,0" Height="1"><Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,0"><GradientStop Color="#00FFFFFF" Offset="0" /><GradientStop Color="#CFFFFFFF" Offset="0.5" /><GradientStop Color="#00FFFFFF" Offset="1" /></LinearGradientBrush></Border.Background></Border>
             </Grid>
         </Border>
 
@@ -35,7 +33,7 @@
                 </Grid>
             </ui:CardExpander.Header>
             <Border Padding="8" Background="Transparent">
-            <ListBox Height="500"
+            <ListBox x:Name="SkyboxList" Height="500"
                      ItemsSource="{Binding SkyboxChoices}"
                      SelectedItem="{Binding SelectedSkybox, Mode=TwoWay}"
                      Background="Transparent" BorderThickness="0"
@@ -67,7 +65,10 @@
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1" BorderBrush="#3DFFFFFF" Background="#B30A0A0C" ClipToBounds="True">
+                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1"
+                                BorderBrush="#3DFFFFFF" Background="#B30A0A0C" ClipToBounds="True"
+                                PreviewMouseLeftButtonDown="SkyCard_MouseLeftButtonDown"
+                                PreviewMouseLeftButtonUp="SkyCard_MouseLeftButtonUp">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="118" />
@@ -80,16 +81,16 @@
                                         </Border.Background>
                                     </Border>
                                     <Border x:Name="NonePreview" CornerRadius="9,9,0,0" Visibility="Collapsed">
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                                <GradientStop Color="#303033" Offset="0" />
-                                                <GradientStop Color="#111113" Offset="1" />
-                                            </LinearGradientBrush>
-                                        </Border.Background>
+                                        <Border.Background><LinearGradientBrush StartPoint="0,0" EndPoint="1,1"><GradientStop Color="#303033" Offset="0" /><GradientStop Color="#111113" Offset="1" /></LinearGradientBrush></Border.Background>
                                         <TextBlock Text="?" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="58" FontWeight="SemiBold" Foreground="White" />
                                     </Border>
                                 </Grid>
                                 <TextBlock Grid.Row="1" Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                                <Button x:Name="FavoriteBadge" Content="★" Tag="{Binding}" Click="FavoriteStar_Click"
+                                        Width="28" Height="28" Margin="8" Padding="0" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                        Background="#E6FFFFFF" BorderThickness="0" Foreground="Black" FontSize="16"
+                                        Visibility="{Binding IsFavorite, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Panel.ZIndex="8" />
                                 <Border x:Name="SelectedBadge" Grid.RowSpan="2" Width="28" Height="28" Margin="8"
                                         HorizontalAlignment="Right" VerticalAlignment="Top" CornerRadius="9"
                                         Background="#E6FFFFFF" Visibility="Collapsed" Panel.ZIndex="7">

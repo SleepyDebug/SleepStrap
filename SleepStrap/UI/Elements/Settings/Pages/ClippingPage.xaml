@@ -210,5 +210,7 @@
                 </ScrollViewer>
             </StackPanel>
         </ui:CardExpander>
+        <ui:Snackbar x:Name="ClipSavedSnackbar" Title="Clip saved!" Message="Your replay was saved to Playbacks." Appearance="Success"
+                     Icon="CheckmarkCircle32" Timeout="3000" Margin="120,0,120,12" Panel.ZIndex="20" />
     </StackPanel>
 </ui:UiPage>

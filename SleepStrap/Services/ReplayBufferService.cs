@@ -27,6 +27,8 @@ namespace SleepStrap.Services
         private int _saveRequested;
         private bool _disposed;
 
+        public static event EventHandler<string>? ClipSaved;
+
         public void Start()
         {
             if (_captureTask is not null || !App.Settings.Prop.ClippingEnabled)
@@ -121,10 +123,9 @@ namespace SleepStrap.Services
             if (String.IsNullOrWhiteSpace(display))
                 display = System.Windows.Forms.Screen.PrimaryScreen?.DeviceName ?? @"\\.\DISPLAY1";
             var source = new DisplayRecordingSource(display);
-            // ScreenRecorderLib 6.6 can access-violate when Windows Graphics Capture
-            // is initialized from the background watcher. Desktop Duplication is the
-            // stable display backend here; software encoding below keeps it isolated
-            // from Roblox's hardware encoder resources.
+            // Desktop Duplication is a GPU-backed capture path and is stable when
+            // Roblox is running fullscreen or borderless. Keep the full native
+            // display size and let ScreenRecorderLib use the hardware H.264 encoder.
             source.RecorderApi = RecorderApi.DesktopDuplication;
             source.IsCursorCaptureEnabled = true;
             source.IsBorderRequired = false;
@@ -169,9 +170,7 @@ namespace SleepStrap.Services
                     Bitrate = 45_000_000,
                     Quality = 95,
                     IsFixedFramerate = true,
-                    // Keep the encoder off Roblox's GPU context. Quality remains high,
-                    // but capture can no longer force a hardware encoder reset in-game.
-                    IsHardwareEncodingEnabled = false,
+                    IsHardwareEncodingEnabled = true,
                     IsLowLatencyEnabled = false,
                     IsFragmentedMp4Enabled = false,
                     IsMp4FastStartEnabled = false
@@ -245,6 +244,7 @@ namespace SleepStrap.Services
                     throw new InvalidOperationException($"Windows could not render the replay ({result}).");
 
                 App.Logger.WriteLine("ReplayBufferService::SaveReplay", $"Saved {output.Path}");
+                ClipSaved?.Invoke(null, output.Path);
             }
             catch (Exception ex)
             {

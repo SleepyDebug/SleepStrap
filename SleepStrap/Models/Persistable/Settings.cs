@@ -58,6 +58,7 @@ namespace SleepStrap.Models.Persistable
         public string SelectedFontSource { get; set; } = "";
         public bool CustomSkyboxEnabled { get; set; } = false;
         public string CustomSkyboxSourceName { get; set; } = "";
+        public List<string> FavoriteSkyboxes { get; set; } = new();
 
         // SleepStrap Rivals display stretch
         public bool RivalsStretchEnabled { get; set; } = false;
@@ -69,6 +70,8 @@ namespace SleepStrap.Models.Persistable
         public Dictionary<string, string> RivalsFpsFlagBackup { get; set; } = new();
         public bool RivalsFpsCounterEnabled { get; set; } = false;
         public Dictionary<string, string> RivalsFpsCounterFlagBackup { get; set; } = new();
+        public bool NvidiaBlurredTexturesEnabled { get; set; } = false;
+        public Dictionary<string, string> NvidiaBlurredTexturesProfileBackup { get; set; } = new();
 
         // SleepStrap replay buffer
         public bool ClippingEnabled { get; set; } = false;
@@ -83,16 +86,12 @@ namespace SleepStrap.Models.Persistable
         public string ClippingMicrophoneDevice { get; set; } = "";
         public int ClippingMicrophoneVolume { get; set; } = 70;
 
-        // SleepStrap RIVALS loadout macro
+        // SleepStrap RIVALS grid loadout and hourly rejoin
         public List<string> MacroMissingWeapons { get; set; } = new();
         public string MacroPrimaryWeapon { get; set; } = "Distortion";
         public string MacroSecondaryWeapon { get; set; } = "Warper";
         public string MacroMeleeWeapon { get; set; } = "Maul";
         public string MacroUtilityWeapon { get; set; } = "Grappler";
-        public bool MacroUseListLayout { get; set; } = false;
-        public bool MacroQuickRespawn { get; set; } = false;
-        public bool MacroAutoUtility { get; set; } = false;
-        public bool MacroAutoInspect { get; set; } = false;
         public bool MacroAutoRejoinHourly { get; set; } = false;
     }
 }

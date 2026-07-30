@@ -27,8 +27,16 @@
             <Setter Property="Border.CornerRadius" Value="12" />
         </Style>
     </base:WpfUiWindow.Resources>
-    <Grid Background="#38000000" ClipToBounds="True">
-    <Rectangle x:Name="SpaceStarsFar" Margin="-260" IsHitTestVisible="False" Opacity="0.28">
+    <Grid Background="#FF000000" ClipToBounds="True">
+    <Border x:Name="SkyBackdrop" IsHitTestVisible="False" Opacity="0.24">
+        <Border.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#FF000000" Offset="0" />
+                <GradientStop Color="#FF1C3048" Offset="1" />
+            </LinearGradientBrush>
+        </Border.Background>
+    </Border>
+    <Rectangle x:Name="SpaceStarsFar" Margin="-260" IsHitTestVisible="False" Visibility="Visible" Opacity="0.28">
         <Rectangle.RenderTransform><TranslateTransform /></Rectangle.RenderTransform>
         <Rectangle.Triggers>
             <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -56,7 +64,7 @@
             </DrawingBrush>
         </Rectangle.Fill>
     </Rectangle>
-    <Rectangle x:Name="SpaceStarsNear" Margin="-220" IsHitTestVisible="False" Opacity="0.22">
+    <Rectangle x:Name="SpaceStarsNear" Margin="-220" IsHitTestVisible="False" Visibility="Visible" Opacity="0.22">
         <Rectangle.RenderTransform><TranslateTransform /></Rectangle.RenderTransform>
         <Rectangle.Triggers>
             <EventTrigger RoutedEvent="FrameworkElement.Loaded">
@@ -82,7 +90,7 @@
         </Rectangle.Fill>
     </Rectangle>
     <Ellipse Width="760" Height="520" Margin="-260,-310,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
-             IsHitTestVisible="False" Opacity="0.32">
+             IsHitTestVisible="False" Visibility="Collapsed" Opacity="0">
         <Ellipse.Fill>
             <RadialGradientBrush>
                 <GradientStop Color="#24FFFFFF" Offset="0" />
@@ -91,7 +99,7 @@
             </RadialGradientBrush>
         </Ellipse.Fill>
     </Ellipse>
-    <Border Margin="8" CornerRadius="15" Background="#08FFFFFF" IsHitTestVisible="False" />
+    <Border Margin="8" CornerRadius="15" Background="Transparent" IsHitTestVisible="False" />
     <Grid x:Name="RootShell" Opacity="0">
         <Grid.RenderTransform>
             <TranslateTransform Y="10" />
@@ -159,7 +167,6 @@
                     <ui:NavigationItem Content="Skybox" PageType="{x:Type pages:SkyboxPage}" Icon="Cube24" Tag="skybox" />
                     <ui:NavigationItem Content="Textures" PageType="{x:Type pages:TexturesPage}" Icon="WrenchScrewdriver20" Tag="textures" />
                     <ui:NavigationItem Content="PC" PageType="{x:Type pages:RivalsPage}" Icon="PlaySettings20" Tag="pc" />
-                    <ui:NavigationItem Content="Macro" PageType="{x:Type pages:MacroPage}" Icon="Keyboard24" Tag="macro" />
                     <ui:NavigationItem Content="Clipping" PageType="{x:Type pages:ClippingPage}" Icon="VideoClip24" Tag="clipping" />
                     <ui:NavigationItem Content="Other" PageType="{x:Type pages:OtherPage}" Icon="MoreHorizontal24" Tag="other" />
                 </ui:NavigationFluent.Items>
@@ -207,11 +214,7 @@
     <Grid x:Name="SettingsIntroOverlay" Panel.ZIndex="100"
           Loaded="SettingsIntroOverlay_Loaded">
         <Grid.Background>
-            <RadialGradientBrush Center="0.5,0.46" GradientOrigin="0.5,0.46" RadiusX="0.72" RadiusY="0.72">
-                <GradientStop Color="#F218181A" Offset="0" />
-                <GradientStop Color="#F20E0E10" Offset="0.62" />
-                <GradientStop Color="#F2070708" Offset="1" />
-            </RadialGradientBrush>
+            <SolidColorBrush Color="#FF000000" />
         </Grid.Background>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid x:Name="SettingsIntroLogo" Width="120" Height="120" HorizontalAlignment="Center"
