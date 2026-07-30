@@ -91,6 +91,23 @@ namespace SleepStrap.UI.ViewModels.Settings
             }
         }
 
+        public string FontColor
+        {
+            get => App.Settings.Prop.SelectedFontColor;
+            set
+            {
+                string color = (value ?? "").Trim();
+                if (!System.Text.RegularExpressions.Regex.IsMatch(color, "^#[0-9A-Fa-f]{6}$"))
+                    return;
+                if (String.Equals(color, App.Settings.Prop.SelectedFontColor, StringComparison.OrdinalIgnoreCase))
+                    return;
+                App.Settings.Prop.SelectedFontColor = color.ToUpperInvariant();
+                App.Settings.Save();
+                OnPropertyChanged(nameof(FontColor));
+                FontStatus = $"Font color {App.Settings.Prop.SelectedFontColor} saved.";
+            }
+        }
+
         public Visibility RestoreFontVisibility => _selectedFont?.IsDefault == false ? Visibility.Visible : Visibility.Collapsed;
 
         public bool IsBusy

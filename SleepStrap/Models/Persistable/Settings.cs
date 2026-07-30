@@ -56,6 +56,7 @@ namespace SleepStrap.Models.Persistable
         public Dictionary<string, string> RtxShineFlagBackup { get; set; } = new();
         public string SelectedFontName { get; set; } = "Roblox Default";
         public string SelectedFontSource { get; set; } = "";
+        public string SelectedFontColor { get; set; } = "#FFFFFF";
         public bool CustomSkyboxEnabled { get; set; } = false;
         public string CustomSkyboxSourceName { get; set; } = "";
         public List<string> FavoriteSkyboxes { get; set; } = new();
