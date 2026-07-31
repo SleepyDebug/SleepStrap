@@ -10,10 +10,55 @@ namespace SleepStrap.UI.ViewModels.Settings
         public OtherViewModel()
         {
             ResetSettingsCommand = new RelayCommand(ResetSettings);
+            RestoreNvidiaChangesCommand = new AsyncRelayCommand(RestoreNvidiaChangesAsync);
         }
 
         public string VersionText => $"SleepStrap {new Version(App.Version).ToString(3)}";
         public ICommand ResetSettingsCommand { get; }
+        public IAsyncRelayCommand RestoreNvidiaChangesCommand { get; }
+
+        private async Task RestoreNvidiaChangesAsync()
+        {
+            if (App.Settings.Prop.NvidiaBlurredTexturesProfileBackup.Count == 0)
+            {
+                Frontend.ShowMessageBox(
+                    "SleepStrap does not have a saved NVIDIA profile backup to restore. Use NVIDIA Control Panel → Manage 3D settings → Program Settings → Roblox VR → Restore.",
+                    MessageBoxImage.Information);
+                return;
+            }
+
+            if (Process.GetProcessesByName("RobloxPlayerBeta").Length > 0)
+            {
+                Frontend.ShowMessageBox("Close Roblox before restoring the NVIDIA profile.", MessageBoxImage.Warning);
+                return;
+            }
+
+            if (Frontend.ShowMessageBox(
+                "Restore the saved NVIDIA Roblox VR profile now? This only restores values SleepStrap saved before Blur was enabled.",
+                MessageBoxImage.Warning, MessageBoxButton.YesNo, MessageBoxResult.No) != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                NvidiaBlurElevationBridge.HelperResult result = await NvidiaBlurElevationBridge.RunElevatedAsync(
+                    false,
+                    App.Settings.Prop.NvidiaBlurredTexturesProfileBackup);
+                if (!result.Success)
+                    throw new InvalidOperationException(String.IsNullOrWhiteSpace(result.Error) ? "The NVIDIA profile could not be restored." : result.Error);
+
+                App.Settings.Prop.NvidiaBlurredTexturesEnabled = false;
+                App.Settings.Prop.NvidiaBlurredTexturesProfileBackup.Clear();
+                App.Settings.Save();
+                Frontend.ShowMessageBox("NVIDIA changes restored.", MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("OtherViewModel::RestoreNvidiaChanges", ex);
+                Frontend.ShowMessageBox($"SleepStrap could not restore the NVIDIA changes.\n\n{ex.Message}", MessageBoxImage.Error);
+            }
+        }
 
         private void ResetSettings()
         {

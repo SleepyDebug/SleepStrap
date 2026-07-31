@@ -128,6 +128,19 @@
             </StackPanel>
         </ui:CardExpander>
 
+        <Border Margin="0,10,0,0" Padding="18" CornerRadius="12" Background="{DynamicResource SleepStrapGlassSurfaceBrush}">
+            <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                <StackPanel Margin="0,0,18,0">
+                    <TextBlock Text="NVIDIA profile" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Restore saved Roblox VR profile changes after Blur." Margin="0,3,0,0" FontSize="12" TextWrapping="Wrap"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+                <ui:Button Grid.Column="1" Content="Restore NVIDIA changes" Icon="ArrowReset20"
+                           Command="{Binding RestoreNvidiaChangesCommand}" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+
         <Border Margin="0,14,0,0" Padding="18" CornerRadius="12" Background="{DynamicResource SleepStrapGlassSurfaceBrush}">
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
