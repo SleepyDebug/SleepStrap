@@ -19,11 +19,10 @@
             <Border Margin="0,22,0,18" Height="1" Background="#45FFFFFF" />
             <TextBlock Text="What's new" FontSize="20" FontWeight="SemiBold" Foreground="White" />
             <StackPanel Margin="0,14,0,0">
-                <TextBlock Text="-experimental things :)" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
-                <TextBlock Text="Fixed custom panorama sky conversion" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
-                <TextBlock Text="Custom skies now use Roblox's 1024px texture format" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
-                <TextBlock Text="Old broken imports are marked for re-import" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
-                <TextBlock Text="Made the standalone sky converter match the app" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="Added compact settings sharing" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="Added optional Hand Gun detection for hold-to-spam" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="Custom skies and device-specific data stay private" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="Cool stuff" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
             </StackPanel>
             <TextBlock Text="Made by sleepy :)" Margin="0,22,0,20" FontSize="14" Foreground="#B8FFFFFF" />
             <Button Content="OK WHATEVER" Click="OkWhatever_Click" Height="40" HorizontalAlignment="Stretch"

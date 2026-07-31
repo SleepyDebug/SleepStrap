@@ -100,6 +100,9 @@ namespace SleepStrap.Models.Persistable
         public int ExperimentalAutoClickerClicksPerSecond { get; set; } = 12;
         public bool ExperimentalRobloxHoldToSpamEnabled { get; set; } = false;
         public int ExperimentalRobloxHoldToSpamClicksPerSecond { get; set; } = 12;
+        // When enabled, hold-to-spam stays inactive until the local Roblox HUD
+        // scanner sees the Hand Gun/Handgun weapon label in the lower-right area.
+        public bool ExperimentalRobloxHoldToSpamHandgunOnly { get; set; } = false;
 
         // SleepStrap RIVALS grid loadout and hourly rejoin
         public List<string> MacroMissingWeapons { get; set; } = new();

@@ -84,6 +84,19 @@ namespace SleepStrap.UI.ViewModels.Settings
             }
         }
 
+        public bool RobloxHoldToSpamHandgunOnly
+        {
+            get => App.Settings.Prop.ExperimentalRobloxHoldToSpamHandgunOnly;
+            set
+            {
+                if (value == App.Settings.Prop.ExperimentalRobloxHoldToSpamHandgunOnly)
+                    return;
+
+                App.Settings.Prop.ExperimentalRobloxHoldToSpamHandgunOnly = value;
+                SaveAndRefresh(nameof(RobloxHoldToSpamHandgunOnly));
+            }
+        }
+
         /// <summary>
         /// Controls only user-imported skies. Preset skies remain available regardless of this setting.
         /// Importing a PNG never changes this value, so imported skies stay disabled by default.

@@ -130,6 +130,23 @@
                 </Grid>
                 <TextBlock Text="clicks per second while holding left click" HorizontalAlignment="Right" Margin="0,4,6,0" FontSize="11"
                            Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+
+                <Separator Margin="0,16" />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Only while Hand Gun is visible" FontSize="14" />
+                        <TextBlock Text="Locally checks the lower-right Roblox HUD for Hand Gun or Handgun before hold-to-spam starts."
+                                   Margin="0,3,0,0" FontSize="12" TextWrapping="Wrap"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                    <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding RobloxHoldToSpamHandgunOnly, Mode=TwoWay}"
+                                     VerticalAlignment="Center" />
+                </Grid>
             </StackPanel>
         </ui:CardExpander>
 

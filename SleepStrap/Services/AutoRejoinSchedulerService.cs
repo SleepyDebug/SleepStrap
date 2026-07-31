@@ -32,6 +32,11 @@ namespace SleepStrap.Services
             ResetSchedule();
         }
 
+        /// <summary>
+        /// Re-reads the persisted setting after a settings share code is imported.
+        /// </summary>
+        public static void Refresh() => ResetSchedule();
+
         private static void ResetSchedule()
         {
             _nextRunUtc = App.Settings.Prop.MacroAutoRejoinHourly

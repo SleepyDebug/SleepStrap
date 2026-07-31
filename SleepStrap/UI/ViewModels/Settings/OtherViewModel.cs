@@ -7,15 +7,50 @@ namespace SleepStrap.UI.ViewModels.Settings
 {
     public class OtherViewModel : NotifyPropertyChangedViewModel
     {
+        private string _shareCode = String.Empty;
+        private string _importCode = String.Empty;
+
         public OtherViewModel()
         {
             ResetSettingsCommand = new RelayCommand(ResetSettings);
             RestoreNvidiaChangesCommand = new AsyncRelayCommand(RestoreNvidiaChangesAsync);
+            CopySettingsCommand = new RelayCommand(CopySettings);
+            ImportSettingsCommand = new RelayCommand(ImportSettings, () => !String.IsNullOrWhiteSpace(ImportCode));
         }
 
         public string VersionText => $"{App.ProjectName} {new Version(App.Version).ToString(3)}";
         public ICommand ResetSettingsCommand { get; }
         public IAsyncRelayCommand RestoreNvidiaChangesCommand { get; }
+        public IRelayCommand CopySettingsCommand { get; }
+        public IRelayCommand ImportSettingsCommand { get; }
+
+        public string ShareCode
+        {
+            get => _shareCode;
+            private set
+            {
+                if (String.Equals(_shareCode, value, StringComparison.Ordinal))
+                    return;
+
+                _shareCode = value;
+                OnPropertyChanged(nameof(ShareCode));
+            }
+        }
+
+        public string ImportCode
+        {
+            get => _importCode;
+            set
+            {
+                string code = value ?? String.Empty;
+                if (String.Equals(_importCode, code, StringComparison.Ordinal))
+                    return;
+
+                _importCode = code;
+                OnPropertyChanged(nameof(ImportCode));
+                ImportSettingsCommand.NotifyCanExecuteChanged();
+            }
+        }
 
         private async Task RestoreNvidiaChangesAsync()
         {
@@ -80,6 +115,64 @@ namespace SleepStrap.UI.ViewModels.Settings
             {
                 App.Logger.WriteException("OtherViewModel::ResetSettings", ex);
                 Frontend.ShowMessageBox($"{App.ProjectName} could not reset its settings.\n\n{ex.Message}", MessageBoxImage.Error);
+            }
+        }
+
+        private void CopySettings()
+        {
+            try
+            {
+                ShareCode = SettingsShareService.CreateCode(App.Settings.Prop);
+                try
+                {
+                    Clipboard.SetText(ShareCode);
+                    Frontend.ShowMessageBox("Your compact settings code was copied.", MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    App.Logger.WriteException("OtherViewModel::CopySettingsClipboard", ex);
+                    Frontend.ShowMessageBox("Your settings code is ready below. Windows could not open the clipboard, so copy the text manually.", MessageBoxImage.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("OtherViewModel::CopySettings", ex);
+                Frontend.ShowMessageBox($"{App.ProjectName} could not create a settings code.\n\n{ex.Message}", MessageBoxImage.Error);
+            }
+        }
+
+        private void ImportSettings()
+        {
+            if (String.IsNullOrWhiteSpace(ImportCode))
+                return;
+
+            if (Frontend.ShowMessageBox(
+                "Import these portable SleepBlox settings? Your custom imported skyboxes, device choices, local backups, and file paths will stay on this PC.",
+                MessageBoxImage.Question,
+                MessageBoxButton.YesNo,
+                MessageBoxResult.No) != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                SettingsShareService.ApplyCode(ImportCode, App.Settings.Prop);
+                SettingsShareService.TryApplyPortableFont(App.Settings.Prop);
+                App.Settings.Save();
+                ExperimentalClickerHostService.Refresh();
+                AutoRejoinSchedulerService.Refresh();
+                SkyboxGalleryService.NotifyGalleryChanged();
+
+                OnPropertyChanged(nameof(CloseSleepStrapOnLaunch));
+                OnPropertyChanged(nameof(OverrideLegacyBloxstrapSettings));
+                ImportCode = String.Empty;
+                Frontend.ShowMessageBox("Settings imported. Texture, sky, and font changes apply when you next launch Roblox.", MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("OtherViewModel::ImportSettings", ex);
+                Frontend.ShowMessageBox($"{App.ProjectName} could not import that settings code.\n\n{ex.Message}", MessageBoxImage.Error);
             }
         }
 

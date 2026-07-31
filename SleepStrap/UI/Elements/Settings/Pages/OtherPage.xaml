@@ -141,6 +141,44 @@
             </Grid>
         </Border>
 
+        <ui:CardExpander Margin="0,14,0,0" IsExpanded="True">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Settings transfer" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Compact codes for sharing your SleepBlox setup" Margin="0,3,0,0" FontSize="12"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <StackPanel Margin="0,0,16,0">
+                        <TextBlock Text="Copy settings as text" FontSize="15" FontWeight="SemiBold" />
+                        <TextBlock Text="Includes portable settings. Imported sky images, device IDs, display mode, file paths, and local backups stay private."
+                                   Margin="0,4,0,0" FontSize="12" TextWrapping="Wrap"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                    <ui:Button Grid.Column="1" Content="Copy settings" Icon="Copy20" Command="{Binding CopySettingsCommand}"
+                               VerticalAlignment="Center" />
+                </Grid>
+
+                <TextBox Margin="0,12,0,0" MinHeight="54" MaxHeight="92" IsReadOnly="True"
+                         AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                         Text="{Binding ShareCode, Mode=OneWay}" />
+
+                <Separator Margin="0,16" />
+
+                <TextBlock Text="Import settings from text" FontSize="15" FontWeight="SemiBold" />
+                <TextBlock Text="Paste a SleepBlox settings code below." Margin="0,4,0,0" FontSize="12"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <TextBox Margin="0,10,0,0" MinHeight="58" MaxHeight="112" MaxLength="16384"
+                         AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"
+                         Text="{Binding ImportCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <ui:Button Content="Import settings" Icon="ArrowDownload20" Appearance="Primary" Margin="0,12,0,0"
+                           HorizontalAlignment="Left" Command="{Binding ImportSettingsCommand}" />
+            </StackPanel>
+        </ui:CardExpander>
+
         <Border Margin="0,14,0,0" Padding="18" CornerRadius="12" Background="{DynamicResource SleepStrapGlassSurfaceBrush}">
             <Grid>
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>

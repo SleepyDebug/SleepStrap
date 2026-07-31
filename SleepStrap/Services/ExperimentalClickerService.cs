@@ -24,6 +24,7 @@ namespace SleepStrap.Services
         private static readonly UIntPtr InputMarker = new(0x53534C50434C4943UL);
 
         private readonly CancellationTokenSource _stopToken = new();
+        private readonly RobloxHandgunHudDetector _handgunHudDetector = new();
         private HwndSource? _hotkeyWindow;
         private LowLevelMouseProc? _mouseHookProc;
         private IntPtr _mouseHook;
@@ -44,7 +45,7 @@ namespace SleepStrap.Services
             _clickLoop = Task.Run(() => ClickLoopAsync(_stopToken.Token));
             App.Logger.WriteLine(
                 "ExperimentalClickerService::Start",
-                $"Started (auto={App.Settings.Prop.ExperimentalAutoClickerEnabled}, hold={App.Settings.Prop.ExperimentalRobloxHoldToSpamEnabled}).");
+                $"Started (auto={App.Settings.Prop.ExperimentalAutoClickerEnabled}, hold={App.Settings.Prop.ExperimentalRobloxHoldToSpamEnabled}, handgunOnly={App.Settings.Prop.ExperimentalRobloxHoldToSpamHandgunOnly}).");
         }
 
         private void RegisterHotkey()
@@ -115,7 +116,14 @@ namespace SleepStrap.Services
 
             if (message == WmLButtonDown)
             {
-                if (!IsRobloxForeground())
+                if (!TryGetRobloxForegroundWindow(out _))
+                    return CallNextHookEx(_mouseHook, code, wParam, lParam);
+
+                // Never swallow a normal left click until the current local HUD
+                // scan confirms the Hand Gun label. That keeps every other weapon
+                // behaving normally when the optional gate is switched on.
+                if (App.Settings.Prop.ExperimentalRobloxHoldToSpamHandgunOnly &&
+                    !_handgunHudDetector.IsHandgunVisible)
                     return CallNextHookEx(_mouseHook, code, wParam, lParam);
 
                 Interlocked.Exchange(ref _physicalLeftHeld, 1);
@@ -136,9 +144,18 @@ namespace SleepStrap.Services
                 {
                     bool autoClicking = Interlocked.CompareExchange(ref _autoClicking, 0, 0) == 1;
                     bool physicalLeftHeld = Interlocked.CompareExchange(ref _physicalLeftHeld, 0, 0) == 1;
-                    bool shouldClick = autoClicking || physicalLeftHeld;
+                    bool robloxForeground = TryGetRobloxForegroundWindow(out IntPtr robloxWindow);
+                    bool requireHandgunHud = App.Settings.Prop.ExperimentalRobloxHoldToSpamHandgunOnly;
 
-                    if (shouldClick && IsRobloxForeground())
+                    if (requireHandgunHud && robloxForeground)
+                        await _handgunHudDetector.RefreshIfDueAsync(robloxWindow, cancellationToken);
+                    else if (!robloxForeground)
+                        _handgunHudDetector.Clear();
+
+                    bool holdGateOpen = !requireHandgunHud || _handgunHudDetector.IsHandgunVisible;
+                    bool shouldClick = autoClicking || (physicalLeftHeld && holdGateOpen);
+
+                    if (shouldClick && robloxForeground)
                         SendLeftClick();
 
                     // A physical held click is the hold-to-spam feature, so it has its
@@ -160,9 +177,9 @@ namespace SleepStrap.Services
             }
         }
 
-        private static bool IsRobloxForeground()
+        private static bool TryGetRobloxForegroundWindow(out IntPtr window)
         {
-            IntPtr window = GetForegroundWindow();
+            window = GetForegroundWindow();
             if (window == IntPtr.Zero)
                 return false;
 
@@ -177,10 +194,12 @@ namespace SleepStrap.Services
             }
             catch (ArgumentException)
             {
+                window = IntPtr.Zero;
                 return false;
             }
             catch (InvalidOperationException)
             {
+                window = IntPtr.Zero;
                 return false;
             }
         }
@@ -231,6 +250,7 @@ namespace SleepStrap.Services
                 _mouseHook = IntPtr.Zero;
             }
             _mouseHookProc = null;
+            _handgunHudDetector.Dispose();
 
             if (_hotkeyWindow is not null)
             {
