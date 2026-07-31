@@ -64,6 +64,33 @@ namespace SleepStrap.Models
             }
         }
 
+        private bool _isRenaming;
+        public bool IsRenaming
+        {
+            get => _isRenaming;
+            set
+            {
+                if (_isRenaming == value) return;
+                _isRenaming = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRenaming)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsNotRenaming)));
+            }
+        }
+
+        public bool IsNotRenaming => !IsRenaming;
+
+        private string _editName = String.Empty;
+        public string EditName
+        {
+            get => _editName;
+            set
+            {
+                if (String.Equals(_editName, value, StringComparison.Ordinal)) return;
+                _editName = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(EditName)));
+            }
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
     }
 }

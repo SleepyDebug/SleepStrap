@@ -81,7 +81,7 @@ namespace SleepStrap.Services
         {
             directory = "";
             if (!TryGetId(selectionKey, out string id) ||
-                !Definitions.Any(definition => String.Equals(definition.Id, id, StringComparison.OrdinalIgnoreCase)))
+                FindDefinition(id) is null)
             {
                 return false;
             }
@@ -100,6 +100,79 @@ namespace SleepStrap.Services
                 return;
 
             App.Settings.Prop.CustomImportedSkyboxesEnabled = enabled;
+            App.Settings.Save();
+            NotifyChanged();
+        }
+
+        /// <summary>
+        /// Renames a locally imported skybox. The folder name remains its immutable
+        /// GUID, so a display name can never affect what is read from disk.
+        /// </summary>
+        public static void Rename(string? selectionKey, string? displayName)
+        {
+            if (!TryGetId(selectionKey, out string id))
+                throw new InvalidDataException("The selected custom skybox is invalid.");
+
+            UserSkyboxDefinition? definition = FindDefinition(id);
+            if (definition is null)
+                throw new FileNotFoundException("That custom skybox no longer exists.");
+
+            string name = ValidateDisplayName(displayName);
+            if (String.Equals(definition.Name, name, StringComparison.Ordinal))
+                return;
+
+            string oldName = definition.Name;
+            definition.Name = name;
+
+            // Older builds briefly stored a skybox display name in favourites.
+            // Preserve those favourites when a user renames that skybox.
+            List<string>? favorites = App.Settings.Prop.FavoriteSkyboxes;
+            if (favorites is not null)
+            {
+                for (int index = 0; index < favorites.Count; index++)
+                {
+                    if (String.Equals(favorites[index], oldName, StringComparison.OrdinalIgnoreCase))
+                        favorites[index] = GetSelectionKey(id);
+                }
+            }
+
+            App.Settings.Save();
+            NotifyChanged();
+        }
+
+        /// <summary>
+        /// Deletes one imported skybox and its private data directory. A selected
+        /// deleted sky is changed to Roblox's original sky before settings are saved.
+        /// This does not touch the live Roblox modifications folder.
+        /// </summary>
+        public static void Delete(string? selectionKey)
+        {
+            if (!TryGetId(selectionKey, out string id))
+                throw new InvalidDataException("The selected custom skybox is invalid.");
+
+            UserSkyboxDefinition? definition = FindDefinition(id);
+            if (definition is null)
+                throw new FileNotFoundException("That custom skybox no longer exists.");
+
+            // The ID has already been parsed as a GUID. GetSkyboxDirectory also
+            // asserts its full path remains directly beneath our private root.
+            DeleteOwnedSkyboxDirectory(id);
+
+            Definitions.RemoveAll(item => HasId(item, id));
+
+            if (TryGetId(App.Settings.Prop.CustomSkyboxSourceName, out string selectedId) &&
+                String.Equals(selectedId, id, StringComparison.OrdinalIgnoreCase))
+            {
+                App.Settings.Prop.CustomSkyboxEnabled = false;
+                App.Settings.Prop.CustomSkyboxSourceName = "";
+            }
+
+            // Do not leave deleted custom skies pinned in the gallery.
+            App.Settings.Prop.FavoriteSkyboxes?.RemoveAll(favorite =>
+                (TryGetId(favorite, out string favoriteId) &&
+                    String.Equals(favoriteId, id, StringComparison.OrdinalIgnoreCase)) ||
+                String.Equals(favorite, definition.Name, StringComparison.OrdinalIgnoreCase));
+
             App.Settings.Save();
             NotifyChanged();
         }
@@ -169,6 +242,13 @@ namespace SleepStrap.Services
         private static List<UserSkyboxDefinition> Definitions =>
             App.Settings.Prop.UserSkyboxes ??= new List<UserSkyboxDefinition>();
 
+        private static UserSkyboxDefinition? FindDefinition(string id) =>
+            Definitions.FirstOrDefault(definition => HasId(definition, id));
+
+        private static bool HasId(UserSkyboxDefinition definition, string id) =>
+            TryNormalizeId(definition.Id, out string definitionId) &&
+            String.Equals(definitionId, id, StringComparison.OrdinalIgnoreCase);
+
         private static bool TryGetId(string? selectionKey, out string id)
         {
             id = "";
@@ -192,8 +272,38 @@ namespace SleepStrap.Services
             return true;
         }
 
-        private static string GetSkyboxDirectory(string id) =>
-            Path.Combine(Root, id);
+        private static string GetSkyboxDirectory(string id)
+        {
+            if (!TryNormalizeId(id, out string normalizedId))
+                throw new InvalidDataException("The imported skybox identifier is invalid.");
+
+            string root = Path.GetFullPath(Root);
+            string directory = Path.GetFullPath(Path.Combine(root, normalizedId));
+            string rootPrefix = root.EndsWith(Path.DirectorySeparatorChar) ||
+                root.EndsWith(Path.AltDirectorySeparatorChar)
+                ? root
+                : root + Path.DirectorySeparatorChar;
+
+            if (!directory.StartsWith(rootPrefix, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidDataException("The imported skybox directory is outside SleepBlox data.");
+
+            return directory;
+        }
+
+        private static void DeleteOwnedSkyboxDirectory(string id)
+        {
+            string directory = GetSkyboxDirectory(id);
+            if (File.Exists(directory) && !Directory.Exists(directory))
+                throw new InvalidDataException("The custom skybox storage is not a directory.");
+            if (!Directory.Exists(directory))
+                return;
+
+            FileAttributes attributes = File.GetAttributes(directory);
+            // A reparse point is deleted as the link itself, never recursively.
+            // That prevents a malicious or accidental junction from deleting an
+            // unrelated directory tree.
+            Directory.Delete(directory, (attributes & FileAttributes.ReparsePoint) == 0);
+        }
 
         private static string ValidateDisplayName(string? displayName)
         {

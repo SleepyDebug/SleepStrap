@@ -19,9 +19,9 @@
             <Border Margin="0,22,0,18" Height="1" Background="#45FFFFFF" />
             <TextBlock Text="What's new" FontSize="20" FontWeight="SemiBold" Foreground="White" />
             <StackPanel Margin="0,14,0,0">
-                <TextBlock Text="Added compact settings sharing" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
-                <TextBlock Text="Added optional Hand Gun detection for hold-to-spam" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
-                <TextBlock Text="Custom skies and device-specific data stay private" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="Added rename and delete controls for custom skyboxes" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="Hover a custom sky to see its trash and rename icons" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="Deleting an active custom sky safely returns to None on the next launch" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
                 <TextBlock Text="Cool stuff" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
             </StackPanel>
             <TextBlock Text="Made by sleepy :)" Margin="0,22,0,20" FontSize="14" Foreground="#B8FFFFFF" />

@@ -83,6 +83,50 @@ namespace SleepStrap.UI.Elements.Settings.Pages
             }
         }
 
+        private void RenameUserSkybox_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is not SkyboxChoice choice)
+                return;
+
+            (DataContext as SkyboxViewModel)?.BeginRenameUserSkybox(choice);
+            if (FindParent<Grid>((DependencyObject)sender) is Grid card && FindChild<TextBox>(card, "RenameSkyboxBox") is TextBox box)
+                Dispatcher.BeginInvoke(() => { box.Focus(); box.SelectAll(); });
+            e.Handled = true;
+        }
+
+        private void DeleteUserSkybox_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is not SkyboxChoice choice)
+                return;
+
+            if (Frontend.ShowMessageBox($"Delete custom skybox '{choice.Name}'?", MessageBoxImage.Warning, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                (DataContext as SkyboxViewModel)?.DeleteUserSkybox(choice);
+            e.Handled = true;
+        }
+
+        private void RenameSkyboxBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is not SkyboxChoice choice)
+                return;
+
+            if (e.Key == Key.Enter)
+            {
+                (DataContext as SkyboxViewModel)?.CommitRenameUserSkybox(choice);
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Escape)
+            {
+                (DataContext as SkyboxViewModel)?.CancelRenameUserSkybox(choice);
+                e.Handled = true;
+            }
+        }
+
+        private void RenameSkyboxBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is SkyboxChoice choice && choice.IsRenaming)
+                (DataContext as SkyboxViewModel)?.CommitRenameUserSkybox(choice);
+        }
+
         private static T? FindParent<T>(DependencyObject? child) where T : DependencyObject
         {
             while (child is not null)
@@ -90,6 +134,21 @@ namespace SleepStrap.UI.Elements.Settings.Pages
                 if (child is T match) return match;
                 child = VisualTreeHelper.GetParent(child);
             }
+            return null;
+        }
+
+        private static T? FindChild<T>(DependencyObject parent, string? name = null) where T : FrameworkElement
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+                if (child is T typed && (name is null || typed.Name == name))
+                    return typed;
+                T? nested = FindChild<T>(child, name);
+                if (nested is not null)
+                    return nested;
+            }
+
             return null;
         }
     }

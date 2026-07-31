@@ -26,6 +26,73 @@ namespace SleepStrap.UI.ViewModels.Settings
         public ObservableCollection<SkyboxChoice> SkyboxChoices { get; }
         public ICommand OpenModsFolderCommand { get; }
 
+        public void BeginRenameUserSkybox(SkyboxChoice? choice)
+        {
+            if (choice is null || !choice.IsUserImported || IsBusy)
+                return;
+
+            choice.EditName = choice.Name;
+            choice.IsRenaming = true;
+        }
+
+        public void CancelRenameUserSkybox(SkyboxChoice? choice)
+        {
+            if (choice is not null)
+                choice.IsRenaming = false;
+        }
+
+        public void CommitRenameUserSkybox(SkyboxChoice? choice)
+        {
+            if (choice is null || !choice.IsUserImported || !choice.IsRenaming || IsBusy)
+                return;
+
+            string name = choice.EditName.Trim();
+            if (String.IsNullOrWhiteSpace(name))
+            {
+                choice.IsRenaming = false;
+                return;
+            }
+
+            try
+            {
+                IsBusy = true;
+                UserSkyboxService.Rename(choice.SelectionKey, name);
+                StatusText = $"Renamed to {name}.";
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("SkyboxViewModel::RenameUserSkybox", ex);
+                Frontend.ShowMessageBox($"{App.ProjectName} could not rename that custom skybox.\n\n{ex.Message}", MessageBoxImage.Error);
+                choice.IsRenaming = false;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public void DeleteUserSkybox(SkyboxChoice? choice)
+        {
+            if (choice is null || !choice.IsUserImported || IsBusy)
+                return;
+
+            try
+            {
+                IsBusy = true;
+                UserSkyboxService.Delete(choice.SelectionKey);
+                StatusText = $"Deleted {choice.Name}.";
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("SkyboxViewModel::DeleteUserSkybox", ex);
+                Frontend.ShowMessageBox($"{App.ProjectName} could not delete that custom skybox.\n\n{ex.Message}", MessageBoxImage.Error);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
         public void ToggleFavorite(SkyboxChoice? choice)
         {
             if (choice is null || choice.IsNone || IsBusy)
