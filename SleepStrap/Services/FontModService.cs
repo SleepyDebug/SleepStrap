@@ -7,7 +7,7 @@ namespace SleepStrap.Services
     internal static class FontModService
     {
         private const string CustomFontAsset = "rbxasset://fonts/CustomFont.ttf";
-        private static string FontBackupRoot => Path.Combine(Paths.SleepStrapData, "Backups", "InGameFonts");
+        private static string FontBackupRoot => Path.Combine(Paths.SleepBloxData, "Backups", "InGameFonts");
 
         private static readonly byte[][] ValidHeaders =
         {
@@ -226,7 +226,7 @@ namespace SleepStrap.Services
 
         private static string EnsureMontserratExtracted()
         {
-            string directory = Path.Combine(Paths.SleepStrapData, "Fonts");
+            string directory = Path.Combine(Paths.SleepBloxData, "Fonts");
             string path = Path.Combine(directory, "Montserrat.ttf");
             Directory.CreateDirectory(directory);
 

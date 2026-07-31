@@ -6,6 +6,8 @@ namespace SleepStrap.UI.Elements.Bootstrapper
     public partial class CustomDialog
     {
         const int Version = 1;
+        private const string CustomBootstrapperRoot = "SleepBloxCustomBootstrapper";
+        private const string LegacyCustomBootstrapperRoot = "SleepStrapCustomBootstrapper";
 
         private class DummyFrameworkElement : FrameworkElement { }
 
@@ -22,7 +24,8 @@ namespace SleepStrap.UI.Elements.Bootstrapper
 
         private static Dictionary<string, HandleXmlElementDelegate> _elementHandlerMap = new Dictionary<string, HandleXmlElementDelegate>()
         {
-            ["SleepStrapCustomBootstrapper"] = HandleXmlElement_SleepStrapCustomBootstrapper_Fake,
+            [CustomBootstrapperRoot] = HandleXmlElement_SleepStrapCustomBootstrapper_Fake,
+            [LegacyCustomBootstrapperRoot] = HandleXmlElement_SleepStrapCustomBootstrapper_Fake,
             ["TitleBar"] = HandleXmlElement_TitleBar,
             ["Button"] = HandleXmlElement_Button,
             ["ProgressBar"] = HandleXmlElement_ProgressBar,
@@ -93,11 +96,11 @@ namespace SleepStrap.UI.Elements.Bootstrapper
             if (_initialised)
                 throw new Exception("Custom dialog has already been initialised");
 
-            if (xml.Name != "SleepStrapCustomBootstrapper")
-                throw new Exception("XML root is not a SleepStrapCustomBootstrapper");
+            if (xml.Name != CustomBootstrapperRoot && xml.Name != LegacyCustomBootstrapperRoot)
+                throw new Exception($"XML root is not a {CustomBootstrapperRoot}");
 
             if (xml.Attribute("Version")?.Value != Version.ToString())
-                throw new Exception("Unknown SleepStrapCustomBootstrapper version");
+                throw new Exception($"Unknown {CustomBootstrapperRoot} version");
 
             if (xml.Descendants().Count() > MaxElements)
                 throw new Exception($"Custom bootstrappers can have a maximum of {MaxElements} elements");

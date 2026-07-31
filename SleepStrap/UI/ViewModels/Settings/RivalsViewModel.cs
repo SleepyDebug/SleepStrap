@@ -70,7 +70,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                 catch (Exception ex)
                 {
                     App.Logger.WriteException("RivalsViewModel::SetStretch", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not change the display stretch.\n\n{ex.Message}", MessageBoxImage.Error);
+                    Frontend.ShowMessageBox($"{App.ProjectName} could not change the display stretch.\n\n{ex.Message}", MessageBoxImage.Error);
                     OnPropertyChanged(nameof(StretchEnabled));
                     RefreshStatus();
                 }
@@ -101,7 +101,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                 {
                     App.Settings.Prop.RivalsStretchPercent = previous;
                     App.Logger.WriteException("RivalsViewModel::ChangeStrength", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not apply that stretch strength.\n\n{ex.Message}", MessageBoxImage.Error);
+                    Frontend.ShowMessageBox($"{App.ProjectName} could not apply that stretch strength.\n\n{ex.Message}", MessageBoxImage.Error);
                     OnPropertyChanged(nameof(SelectedStretchPercent));
                     RefreshStatus();
                 }
@@ -133,7 +133,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                 catch (Exception ex)
                 {
                     App.Logger.WriteException("RivalsViewModel::ChangeFps", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not change the FPS limit.\n\n{ex.Message}", MessageBoxImage.Error);
+                    Frontend.ShowMessageBox($"{App.ProjectName} could not change the FPS limit.\n\n{ex.Message}", MessageBoxImage.Error);
                     OnPropertyChanged(nameof(SelectedFpsLimit));
                 }
             }
@@ -240,7 +240,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                     ? "Enabled for the NVIDIA Roblox VR profile"
                     : "NVIDIA profile was not changed";
                 Frontend.ShowMessageBox(
-                    $"SleepStrap could not change the NVIDIA texture settings.\n\n{ex.Message}",
+                    $"{App.ProjectName} could not change the NVIDIA texture settings.\n\n{ex.Message}",
                     MessageBoxImage.Error);
             }
             finally

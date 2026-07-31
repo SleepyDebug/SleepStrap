@@ -61,6 +61,11 @@ namespace SleepStrap.Models.Persistable
         public bool CustomSkyboxEnabled { get; set; } = false;
         public string CustomSkyboxSourceName { get; set; } = "";
         public List<string> FavoriteSkyboxes { get; set; } = new();
+        // This is intentionally separate from CustomSkyboxEnabled: the latter
+        // describes the selected sky (including bundled presets), while this is
+        // the master switch for locally imported user panoramas.
+        public bool CustomImportedSkyboxesEnabled { get; set; } = false;
+        public List<UserSkyboxDefinition> UserSkyboxes { get; set; } = new();
 
         // SleepStrap Rivals display stretch
         public bool RivalsStretchEnabled { get; set; } = false;
@@ -87,6 +92,14 @@ namespace SleepStrap.Models.Persistable
         public bool ClippingMicrophoneEnabled { get; set; } = false;
         public string ClippingMicrophoneDevice { get; set; } = "";
         public int ClippingMicrophoneVolume { get; set; } = 70;
+
+        // Experimental input tools
+        public bool ExperimentalAutoClickerEnabled { get; set; } = false;
+        public int ExperimentalAutoClickerHotkeyModifiers { get; set; } = 0;
+        public int ExperimentalAutoClickerHotkeyVirtualKey { get; set; } = 0x75; // F6
+        public int ExperimentalAutoClickerClicksPerSecond { get; set; } = 12;
+        public bool ExperimentalRobloxHoldToSpamEnabled { get; set; } = false;
+        public int ExperimentalRobloxHoldToSpamClicksPerSecond { get; set; } = 12;
 
         // SleepStrap RIVALS grid loadout and hourly rejoin
         public List<string> MacroMissingWeapons { get; set; } = new();

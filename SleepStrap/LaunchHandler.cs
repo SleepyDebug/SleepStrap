@@ -55,6 +55,11 @@ namespace SleepStrap
                 App.Logger.WriteLine(LOG_IDENT, "Opening persistent clipping service");
                 Services.ClippingHostService.RunHostMode();
             }
+            else if (App.LaunchSettings.ExperimentalFlag.Active)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Opening persistent experimental input service");
+                Services.ExperimentalClickerHostService.RunHostMode();
+            }
             else if (App.LaunchSettings.MenuFlag.Active)
             {
                 App.Logger.WriteLine(LOG_IDENT, "Opening settings");
@@ -131,7 +136,7 @@ namespace SleepStrap
             else
             {
 #if QA_BUILD
-                Frontend.ShowMessageBox("You are about to install a QA build of SleepStrap. The red window border indicates that this is a QA build.\n\nQA builds are handled completely separately of your standard installation, like a virtual environment.", MessageBoxImage.Information);
+                Frontend.ShowMessageBox("You are about to install a QA build of SleepBlox. The red window border indicates that this is a QA build.\n\nQA builds are handled completely separately of your standard installation, like a virtual environment.", MessageBoxImage.Information);
 #endif
 
                 new LanguageSelectorDialog().ShowDialog();
@@ -268,7 +273,7 @@ namespace SleepStrap
                     App.Logger.WriteLine(LOG_IDENT, "Could not close Roblox before launch");
                     App.Logger.WriteException(LOG_IDENT, ex);
                     Frontend.ShowMessageBox(
-                        $"SleepStrap could not close Roblox before launching it.\n\n{ex.Message}",
+                        $"{App.ProjectName} could not close Roblox before launching it.\n\n{ex.Message}",
                         MessageBoxImage.Error);
                     if (!keepSettingsOpen)
                         App.Terminate(ErrorCode.ERROR_INSTALL_FAILURE);
@@ -387,7 +392,7 @@ namespace SleepStrap
             App.Logger.WriteLine(LOG_IDENT, "Initializing bootstrapper");
             App.Bootstrapper = new Bootstrapper(LaunchMode.Player)
             {
-                MutexName = "SleepStrap-BackgroundUpdater",
+                MutexName = App.BackgroundUpdaterMutexName,
                 QuitIfMutexExists = true
             };
 
@@ -396,7 +401,7 @@ namespace SleepStrap
             Task.Run(() =>
             {
                 App.Logger.WriteLine(LOG_IDENT, "Started event waiter");
-                using (EventWaitHandle handle = new EventWaitHandle(false, EventResetMode.AutoReset, "SleepStrap-BackgroundUpdaterKillEvent"))
+                using (EventWaitHandle handle = new EventWaitHandle(false, EventResetMode.AutoReset, App.BackgroundUpdaterKillEventName))
                     handle.WaitOne();
 
                 App.Logger.WriteLine(LOG_IDENT, "Received close event, killing it all!");

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Bootstrapper.AutoUpdateFailed" xml:space="preserve">
-    <value>SleepStrap {0} sürümüne otomatik olarak güncellenemedi. Lütfen SleepStrap'ı web sitesinden indirip çalıştırarak manuel olarak güncelleyin.</value>
+    <value>SleepBlox {0} sürümüne otomatik olarak güncellenemedi. Lütfen SleepBlox'ı web sitesinden indirip çalıştırarak manuel olarak güncelleyin.</value>
   </data>
   <data name="Bootstrapper.ConfirmLaunch" xml:space="preserve">
     <value>Roblox şu anda çalışıyor ve başka bir istemcinin başlatılması onu kapatacaktır. Başlatmak istediğinizden emin misiniz?</value>
@@ -127,13 +127,13 @@
     <value>Roblox'un sunucuları şu an çökmüş olabilir. Daha fazla bilgi için {0} göz atın.</value>
   </data>
   <data name="Dialog.Connectivity.BadConnection" xml:space="preserve">
-    <value>Herhangi bir bağlantı sağlanılamadı, bu da zayıf bir internet bağlantısının veya bir güvenlik duvarı engelinin işareti olabilir. Eğer bağlantınızda bir sorun yoksa, lütfen antivirüs yazılımınızın SleepStrap'ı engellemediğinden emin olun.</value>
+    <value>Herhangi bir bağlantı sağlanılamadı, bu da zayıf bir internet bağlantısının veya bir güvenlik duvarı engelinin işareti olabilir. Eğer bağlantınızda bir sorun yoksa, lütfen antivirüs yazılımınızın SleepBlox'ı engellemediğinden emin olun.</value>
   </data>
   <data name="Bootstrapper.FirstRunUninstall" xml:space="preserve">
-    <value>SleepStrap'i silmek için ilk önce kurmalısınız.</value>
+    <value>SleepBlox'i silmek için ilk önce kurmalısınız.</value>
   </data>
   <data name="Bootstrapper.NotEnoughSpace" xml:space="preserve">
-    <value>SleepStrap, Roblox'u indirmek ve kurmak için yeterli disk alanına sahip değil. Lütfen biraz disk alanı boşaltın ve tekrar deneyin.</value>
+    <value>SleepBlox, Roblox'u indirmek ve kurmak için yeterli disk alanına sahip değil. Lütfen biraz disk alanı boşaltın ve tekrar deneyin.</value>
   </data>
   <data name="Bootstrapper.Status.ApplyingModifications" xml:space="preserve">
     <value>Roblox modifikasyonları uygulanıyor...</value>
@@ -169,10 +169,10 @@
     <comment>Text for style previews that use text button that says "Cancel"</comment>
   </data>
   <data name="Bootstrapper.SuccessfullyUninstalled" xml:space="preserve">
-    <value>SleepStrap başarıyla kaldırıldı</value>
+    <value>SleepBlox başarıyla kaldırıldı</value>
   </data>
   <data name="Bootstrapper.Uninstall.RobloxRunning" xml:space="preserve">
-    <value>Roblox şu an çalışıyor, ancak SleepStrap'ı kaldırmak için kapalı olması gerekiyor. Roblox'u şimdi kapatmak ister misiniz?</value>
+    <value>Roblox şu an çalışıyor, ancak SleepBlox'ı kaldırmak için kapalı olması gerekiyor. Roblox'u şimdi kapatmak ister misiniz?</value>
   </data>
   <data name="Bootstrapper.WMFNotFound" xml:space="preserve">
     <value>Büyük ihtimalle Windows'un N sürümünü kullandığınız için Windows Media Foundation bileşenleri eksik olabilir ve bu yüzden Roblox'u açamıyor olabilirsiniz. Lütfen bu bileşenleri kurun ve ardından Roblox'u tekrar başlatın.</value>
@@ -276,22 +276,22 @@ Daha fazla bilgi için tıklayınız</value>
     <value>Bağlantı hatası</value>
   </data>
   <data name="Dialog.Connectivity.UnableToConnect" xml:space="preserve">
-    <value>SleepStrap {0} ile bağlantı kuramıyor</value>
+    <value>SleepBlox {0} ile bağlantı kuramıyor</value>
     <comment>{0} is the name of a service (i.e. Roblox, GitHub)</comment>
   </data>
   <data name="Dialog.Exception.CopyLogContents" xml:space="preserve">
     <value>Kayıt içeriğini kopyala</value>
   </data>
   <data name="Dialog.Exception.Info.1" xml:space="preserve">
-    <value>SleepStrap çalıştırılırken bir istisna oluştu</value>
+    <value>SleepBlox çalıştırılırken bir istisna oluştu</value>
   </data>
   <data name="Dialog.Exception.Info.2" xml:space="preserve">
-    <value>Bu sorunun halihazırda bir düzeltmeyle giderilip giderilmediğini görmek için önce [SleepStrap Wiki]({0})'yi kontrol ediniz.
+    <value>Bu sorunun halihazırda bir düzeltmeyle giderilip giderilmediğini görmek için önce [SleepBlox Wiki]({0})'yi kontrol ediniz.
 
 Değilse, lütfen bu sorunu oluşturulan kayıt dosyasının bir kopyasıyla birlikte [GitHub sorunu]({1}) aracılığıyla bildirin.</value>
   </data>
   <data name="Dialog.Exception.Title" xml:space="preserve">
-    <value>SleepStrap Istisnası</value>
+    <value>SleepBlox Istisnası</value>
   </data>
   <data name="Common.Custom" xml:space="preserve">
     <value>Özel</value>
@@ -306,10 +306,10 @@ Değilse, lütfen bu sorunu oluşturulan kayıt dosyasının bir kopyasıyla bir
     <value>Sahte Byfron (2023)</value>
   </data>
   <data name="Enums.BootstrapperStyle.ClassicFluentDialog" xml:space="preserve">
-    <value>SleepStrap (Klasik)</value>
+    <value>SleepBlox (Klasik)</value>
   </data>
   <data name="Enums.BootstrapperStyle.FluentAeroDialog" xml:space="preserve">
-    <value>SleepStrap (Cam)</value>
+    <value>SleepBlox (Cam)</value>
   </data>
   <data name="Enums.BootstrapperStyle.LegacyDialog2008" xml:space="preserve">
     <value>Eski (2008-2011)</value>
@@ -387,10 +387,10 @@ Değilse, lütfen bu sorunu oluşturulan kayıt dosyasının bir kopyasıyla bir
     <value>Aydınlık</value>
   </data>
   <data name="InstallChecker.Updated" xml:space="preserve">
-    <value>SleepStrap v{0} sürümüne güncellendi</value>
+    <value>SleepBlox v{0} sürümüne güncellendi</value>
   </data>
   <data name="InstallChecker.VersionDifferentThanInstalled" xml:space="preserve">
-    <value>Başlattığınız SleepStrap sürümü, şuan ki güncel sürümden farklı. Yeni sürüme güncellemek ister misiniz?</value>
+    <value>Başlattığınız SleepBlox sürümü, şuan ki güncel sürümden farklı. Yeni sürüme güncellemek ister misiniz?</value>
   </data>
   <data name="Menu.About.Contributors" xml:space="preserve">
     <value>Katkıda Bulunanlar</value>
@@ -399,7 +399,7 @@ Değilse, lütfen bu sorunu oluşturulan kayıt dosyasının bir kopyasıyla bir
     <value>Kod</value>
   </data>
   <data name="Menu.About.Contributors.Description" xml:space="preserve">
-    <value>Bu insanlar SleepStrap'e kayda değer katkılarda bulunmuş ve onun bu hale gelmesine yardımcı olmuş kişilerdir.</value>
+    <value>Bu insanlar SleepBlox'e kayda değer katkılarda bulunmuş ve onun bu hale gelmesine yardımcı olmuş kişilerdir.</value>
   </data>
   <data name="Menu.About.Contributors.FeatureIdeas" xml:space="preserve">
     <value>Özellik Fikirleri</value>
@@ -445,7 +445,7 @@ Değilse, lütfen bu sorunu oluşturulan kayıt dosyasının bir kopyasıyla bir
     <value>Şu anda açık olan tüm Roblox istemcilerini kapatana kadar tüm değişikliklerinizin hemen uygulanmayacağını lütfen unutmayın.</value>
   </data>
   <data name="Menu.AlreadyRunning.Title" xml:space="preserve">
-    <value>SleepStrap zaten çalışıyor</value>
+    <value>SleepBlox zaten çalışıyor</value>
   </data>
   <data name="Menu.Appearance.Bootstrapper.Description" xml:space="preserve">
     <value>Farklı, retro veya hatta sadece Roblox gibi görünmesini sağlayabilirsiniz.</value>
@@ -472,7 +472,7 @@ Değilse, lütfen bu sorunu oluşturulan kayıt dosyasının bir kopyasıyla bir
     <value>Başlık</value>
   </data>
   <data name="Menu.Appearance.Description" xml:space="preserve">
-    <value>SleepStrap'in nasıl görünmesi gerektiğini yapılandırın.</value>
+    <value>SleepBlox'in nasıl görünmesi gerektiğini yapılandırın.</value>
   </data>
   <data name="Menu.Appearance.Global.Theme.Title" xml:space="preserve">
     <value>Global Tema</value>
@@ -496,10 +496,10 @@ Değilse, lütfen bu sorunu oluşturulan kayıt dosyasının bir kopyasıyla bir
     <value>Görünüş</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Description" xml:space="preserve">
-    <value>SleepStrap, Roblox'u başlattığınızda kendini otomatik olarak kontrol edecek ve güncelleyecektir.</value>
+    <value>SleepBlox, Roblox'u başlattığınızda kendini otomatik olarak kontrol edecek ve güncelleyecektir.</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Title" xml:space="preserve">
-    <value>SleepStrap'i otomatik olarak güncelle</value>
+    <value>SleepBlox'i otomatik olarak güncelle</value>
   </data>
   <data name="Menu.Behaviour.ConfirmLaunches.Description" xml:space="preserve">
     <value>Mevcut oyununuzun kapanmasını önlemek için başka bir oyunun yanlışlıkla başlatılmasını engelleyin.</value>
@@ -508,7 +508,7 @@ Değilse, lütfen bu sorunu oluşturulan kayıt dosyasının bir kopyasıyla bir
     <value>Başka bir Roblox istemcisi başlatılırken onay iste</value>
   </data>
   <data name="Menu.Behaviour.Description" xml:space="preserve">
-    <value>SleepStrap'ın Roblox'u başlatınca yapması gerektiğini yapılandırın.</value>
+    <value>SleepBlox'ın Roblox'u başlatınca yapması gerektiğini yapılandırın.</value>
   </data>
   <data name="Menu.Behaviour.ForceRobloxReinstall.Description" xml:space="preserve">
     <value>Roblox, sonraki başlangıçta yeniden kurulacak.</value>
@@ -628,10 +628,10 @@ Bunu, diğer insanlar tarafından yapılan ve performansı artırmayı vaat eden
     <value>İkon Dosyaları</value>
   </data>
   <data name="Menu.InstallLocation.CantInstall" xml:space="preserve">
-    <value>SleepStrap buraya kurulamaz. Lütfen farklı bir konum seçin veya sıfırla düğmesine tıklayarak varsayılan konumu kullanmaya devam edin.</value>
+    <value>SleepBlox buraya kurulamaz. Lütfen farklı bir konum seçin veya sıfırla düğmesine tıklayarak varsayılan konumu kullanmaya devam edin.</value>
   </data>
   <data name="Menu.InstallLocation.NotEmpty" xml:space="preserve">
-    <value>SleepStrap'i kurmak için seçtiğiniz klasör zaten var ve boş DEĞİL. SleepStrap'in kendi bağımsız klasörüne kurulması şiddetle tavsiye edilir.
+    <value>SleepBlox'i kurmak için seçtiğiniz klasör zaten var ve boş DEĞİL. SleepBlox'in kendi bağımsız klasörüne kurulması şiddetle tavsiye edilir.
 
 Aşağıdaki konuma değiştirilmesi önerilir:
 {0}
@@ -644,7 +644,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Bir kurulum konumu seçmelisin</value>
   </data>
   <data name="Menu.InstallLocation.NoWritePerms" xml:space="preserve">
-    <value>SleepStrap'in seçtiğiniz kurulum konumuna yazma erişimi yok. Lütfen başka bir konum seçin.</value>
+    <value>SleepBlox'in seçtiğiniz kurulum konumuna yazma erişimi yok. Lütfen başka bir konum seçin.</value>
   </data>
   <data name="Menu.Integrations.ActivityTracking" xml:space="preserve">
     <value>Etkinlik takibi</value>
@@ -695,7 +695,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Masaüstü uygulamasına çıkma</value>
   </data>
   <data name="Menu.Integrations.EnableActivityTracking.Description" xml:space="preserve">
-    <value>SleepStrap'in hangi Roblox oyununu oynadığınızı algılamasını sağlar. Bazı özellikler bunu gerektirebilir.</value>
+    <value>SleepBlox'in hangi Roblox oyununu oynadığınızı algılamasını sağlar. Bazı özellikler bunu gerektirebilir.</value>
   </data>
   <data name="Menu.Integrations.EnableActivityTracking.Title" xml:space="preserve">
     <value>Etkinlik takibini etkinleştirin</value>
@@ -786,7 +786,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Ayarlar kaydedildi!</value>
   </data>
   <data name="Menu.Title" xml:space="preserve">
-    <value>SleepStrap Ayarları</value>
+    <value>SleepBlox Ayarları</value>
   </data>
   <data name="Dialog.LanguageSelector.Header" xml:space="preserve">
     <value>Tercih edilen dili seçiniz</value>
@@ -816,7 +816,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Kullanıcı Arayüzü ve Düzeni</value>
   </data>
   <data name="Menu.FastFlags.ManagerEnabled.Title" xml:space="preserve">
-    <value>SleepStrap'in Fast Flag'ları yönetmesine izin verin</value>
+    <value>SleepBlox'in Fast Flag'ları yönetmesine izin verin</value>
   </data>
   <data name="Menu.FastFlags.ManagerEnabled.Description" xml:space="preserve">
     <value>Bunun yetkisini almak burada ayarlanan herhangi birşeyin Roblox'a uygulamamasını sağlayacak.</value>
@@ -843,7 +843,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Seviye 3 (En Yükseği)</value>
   </data>
   <data name="Dialog.Connectivity.UnableToDownload" xml:space="preserve">
-    <value>SleepStrap Roblox'u indiremiyor</value>
+    <value>SleepBlox Roblox'u indiremiyor</value>
   </data>
   <data name="Dialog.Connectivity.UnableToDownloadReason" xml:space="preserve">
     <value>Roblox şu anda indirilemiyor. Daha fazla bilgi için lütfen yardım sayfasını okuyunuz: {0}</value>
@@ -864,7 +864,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Değerin bir sayı olması gerektiğinden '{0}' girişi geçerli değildir</value>
   </data>
   <data name="Logger.NoWriteMode" xml:space="preserve">
-    <value>Bu başlatma için herhangi bir kayıt dosyası yazılmıyacak çünkü SleepStrap '{0}' konumundaki klasöre yazamıyor</value>
+    <value>Bu başlatma için herhangi bir kayıt dosyası yazılmıyacak çünkü SleepBlox '{0}' konumundaki klasöre yazamıyor</value>
   </data>
   <data name="Common.Default" xml:space="preserve">
     <value>Varsayılan</value>
@@ -879,7 +879,7 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>Yer filtresi doğru biçimlendirilmediği için '{0}' girişi geçerli değil.</value>
   </data>
   <data name="Installer.Title" xml:space="preserve">
-    <value>SleepStrap Yükleyicisi</value>
+    <value>SleepBlox Yükleyicisi</value>
   </data>
   <data name="Installer.Welcome.Title" xml:space="preserve">
     <value>Hoş geldiniz</value>
@@ -898,18 +898,18 @@ Aşağıdaki konuma değiştirilmesi önerilir:
     <value>İleri</value>
   </data>
   <data name="Installer.Welcome.MainText" xml:space="preserve">
-    <value>SleepStrap'ı indirdiğiniz için teşekkürler.
+    <value>SleepBlox'ı indirdiğiniz için teşekkürler.
 
-SleepStrap'ı indirebileceğiniz tek resmî web siteleri {0} ve {1}'dur, bu yüzden lütfen resmî bir kaynaktan indirdiğinizi doğrulayın.
+SleepBlox'ı indirebileceğiniz tek resmî web siteleri {0} ve {1}'dur, bu yüzden lütfen resmî bir kaynaktan indirdiğinizi doğrulayın.
 
-Bu yükleme işlemi hızlı ve basit olacaktır, ve yükleme işlemi bittikten sonra SleepStrap'ın her ayarını yapılandırabileceksiniz.</value>
+Bu yükleme işlemi hızlı ve basit olacaktır, ve yükleme işlemi bittikten sonra SleepBlox'ın her ayarını yapılandırabileceksiniz.</value>
     <comment>{0} and {1} are URLs</comment>
   </data>
   <data name="Installer.Welcome.NextToContinue" xml:space="preserve">
     <value>Devam etmek için lütfen "İleri" butonuna tıklayın.</value>
   </data>
   <data name="Installer.Welcome.UpdateNotice" xml:space="preserve">
-    <value>SleepStrap'ın {0} sürümünü yüklemeye çalışıyorsunuz, fakat mevcut olan en son sürüm {1}. En son sürümü yüklemek ister misiniz?</value>
+    <value>SleepBlox'ın {0} sürümünü yüklemeye çalışıyorsunuz, fakat mevcut olan en son sürüm {1}. En son sürümü yüklemek ister misiniz?</value>
   </data>
   <data name="Installer.Install.Location.Title" xml:space="preserve">
     <value>Yüklenecek yeri seç</value>
@@ -930,16 +930,16 @@ Bu yükleme işlemi hızlı ve basit olacaktır, ve yükleme işlemi bittikten s
     <value>Başlat Menü simgesi</value>
   </data>
   <data name="Installer.Completion.Text" xml:space="preserve">
-    <value>SleepStrap başarıyla yüklendi.
+    <value>SleepBlox başarıyla yüklendi.
 
-Roblox henüz yüklenmedi, SleepStrap'ı ilk defa başlattığınızda yüklenecektir. Ancak, bunu yapmadan önce, SleepStrap'ın ayarlarını yapılandırmak isteyebilirsiniz.
+Roblox henüz yüklenmedi, SleepBlox'ı ilk defa başlattığınızda yüklenecektir. Ancak, bunu yapmadan önce, SleepBlox'ın ayarlarını yapılandırmak isteyebilirsiniz.
 
-Ayrıca, Roblox'u başlatmak için "Roblox Player" kısayolunu kullanmaktan sakının, yoksa SleepStrap Roblox ile başlatılmayacaktır. Eğer siteden başlattığınızda SleepStrap'ı göremezseniz, düzeltmek için Roblox'u SleepStrap ile masaüstünden bir kez başlatmanız yeterlidir.
+Ayrıca, Roblox'u başlatmak için "Roblox Player" kısayolunu kullanmaktan sakının, yoksa SleepBlox Roblox ile başlatılmayacaktır. Eğer siteden başlattığınızda SleepBlox'ı göremezseniz, düzeltmek için Roblox'u SleepBlox ile masaüstünden bir kez başlatmanız yeterlidir.
 
 Ne yapmak istersiniz?</value>
   </data>
   <data name="Installer.Completion.Settings.Title" xml:space="preserve">
-    <value>SleepStrap'ın ayarlarını yapılandır</value>
+    <value>SleepBlox'ın ayarlarını yapılandır</value>
   </data>
   <data name="Installer.Completion.Settings.Description" xml:space="preserve">
     <value>Sunduğu tüm özelliklerle ince ayar yapın</value>
@@ -951,22 +951,22 @@ Ne yapmak istersiniz?</value>
     <value>Her şey bittikten sonra masaüstü uygulamasına bırakılacaksınız</value>
   </data>
   <data name="Uninstaller.Title" xml:space="preserve">
-    <value>SleepStrap'ı kaldır</value>
+    <value>SleepBlox'ı kaldır</value>
   </data>
   <data name="Uninstaller.Text" xml:space="preserve">
-    <value>Kaldırmak, SleepStrap'ı sisteminizden kaldıracaktır, ve hâlâ yüklü ise varsayılan Roblox başlatıcısını otomatik olarak yeniden yapılandıracaktır.
+    <value>Kaldırmak, SleepBlox'ı sisteminizden kaldıracaktır, ve hâlâ yüklü ise varsayılan Roblox başlatıcısını otomatik olarak yeniden yapılandıracaktır.
 
 Eğer Roblox ile bir sorun yaşadığınızdan dolayı kaldırıyorsanız veya yeniden yüklüyorsanız, ilk önce [bu yardım sayfasını]({0}) okuyun.
 
-Kaldırma işlemi kendisinin artıklarını tamamen temizleyemeyebilir, bu yüzden SleepStrap'ın yüklü olduğu yerdeki artık dosyaları manuel olarak temizlemeniz gerekebilir.
+Kaldırma işlemi kendisinin artıklarını tamamen temizleyemeyebilir, bu yüzden SleepBlox'ın yüklü olduğu yerdeki artık dosyaları manuel olarak temizlemeniz gerekebilir.
 
-SleepStrap "{1}" yerine yüklüydü.</value>
+SleepBlox "{1}" yerine yüklüydü.</value>
   </data>
   <data name="Uninstaller.KeepData.Label" xml:space="preserve">
     <value>Ayarlarımı ve modlarımı tut</value>
   </data>
   <data name="Uninstaller.KeepData.Description" xml:space="preserve">
-    <value>SleepStrap'ın yüklü olduğu yerde tutulacak, ve bir yeniden yükleme de otomatik olarak geri yüklenecektir.</value>
+    <value>SleepBlox'ın yüklü olduğu yerde tutulacak, ve bir yeniden yükleme de otomatik olarak geri yüklenecektir.</value>
   </data>
   <data name="Uninstaller.Uninstall" xml:space="preserve">
     <value>Kaldır</value>
@@ -987,19 +987,19 @@ SleepStrap "{1}" yerine yüklüydü.</value>
     <value>Şuan WebView2 runtime sizde yüklü değil. Masaüstü uygulaması gibi bazı Roblox özellikleri WebView2 runtime olmadan düzgün çalışmayacaktır. WebView2 runtime'yi şimdi indirmek ister misiniz?</value>
   </data>
   <data name="Dialog.CannotCreateShortcuts" xml:space="preserve">
-    <value>SleepStrap Masaüstü ve Başlat menüsüne kısayollar oluşturamadı. Daha sonra ayarlardan oluşturmayı deneyin.</value>
+    <value>SleepBlox Masaüstü ve Başlat menüsüne kısayollar oluşturamadı. Daha sonra ayarlardan oluşturmayı deneyin.</value>
   </data>
   <data name="Dialog.Exception.Info.2.Alt" xml:space="preserve">
-    <value>Bu sorunun daha önce bir düzeltme ile ele alınıp alınmadığını görmek için önce [SleepStrap Wiki'yi]({0}) kontrol edin.
+    <value>Bu sorunun daha önce bir düzeltme ile ele alınıp alınmadığını görmek için önce [SleepBlox Wiki'yi]({0}) kontrol edin.
 
-Eğer sorun ele alınmadıysa, lütfen bu istisnayı bu versiyonun geliştiricilerine bildirin. Bu istisnayı SAKIN SleepStrap'ın GitHub issues sayfasına bildirmeyin, çünkü bu bir resmî olmayan yapıdır.</value>
+Eğer sorun ele alınmadıysa, lütfen bu istisnayı bu versiyonun geliştiricilerine bildirin. Bu istisnayı SAKIN SleepBlox'ın GitHub issues sayfasına bildirmeyin, çünkü bu bir resmî olmayan yapıdır.</value>
     <comment>"fork" in general means "a variation of" or "a different version of". You can alternatively write the first sentence as "...to the maintainers of this version."</comment>
   </data>
   <data name="Installer.Install.Shortcuts.Description" xml:space="preserve">
     <value>Bunlar, çoktan seçmeli bir başlatma menüsü getiren genel kısayollardır. Belirli fonksiyonlar için kısayollar daha sonra ayarlardan oluşturulabilir.</value>
   </data>
   <data name="Menu.Shortcuts.Description" xml:space="preserve">
-    <value>SleepStrap'ın nasıl kolayca başlatılabileceğini yapılandırın.</value>
+    <value>SleepBlox'ın nasıl kolayca başlatılabileceğini yapılandırın.</value>
   </data>
   <data name="Menu.Shortcuts.General.Title" xml:space="preserve">
     <value>Genel</value>
@@ -1039,7 +1039,7 @@ Eğer sorun ele alınmadıysa, lütfen bu istisnayı bu versiyonun geliştiricil
     <value>Kaydedilmemiş değişiklikleriniz var. Kaydetmeden kapatmak istediğinizden emin misiniz?</value>
   </data>
   <data name="InstallChecker.VersionLessThanInstalled" xml:space="preserve">
-    <value>Başlattığınız SleepStrap sürümü sizde şu an yüklü olan sürümden daha eski. Sorunlar ortaya çıkabilir ve ayarlarınız değişebilir. Bir yeniden yükleme önerilir. Devam etmek istediğinizden emin misiniz?</value>
+    <value>Başlattığınız SleepBlox sürümü sizde şu an yüklü olan sürümden daha eski. Sorunlar ortaya çıkabilir ve ayarlarınız değişebilir. Bir yeniden yükleme önerilir. Devam etmek istediğinizden emin misiniz?</value>
   </data>
   <data name="Dialog.PlayerError.FailedLaunch" xml:space="preserve">
     <value>Roblox başlatılamadı.</value>
@@ -1050,7 +1050,7 @@ Eğer sorun ele alınmadıysa, lütfen bu istisnayı bu versiyonun geliştiricil
   <data name="Dialog.PlayerError.HelpInformation" xml:space="preserve">
     <value>Bunun neden yaşandığı ve nasıl çözüleceğine dair bilgi için lütfen [bu yardım makalesini]({0}) okuyun.
 
-Roblox'un [varsayılan başlatıcı]({1}) ile çalışıp çalışmadığına göz atın. Eğer çalışmıyorsa, o zaman bu bir SleepStrap sorunu değildir. Eğer çalışıyorsa, lütfen yardım makalesine göz atın.</value>
+Roblox'un [varsayılan başlatıcı]({1}) ile çalışıp çalışmadığına göz atın. Eğer çalışmıyorsa, o zaman bu bir SleepBlox sorunu değildir. Eğer çalışıyorsa, lütfen yardım makalesine göz atın.</value>
   </data>
   <data name="Common.NetworkError" xml:space="preserve">
     <value>Bir bağlantı sorunu nedeniyle veri yüklenemedi.</value>
@@ -1062,7 +1062,7 @@ Roblox'un [varsayılan başlatıcı]({1}) ile çalışıp çalışmadığına g�
     <value>Destekçiler</value>
   </data>
   <data name="About.Supporters.Description" xml:space="preserve">
-    <value>Bu kişiler, SleepStrap'ı Ko-fi üzerinden desteklemiş kişilerdir. Burada ki herkese çok teşekkürler!
+    <value>Bu kişiler, SleepBlox'ı Ko-fi üzerinden desteklemiş kişilerdir. Burada ki herkese çok teşekkürler!
 Buradaki herkes genel vaatlerine göre sıralanmıştır.</value>
   </data>
   <data name="JsonManager.SettingsLoadFailed" xml:space="preserve">
@@ -1093,12 +1093,12 @@ Buradaki herkes genel vaatlerine göre sıralanmıştır.</value>
     <value>Bu başlatma için, Roblox güncellemeler için kontrol edilmeyecek, ve modlara değişiklikler uygulanmayacaktır.</value>
   </data>
   <data name="Dialog.Connectivity.RobloxUpgradeNeeded" xml:space="preserve">
-    <value>Roblox'un yüklenmesi veya yükseltilmesi gerektiği için SleepStrap devam edemiyor.</value>
+    <value>Roblox'un yüklenmesi veya yükseltilmesi gerektiği için SleepBlox devam edemiyor.</value>
   </data>
   <data name="Installer.Install.CannotOverwrite" xml:space="preserve">
-    <value>SleepStrap önceden bu yola yüklendi ve hâlâ burada, fakat yükleyici eski çalıştırılabilirin üzerine yazamıyor.
+    <value>SleepBlox önceden bu yola yüklendi ve hâlâ burada, fakat yükleyici eski çalıştırılabilirin üzerine yazamıyor.
 
-Lütfen manuel olarak yükleme yolundan SleepStrap.exe'yi silin veya sisteminizi yeniden başlatmayı deneyin, ve sonra yüklemeyi yeniden deneyin.</value>
+Lütfen manuel olarak yükleme yolundan SleepBlox.exe'yi silin veya sisteminizi yeniden başlatmayı deneyin, ve sonra yüklemeyi yeniden deneyin.</value>
   </data>
   <data name="Common.NotAvailable" xml:space="preserve">
     <value>Mevcut değil</value>
@@ -1110,7 +1110,7 @@ Lütfen manuel olarak yükleme yolundan SleepStrap.exe'yi silin veya sisteminizi
     <value>DPI ölçeklendirme ve [tam ekran optimizasyonları]({0}) gibi uygulama parametrelerini yapılandırın.</value>
   </data>
   <data name="Common.RobloxNotInstalled" xml:space="preserve">
-    <value>Roblox henüz yüklenmedi. Bu seçeneği kullanmaya çalışmadan önce lütfen Roblox'u SleepStrap'ı kullanarak en az bir kere başlatın.</value>
+    <value>Roblox henüz yüklenmedi. Bu seçeneği kullanmaya çalışmadan önce lütfen Roblox'u SleepBlox'ı kullanarak en az bir kere başlatın.</value>
   </data>
   <data name="Installer.ShouldCancel" xml:space="preserve">
     <value>Yüklemeyi iptal etmek istediğinizden emin misiniz?</value>
@@ -1128,10 +1128,10 @@ Lütfen manuel olarak yükleme yolundan SleepStrap.exe'yi silin veya sisteminizi
     <value>Roblox simgelerini klasöre çıkar</value>
   </data>
   <data name="Menu.Shortcuts.ExtractIcons.Description" xml:space="preserve">
-    <value>Kısayollarınız için SleepStrap'ın çeşitli Roblox simgelerini kullanmanızı sağlar. [Nasıl olduğunu görün.]({0})</value>
+    <value>Kısayollarınız için SleepBlox'ın çeşitli Roblox simgelerini kullanmanızı sağlar. [Nasıl olduğunu görün.]({0})</value>
   </data>
   <data name="Dialog.RegistryWriteError" xml:space="preserve">
-    <value>SleepStrap Windows Kayıt Defterine yazamıyor. Bir antivirüs yazılımı muhtemelen müdahale ediyor ve sorunlara neden oluyor. Lütfen SleepStrap'ın operasyonunu sınırlayan bir şeyin olmadığını kontrol edin.</value>
+    <value>SleepBlox Windows Kayıt Defterine yazamıyor. Bir antivirüs yazılımı muhtemelen müdahale ediyor ve sorunlara neden oluyor. Lütfen SleepBlox'ın operasyonunu sınırlayan bir şeyin olmadığını kontrol edin.</value>
   </data>
   <data name="About.Supporters.Monthly" xml:space="preserve">
     <value>Aylık</value>
@@ -1160,7 +1160,7 @@ Etkinken, kapatana kadar bir döngü içerisinde Ayarları kapattıktan sonra ot
 Test modu açmak ister misiniz?</value>
   </data>
   <data name="About.Translators.Description" xml:space="preserve">
-    <value>SleepStrap'ın tüm çevirileri [Crowdin]({0}) üzerinden kitle kaynaklıdır. Burada listelenen herkes cömertce SleepStrap'ı yerelleştirmek için zamanlarını ve çabalarını harcayan kişilerdir. Buradaki herkese çok teşekkürler!</value>
+    <value>SleepBlox'ın tüm çevirileri [Crowdin]({0}) üzerinden kitle kaynaklıdır. Burada listelenen herkes cömertce SleepBlox'ı yerelleştirmek için zamanlarını ve çabalarını harcayan kişilerdir. Buradaki herkese çok teşekkürler!</value>
   </data>
   <data name="Common.Navigation.Install" xml:space="preserve">
     <value>Yükle</value>
@@ -1180,7 +1180,7 @@ Test modu açmak ister misiniz?</value>
     <value>Özel</value>
   </data>
   <data name="Bootstrapper.FilesInUse" xml:space="preserve">
-    <value>SleepStrap Roblox'u yükseltmeye çalıştı ancak başaramadı çünkü Roblox'un dosyaları hâlâ kullanımda.
+    <value>SleepBlox Roblox'u yükseltmeye çalıştı ancak başaramadı çünkü Roblox'un dosyaları hâlâ kullanımda.
 
 Lütfen Roblox'un dosyalarını kullanabiliyor olan uygulamaları kapatın, ve tekrar başlatın.</value>
     <comment>This is *not* for when Roblox is still running when trying to upgrade. This applies to files being open (i.e. image assets)</comment>
@@ -1191,10 +1191,10 @@ Lütfen Roblox'un dosyalarını kullanabiliyor olan uygulamaları kapatın, ve t
   </data>
   <data name="Common.Export" xml:space="preserve">
     <value>Dışa aktar</value>
-    <comment>Currently used under the "SleepStrap" settings tab for the button to export diagnostic data</comment>
+    <comment>Currently used under the "SleepBlox" settings tab for the button to export diagnostic data</comment>
   </data>
   <data name="Dialog.Connectivity.Preventing" xml:space="preserve">
-    <value>Muhtemelen bir şey SleepStrap'ın internet'e bağlanmasına engel oluyor.</value>
+    <value>Muhtemelen bir şey SleepBlox'ın internet'e bağlanmasına engel oluyor.</value>
   </data>
   <data name="Dialog.Connectivity.TimedOut" xml:space="preserve">
     <value>Bağlantı zaman aşımına uğradı, bu da zayıf bir internet bağlantısının veya bir güvenlik duvarı engelinin işareti olabilir.</value>
@@ -1222,10 +1222,10 @@ Lütfen Roblox'un dosyalarını kullanabiliyor olan uygulamaları kapatın, ve t
     <value>Roblox artık Windows 7 ve 8,1. desteklemiyor. Roblox'u oynamaya devam etmek için Windows 10 veya daha üst versiyona geçiş yapınız.</value>
   </data>
   <data name="Bootstrapper.Status.UpgradingSleepStrap" xml:space="preserve">
-    <value>SleepStrap'in en yeni sürümü indiriliyor...</value>
+    <value>SleepBlox'in en yeni sürümü indiriliyor...</value>
   </data>
   <data name="Menu.SleepStrap.Description" xml:space="preserve">
-    <value>SleepStrap'ın davranışı ile ilgili ayarları yapılandırın.</value>
+    <value>SleepBlox'ın davranışı ile ilgili ayarları yapılandırın.</value>
   </data>
   <data name="Menu.SleepStrap.Analytics.Title" xml:space="preserve">
     <value>Analitikleri göndermeyi etkinleştir</value>
@@ -1390,7 +1390,7 @@ Lütfen Roblox'un dosyalarını kullanabiliyor olan uygulamaları kapatın, ve t
   <data name="CustomTheme.Errors.SetupFailed" xml:space="preserve">
     <value>Özel bootstrapper kurulamadı: {0}.
 Otomatiklen {1}'e alınılıyor.</value>
-    <comment>{0} is the error reason, {1} is the theme name (e.g. SleepStrap (Classic))</comment>
+    <comment>{0} is the error reason, {1} is the theme name (e.g. SleepBlox (Classic))</comment>
   </data>
   <data name="Menu.Appearance.CustomThemes.NoneSelected" xml:space="preserve">
     <value>Özel tema seçilmedi.</value>
@@ -1457,7 +1457,7 @@ Otomatiklen {1}'e alınılıyor.</value>
     <value>Düzenle</value>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>SleepStrap Hakkında</value>
+    <value>SleepBlox Hakkında</value>
   </data>
   <data name="Menu.FastFlags.Presets.EscapeMenuVersion.Title" xml:space="preserve">
     <value>Tercih edilen ESC menüsü versiyonu</value>
@@ -1469,7 +1469,7 @@ Otomatiklen {1}'e alınılıyor.</value>
     <value>Kare hızı limiti (FPS)</value>
   </data>
   <data name="Menu.FastFlags.Presets.HideGuis.Description" xml:space="preserve">
-    <value>[Klavye kısayolları]({0}) ile değiştirilir. Yalnızca [SleepStrap grubu]({1}) içindeyseniz çalışır.</value>
+    <value>[Klavye kısayolları]({0}) ile değiştirilir. Yalnızca [SleepBlox grubu]({1}) içindeyseniz çalışır.</value>
   </data>
   <data name="Menu.FastFlags.Presets.HideGuis.Title" xml:space="preserve">
     <value>GUI'leri gizleme özelliğini etkinleştir</value>

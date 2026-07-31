@@ -155,7 +155,7 @@
                     </Grid.ColumnDefinitions>
                     <Image Width="26" Height="26" Source="pack://application:,,,/SleepStrap.ico" RenderOptions.BitmapScalingMode="HighQuality" />
                     <StackPanel Grid.Column="1" Margin="9,0,0,0" VerticalAlignment="Center">
-                        <TextBlock Text="SleepStrap" FontSize="17" FontWeight="SemiBold" Foreground="{DynamicResource SleepStrapAccentBrush}" />
+                        <TextBlock Text="SleepBlox" FontSize="17" FontWeight="SemiBold" Foreground="{DynamicResource SleepStrapAccentBrush}" />
                         <TextBlock Text="{Binding VersionText}" Margin="0,1,0,0" FontSize="10.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                     </StackPanel>
                 </Grid>
@@ -167,6 +167,7 @@
                     <ui:NavigationItem Content="Skybox" PageType="{x:Type pages:SkyboxPage}" Icon="Cube24" Tag="skybox" />
                     <ui:NavigationItem Content="Textures" PageType="{x:Type pages:TexturesPage}" Icon="WrenchScrewdriver20" Tag="textures" />
                     <ui:NavigationItem Content="PC" PageType="{x:Type pages:RivalsPage}" Icon="PlaySettings20" Tag="pc" />
+                    <ui:NavigationItem Content="Experimental" PageType="{x:Type pages:ExperimentalPage}" Icon="Beaker24" Tag="experimental" />
                     <ui:NavigationItem Content="Clipping" PageType="{x:Type pages:ClippingPage}" Icon="VideoClip24" Tag="clipping" />
                     <ui:NavigationItem Content="Other" PageType="{x:Type pages:OtherPage}" Icon="MoreHorizontal24" Tag="other" />
                 </ui:NavigationFluent.Items>

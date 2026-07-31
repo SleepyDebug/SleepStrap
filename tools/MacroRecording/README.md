@@ -10,5 +10,5 @@ weapon positions.
 Both recorders use `1` (or Numpad `1`) to capture the mouse position,
 `Ctrl+Z` to undo, `F8` to show progress, and `F10` to reset.
 
-These files are not required at runtime; SleepStrap embeds the finalized position
+These files are not required at runtime; SleepBlox embeds the finalized position
 data in the application.

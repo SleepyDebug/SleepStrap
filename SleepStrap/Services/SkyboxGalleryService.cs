@@ -7,6 +7,22 @@ namespace SleepStrap.Services
     {
         private const string ResourcePrefix = "SleepStrap.Skyboxes/";
 
+        /// <summary>
+        /// Raised when a user-imported sky is added or when its master availability
+        /// switch changes. Pages can rebuild the gallery without reopening settings.
+        /// </summary>
+        public static event EventHandler? GalleryChanged
+        {
+            add => UserSkyboxService.UserSkyboxChanged += value;
+            remove => UserSkyboxService.UserSkyboxChanged -= value;
+        }
+
+        /// <summary>
+        /// Signals pages to rebuild their gallery after a caller has changed the
+        /// imported-sky master setting directly.
+        /// </summary>
+        public static void NotifyGalleryChanged() => UserSkyboxService.NotifyChanged();
+
         // Keep the gallery grouped by the dominant color of each sky.
         private static readonly string[] PresetNames =
         {
@@ -23,6 +39,14 @@ namespace SleepStrap.Services
             PresetNames.Contains(name, StringComparer.OrdinalIgnoreCase) ||
             String.Equals(name, "Zoff", StringComparison.OrdinalIgnoreCase);
 
+        public static bool IsUserImported(string? selectionKey) =>
+            UserSkyboxService.IsUserSkyboxKey(selectionKey);
+
+        public static bool AreUserImportedSkyboxesEnabled => UserSkyboxService.IsEnabled;
+
+        public static bool TryGetUserSkyboxDirectory(string? selectionKey, out string directory) =>
+            UserSkyboxService.TryGetSkyboxDirectory(selectionKey, out directory);
+
         public static string GetResourceFolder(string name) =>
             String.Equals(name, "Zoff", StringComparison.OrdinalIgnoreCase) ? "Pandora" : name;
 
@@ -30,14 +54,19 @@ namespace SleepStrap.Services
         {
             List<SkyboxChoice> choices = new()
             {
-                new SkyboxChoice("None", "", null, true)
+                new SkyboxChoice("None", "", null, true, selectionKey: "")
             };
 
             foreach (string name in PresetNames)
             {
                 string displayName = String.Equals(name, "Pandora", StringComparison.OrdinalIgnoreCase) ? "Zoff" : name;
-                choices.Add(new SkyboxChoice(displayName, name, LoadPreview(name)));
+                choices.Add(new SkyboxChoice(displayName, name, LoadPreview(name), selectionKey: displayName));
             }
+
+            // Imported entries are deliberately included even while the master
+            // switch is off. Their IsAvailable state tells the UI to render them
+            // disabled without hiding a user's saved work.
+            choices.AddRange(UserSkyboxService.GetChoices());
 
             return choices;
         }

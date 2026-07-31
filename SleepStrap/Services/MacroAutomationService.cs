@@ -99,7 +99,7 @@ namespace SleepStrap.Services
             }
 
             if (GetForegroundWindow() != robloxWindow)
-                throw new InvalidOperationException("SleepStrap could not activate the Roblox window.");
+                throw new InvalidOperationException($"{App.ProjectName} could not activate the Roblox window.");
 
             await Task.Delay(180, cancellationToken);
             bool selectorOpen = false;
@@ -215,7 +215,7 @@ namespace SleepStrap.Services
             MacroPoint start = MapRecordedPointToWindow(recordedStart, window);
             MacroPoint end = MapRecordedPointToWindow(recordedEnd, window);
             if (!SetCursorPos(start.X, start.Y))
-                throw new InvalidOperationException("SleepStrap could not start the Auto Rejoin drag.");
+                throw new InvalidOperationException($"{App.ProjectName} could not start the Auto Rejoin drag.");
 
             await Task.Delay(80, cancellationToken);
             SendMouseButton(MouseEventLeftDown);
@@ -223,7 +223,7 @@ namespace SleepStrap.Services
             {
                 await Task.Delay(120, cancellationToken);
                 if (!SetCursorPos(end.X, end.Y))
-                    throw new InvalidOperationException("SleepStrap could not finish the Auto Rejoin drag.");
+                    throw new InvalidOperationException($"{App.ProjectName} could not finish the Auto Rejoin drag.");
                 await Task.Delay(100, cancellationToken);
             }
             finally

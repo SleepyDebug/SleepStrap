@@ -59,7 +59,7 @@ namespace SleepStrap.Services
         {
             if (backup.Count == 0)
                 throw new InvalidOperationException(
-                    "SleepStrap has no NVIDIA profile backup to restore. The driver profile was not changed.");
+                    $"{App.ProjectName} has no NVIDIA profile backup to restore. The driver profile was not changed.");
 
             using var api = new NvApi();
             IntPtr session = api.CreateSession();

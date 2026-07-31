@@ -59,7 +59,7 @@ outputFile := outputDirectory "\list_weapon_positions.csv"
 positions := []
 DirCreate outputDirectory
 
-recorder := Gui("+AlwaysOnTop", "SleepStrap List Weapon Recorder")
+recorder := Gui("+AlwaysOnTop", "SleepBlox List Weapon Recorder")
 recorder.SetFont("s10", "Segoe UI")
 recorder.MarginX := 18
 recorder.MarginY := 16

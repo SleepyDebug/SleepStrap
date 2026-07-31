@@ -25,7 +25,7 @@ namespace SleepStrap.Services
 
             try
             {
-                App.Logger.WriteLine(LogIdent, "Checking GitHub for a newer SleepStrap release");
+                App.Logger.WriteLine(LogIdent, $"Checking GitHub for a newer {App.ProjectName} release");
                 GithubRelease? release = await App.GetLatestRelease();
                 if (release?.Assets is null)
                     return false;
@@ -34,13 +34,16 @@ namespace SleepStrap.Services
                 Version releaseVersion = Utilities.GetVersionFromString(release.TagName);
                 if (installedVersion >= releaseVersion)
                 {
-                    App.Logger.WriteLine(LogIdent, $"SleepStrap {installedVersion} is current (latest: {releaseVersion})");
+                    App.Logger.WriteLine(LogIdent, $"{App.ProjectName} {installedVersion} is current (latest: {releaseVersion})");
                     return false;
                 }
 
                 GithubReleaseAsset? asset = release.Assets
                     .Where(item => item.Name.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
-                    .OrderByDescending(item => item.Name.StartsWith("SleepStrap", StringComparison.OrdinalIgnoreCase))
+                    // Prefer the rebranded file name while still accepting an older
+                    // release asset during the transition.
+                    .OrderByDescending(item => item.Name.StartsWith(App.ProjectName, StringComparison.OrdinalIgnoreCase))
+                    .ThenByDescending(item => item.Name.StartsWith(App.LegacyProjectName, StringComparison.OrdinalIgnoreCase))
                     .FirstOrDefault();
                 if (asset is null)
                 {
@@ -49,7 +52,7 @@ namespace SleepStrap.Services
                 }
 
                 MessageBoxResult answer = Frontend.ShowMessageBox(
-                    $"SleepStrap {releaseVersion} is available on GitHub. Update now?",
+                    $"{App.ProjectName} {releaseVersion} is available on GitHub. Update now?",
                     MessageBoxImage.Question,
                     MessageBoxButton.YesNo,
                     MessageBoxResult.No);
@@ -67,7 +70,7 @@ namespace SleepStrap.Services
 
                 int closedProcessCount = ProcessShutdownService.CloseOtherSleepStrapProcesses();
                 if (closedProcessCount > 0)
-                    App.Logger.WriteLine(LogIdent, $"Closed {closedProcessCount} other SleepStrap process(es) before updating");
+                    App.Logger.WriteLine(LogIdent, $"Closed {closedProcessCount} other {App.ProjectName} process(es) before updating");
 
                 CleanupStaleUpdateDownloads();
 
@@ -93,7 +96,7 @@ namespace SleepStrap.Services
 
                 _updateLock = new InterProcessLock("AutoUpdater", TimeSpan.FromSeconds(5));
                 if (!_updateLock.IsAcquired)
-                    throw new InvalidOperationException("Another SleepStrap update is already running.");
+                    throw new InvalidOperationException($"Another {App.ProjectName} update is already running.");
 
                 ProcessStartInfo startInfo = new()
                 {
@@ -109,14 +112,14 @@ namespace SleepStrap.Services
 
                 App.Settings.Save();
                 Process.Start(startInfo);
-                App.Logger.WriteLine(LogIdent, $"Started SleepStrap {releaseVersion} updater");
+                App.Logger.WriteLine(LogIdent, $"Started {App.ProjectName} {releaseVersion} updater");
                 return true;
             }
             catch (Exception ex)
             {
                 App.Logger.WriteException(LogIdent, ex);
                 Frontend.ShowMessageBox(
-                    $"SleepStrap could not check for or install the GitHub update.\n\n{ex.Message}",
+                    $"{App.ProjectName} could not check for or install the GitHub update.\n\n{ex.Message}",
                     MessageBoxImage.Information);
                 return false;
             }

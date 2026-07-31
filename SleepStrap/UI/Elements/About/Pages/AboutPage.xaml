@@ -23,7 +23,7 @@
             <Image x:Name="Image1" Width="96" Height="96" Source="pack://application:,,,/SleepStrap.ico" RenderOptions.BitmapScalingMode="HighQuality" />
             <Image x:Name="Image2" Width="96" Height="96" Source="pack://application:,,,/Resources/BootstrapperStyles/ByfronDialog/Matt.png" RenderOptions.BitmapScalingMode="HighQuality" Opacity="0" />
         </Grid>
-        <TextBlock Text="SleepStrap" Margin="0,14,0,0" HorizontalAlignment="Center" FontSize="28" FontWeight="SemiBold" />
+        <TextBlock Text="SleepBlox" Margin="0,14,0,0" HorizontalAlignment="Center" FontSize="28" FontWeight="SemiBold" />
         <TextBlock Text="{Binding Version, Mode=OneTime}" Margin="0,4,0,18" HorizontalAlignment="Center" Foreground="{DynamicResource TextFillColorTertiaryBrush}" />
         <ui:Anchor Content="Discord" Icon="Chat24" NavigateUri="https://discord.gg/W3CMjx8C7s" HorizontalAlignment="Center" />
     </StackPanel>

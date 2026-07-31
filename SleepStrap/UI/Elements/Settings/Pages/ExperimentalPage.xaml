@@ -1,0 +1,188 @@
+<ui:UiPage x:Class="SleepStrap.UI.Elements.Settings.Pages.ExperimentalPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:dmodels="clr-namespace:SleepStrap.UI.ViewModels.Settings"
+      mc:Ignorable="d" d:DataContext="{d:DesignInstance dmodels:ExperimentalViewModel, IsDesignTimeCreatable=True}"
+      d:DesignHeight="650" d:DesignWidth="800" Title="Experimental" Scrollable="True">
+    <StackPanel Margin="0,0,14,24">
+        <Border Padding="18,14,18,12" CornerRadius="14" BorderThickness="0" Background="#C40A0A0C">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Experimental" FontSize="28" FontWeight="SemiBold" VerticalAlignment="Center" />
+                    <ui:SymbolIcon Grid.Column="1" Symbol="Beaker24" FontSize="34" Foreground="White" Opacity="0.72" />
+                </Grid>
+                <TextBlock Grid.Row="1" Text="Strange tools, kept off until you enable them."
+                           Margin="0,8,0,0" FontSize="12"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </Grid>
+        </Border>
+
+        <Border Margin="0,14,0,0" Padding="16,14" CornerRadius="12" BorderThickness="1"
+                BorderBrush="#55FFD166" Background="#241B1608">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <ui:SymbolIcon Symbol="Warning24" FontSize="24" Foreground="#FFFFD166" Margin="0,1,12,0" />
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Beta features" FontSize="15" FontWeight="SemiBold" Foreground="White" />
+                    <TextBlock Margin="0,5,0,0" FontSize="12" TextWrapping="Wrap"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                               Text="These features are experimental. Their allowed status, availability, and reliability are not guaranteed, and they may change or be removed later. Have fun with what is here, but use it at your own risk. SleepBlox does not alter Roblox's executable code." />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ui:CardExpander Margin="0,14,0,0" IsExpanded="True">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Auto clicker" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Only clicks while Roblox is focused" Margin="0,3,0,0" FontSize="12"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Enable auto clicker" FontSize="14" />
+                        <TextBlock Text="{Binding AutoClickerStatus}" Margin="0,3,0,0" FontSize="12"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                    <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding AutoClickerEnabled, Mode=TwoWay}"
+                                     VerticalAlignment="Center" />
+                </Grid>
+
+                <Separator Margin="0,16" />
+
+                <TextBlock Text="Toggle hotkey" FontSize="14" FontWeight="SemiBold" />
+                <TextBox x:Name="AutoClickerHotkeyBox" Margin="0,8,0,0" Height="38" IsReadOnly="True" Cursor="Hand"
+                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                         FontWeight="SemiBold" Text="{Binding AutoClickerHotkeyDisplay, Mode=OneWay}"
+                         PreviewMouseLeftButtonDown="AutoClickerHotkeyBox_PreviewMouseLeftButtonDown"
+                         PreviewKeyDown="AutoClickerHotkeyBox_PreviewKeyDown"
+                         LostKeyboardFocus="AutoClickerHotkeyBox_LostKeyboardFocus" />
+
+                <Grid Margin="0,18,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="90" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Speed" FontSize="14" FontWeight="SemiBold" />
+                        <Slider Minimum="1" Maximum="50" TickFrequency="1" IsSnapToTickEnabled="True"
+                                Value="{Binding ClicksPerSecond, Mode=TwoWay}" Margin="0,9,12,0" />
+                    </StackPanel>
+                    <TextBox Grid.Column="1" Text="{Binding ClicksPerSecond, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                </Grid>
+                <TextBlock Text="clicks per second" HorizontalAlignment="Right" Margin="0,4,6,0" FontSize="11"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </ui:CardExpander>
+
+        <ui:CardExpander Margin="0,10,0,0" IsExpanded="True">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Roblox hold-to-spam" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Holding left click becomes repeated clicks in Roblox" Margin="0,3,0,0" FontSize="12"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="Replace held left click" FontSize="14" VerticalAlignment="Center" />
+                    <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding RobloxHoldToSpamEnabled, Mode=TwoWay}"
+                                     VerticalAlignment="Center" />
+                </Grid>
+
+                <Grid Margin="0,18,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="90" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Hold click speed" FontSize="14" FontWeight="SemiBold" />
+                        <Slider Minimum="1" Maximum="50" TickFrequency="1" IsSnapToTickEnabled="True"
+                                Value="{Binding RobloxHoldToSpamClicksPerSecond, Mode=TwoWay}" Margin="0,9,12,0" />
+                    </StackPanel>
+                    <TextBox Grid.Column="1" Text="{Binding RobloxHoldToSpamClicksPerSecond, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                </Grid>
+                <TextBlock Text="clicks per second while holding left click" HorizontalAlignment="Right" Margin="0,4,6,0" FontSize="11"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </ui:CardExpander>
+
+        <ui:CardExpander Margin="0,10,0,0" IsExpanded="True">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Custom skyboxes" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="Import a PNG panorama without changing Roblox" Margin="0,3,0,0" FontSize="12"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Enable imported skyboxes" FontSize="14" />
+                        <TextBlock Text="Off by default. Your saved PNG skies are kept even when disabled."
+                                   Margin="0,3,0,0" FontSize="12"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                    <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding CustomImportedSkyboxesEnabled, Mode=TwoWay}"
+                                     VerticalAlignment="Center" />
+                </Grid>
+
+                <Separator Margin="0,16" />
+
+                <TextBlock Text="Skybox name" FontSize="14" FontWeight="SemiBold" />
+                <TextBox Margin="0,8,0,0" Height="38" MaxLength="64"
+                         VerticalContentAlignment="Center"
+                         Text="{Binding CustomSkyboxName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                <TextBlock Text="PNG panorama" Margin="0,16,0,0" FontSize="14" FontWeight="SemiBold" />
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox Height="38" IsReadOnly="True" VerticalContentAlignment="Center"
+                             Text="{Binding CustomSkyboxSourceDisplay, Mode=OneWay}" />
+                    <ui:Button Grid.Column="1" Content="Choose PNG" Icon="ImageAdd20" Margin="10,0,0,0"
+                               Command="{Binding ChooseCustomSkyboxPngCommand}" />
+                </Grid>
+
+                <ui:Button Content="Add skybox" Icon="Add20" Appearance="Primary" Margin="0,14,0,0"
+                           HorizontalAlignment="Left" MinWidth="140"
+                           Command="{Binding ImportCustomSkyboxCommand}" />
+                <TextBlock Text="{Binding CustomSkyboxStatus}" Margin="0,10,0,0" FontSize="12"
+                           TextWrapping="Wrap"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+        </ui:CardExpander>
+    </StackPanel>
+</ui:UiPage>

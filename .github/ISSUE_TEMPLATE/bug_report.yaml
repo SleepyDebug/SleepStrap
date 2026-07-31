@@ -5,8 +5,8 @@ body:
   - type: input
     id: version
     attributes:
-      label: SleepStrap Version
-      description: "What version of SleepStrap are you using?"
+      label: SleepBlox Version
+      description: "What version of SleepBlox are you using?"
       placeholder: "v2.9.0.0"
     validations:
       required: true
@@ -30,7 +30,7 @@ body:
   - type: textarea
     id: log
     attributes:
-      label: SleepStrap Log
-      description: If you're getting a SleepStrap Exception error, upload your log file here. Otherwise, just leave it empty.
+      label: SleepBlox Log
+      description: If you're getting a SleepBlox Exception error, upload your log file here. Otherwise, just leave it empty.
       value: "N/A"
       render: text

@@ -3,12 +3,13 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:base="clr-namespace:SleepStrap.UI.Elements.Base"
+    xmlns:app="clr-namespace:SleepStrap"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:SleepStrap.UI.Elements.Bootstrapper"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-    Title="SleepStrap"
+    Title="{x:Static app:App.ProjectName}"
     Width="800"
     Height="450"
     MinWidth="150"
@@ -44,7 +45,7 @@
 
             <ui:TitleBar
                 x:Name="RootTitleBar"
-                Title="SleepStrap"
+                Title="{x:Static app:App.ProjectName}"
                 Grid.Row="0"
                 Padding="8"
                 Panel.ZIndex="1001"

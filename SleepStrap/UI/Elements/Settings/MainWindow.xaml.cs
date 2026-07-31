@@ -55,7 +55,7 @@ namespace SleepStrap.UI.Elements.Settings
 
             // Macro remains in the source tree for future work, but is intentionally
             // excluded from navigation and saved-page restoration for now.
-            Type[] visiblePages = { typeof(SkyboxPage), typeof(TexturesPage), typeof(RivalsPage), typeof(ClippingPage), typeof(OtherPage) };
+            Type[] visiblePages = { typeof(SkyboxPage), typeof(TexturesPage), typeof(RivalsPage), typeof(ExperimentalPage), typeof(ClippingPage), typeof(OtherPage) };
             if (lastPage != null && visiblePages.Contains(lastPage))
                 SafeNavigate(lastPage);
 

@@ -14,10 +14,13 @@ namespace SleepStrap
     public partial class App : Application
     {
 #if QA_BUILD
-        public const string ProjectName = "SleepStrap-QA";
+        public const string ProjectName = "SleepBlox-QA";
 #else
-        public const string ProjectName = "SleepStrap";
+        public const string ProjectName = "SleepBlox";
 #endif
+        // Keep the old identity only for migration. Existing installations continue
+        // to use their original folder and settings after the public rebrand.
+        public const string LegacyProjectName = "SleepStrap";
         public const string ProjectOwner = "SleepyDebug";
         public const string ProjectRepository = "SleepyDebug/SleepStrap";
         public const string ProjectDownloadLink = "https://github.com/SleepyDebug/SleepStrap/releases";
@@ -26,6 +29,16 @@ namespace SleepStrap
         public const string ProjectRemoteDataLink = "https://config.fishstrap.app/v1/Data.json";
         public const bool SupportsSelfUpdates = true;
 
+        public static string BootstrapperMutexName => $"{ProjectName}-Bootstrapper";
+        public static string BackgroundUpdaterMutexName => $"{ProjectName}-BackgroundUpdater";
+        public static string BackgroundUpdaterKillEventName => $"{ProjectName}-BackgroundUpdaterKillEvent";
+        public static string MultiInstanceWatcherEventName => $"{ProjectName}-MultiInstanceWatcherInitialisationFinished";
+
+        public const string LegacyBootstrapperMutexName = "SleepStrap-Bootstrapper";
+        public const string LegacyBackgroundUpdaterMutexName = "SleepStrap-BackgroundUpdater";
+        public const string LegacyBackgroundUpdaterKillEventName = "SleepStrap-BackgroundUpdaterKillEvent";
+        public const string LegacyMultiInstanceWatcherEventName = "SleepStrap-MultiInstanceWatcherInitialisationFinished";
+
         public const string RobloxPlayerAppName = "RobloxPlayerBeta.exe";
         public const string RobloxStudioAppName = "RobloxStudioBeta.exe";
         // one day ill add studio support, haha i never did!
@@ -33,6 +46,7 @@ namespace SleepStrap
 
         // simple shorthand for extremely frequently used and long string - this goes under HKCU
         public const string UninstallKey = $@"Software\Microsoft\Windows\CurrentVersion\Uninstall\{ProjectName}";
+        public const string LegacyUninstallKey = @"Software\Microsoft\Windows\CurrentVersion\Uninstall\SleepStrap";
 
         public const string ApisKey = $"Software\\{ProjectName}";
 
@@ -234,7 +248,19 @@ namespace SleepStrap
             LaunchSettings = new LaunchSettings(e.Args);
 
             // installation check begins here
-            using var uninstallKey = Registry.CurrentUser.OpenSubKey(UninstallKey);
+            // A rebranded build must still find the existing SleepStrap install so
+            // it keeps the user's configuration, Roblox registration, and local mods.
+            RegistryKey? currentUninstallKey = Registry.CurrentUser.OpenSubKey(UninstallKey);
+#if !QA_BUILD
+            RegistryKey? legacyUninstallKey = currentUninstallKey is null
+                ? Registry.CurrentUser.OpenSubKey(LegacyUninstallKey)
+                : null;
+            bool rebrandingLegacyInstall = legacyUninstallKey is not null;
+            using RegistryKey? uninstallKey = currentUninstallKey ?? legacyUninstallKey;
+#else
+            const bool rebrandingLegacyInstall = false;
+            using RegistryKey? uninstallKey = currentUninstallKey;
+#endif
             string? installLocation = null;
             bool fixInstallLocation = false;
 
@@ -325,8 +351,8 @@ namespace SleepStrap
                 FastFlags.Load();
                 GlobalSettings.Load();
 
-                // Older SleepStrap builds hard-disabled this setting. Migrate those
-                // installations now that releases are published in the SleepStrap repo.
+                // Older builds hard-disabled this setting. Migrate those
+                // installations now that releases are published in the current repo.
                 if (!Settings.Prop.CheckForUpdates)
                 {
                     Settings.Prop.CheckForUpdates = true;
@@ -341,10 +367,18 @@ namespace SleepStrap
 
                 Locale.Set(Settings.Prop.Locale);
 
+                // Finish the public rebrand on existing installations. Without this,
+                // browser protocols and shortcuts can keep launching an old-named
+                // executable even after a user has installed SleepBlox.
+                if (rebrandingLegacyInstall)
+                    Installer.MigrateLegacyInstallation();
+
                 if (!LaunchSettings.BypassUpdateCheck)
                     Installer.HandleUpgrade();
 
-                if (!LaunchSettings.ClippingFlag.Active && await Services.AppUpdateService.CheckAndPromptAsync())
+                bool isBackgroundHost = LaunchSettings.ClippingFlag.Active || LaunchSettings.ExperimentalFlag.Active;
+
+                if (!isBackgroundHost && await Services.AppUpdateService.CheckAndPromptAsync())
                 {
                     SoftTerminate();
                     return;
@@ -355,11 +389,14 @@ namespace SleepStrap
                 WindowsRegistry.RegisterApis(); // we want to register those early on
                                                 // so we wont have any issues with bloxshade
 
-                if (!LaunchSettings.ClippingFlag.Active)
+                if (!isBackgroundHost)
                     Services.ClippingHostService.StopRemovedSleePlayer();
 
-                if (!LaunchSettings.ClippingFlag.Active && Settings.Prop.ClippingEnabled)
+                if (!isBackgroundHost && Settings.Prop.ClippingEnabled)
                     Services.ClippingHostService.EnsureStarted();
+
+                if (!isBackgroundHost)
+                    Services.ExperimentalClickerHostService.EnsureStarted();
 
                 LaunchHandler.ProcessLaunchArgs();
             }

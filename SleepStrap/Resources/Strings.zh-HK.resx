@@ -1,17 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Bootstrapper.AutoUpdateFailed" xml:space="preserve">
-    <value>SleepStrap 無法自動更新到版本 {0}。請從網站下載並執行手動更新。</value>
+    <value>SleepBlox 無法自動更新到版本 {0}。請從網站下載並執行手動更新。</value>
   </data>
   <data name="Bootstrapper.ConfirmLaunch" xml:space="preserve">
     <value>目前 Roblox 執行中，而開另一個程式會關閉目前執行中的程式。你確定要繼續開啓嗎？</value>
@@ -127,13 +127,13 @@
     <value>Roblox 伺服器現在可能發生了故障。請參閱{0}以了解更多資訊。</value>
   </data>
   <data name="Dialog.Connectivity.BadConnection" xml:space="preserve">
-    <value>無法建立連線，這可能表示網際網路連線較差或防火牆封鎖。如果您的連線正常運作，請確保您的防毒軟體沒有封鎖 SleepStrap。</value>
+    <value>無法建立連線，這可能表示網際網路連線較差或防火牆封鎖。如果您的連線正常運作，請確保您的防毒軟體沒有封鎖 SleepBlox。</value>
   </data>
   <data name="Bootstrapper.FirstRunUninstall" xml:space="preserve">
-    <value>你必須要安裝 SleepStrap 才能解除安裝。</value>
+    <value>你必須要安裝 SleepBlox 才能解除安裝。</value>
   </data>
   <data name="Bootstrapper.NotEnoughSpace" xml:space="preserve">
-    <value>你的電腦沒有足夠儲存空間來安裝 SleepStrap 和 Roblox，請先釋放一些儲存空間然後再試。</value>
+    <value>你的電腦沒有足夠儲存空間來安裝 SleepBlox 和 Roblox，請先釋放一些儲存空間然後再試。</value>
   </data>
   <data name="Bootstrapper.Status.ApplyingModifications" xml:space="preserve">
     <value>正在套用 Roblox 的修改...</value>
@@ -169,10 +169,10 @@
     <comment>Text for style previews that use text button that says "Cancel"</comment>
   </data>
   <data name="Bootstrapper.SuccessfullyUninstalled" xml:space="preserve">
-    <value>SleepStrap 已成功解除安裝</value>
+    <value>SleepBlox 已成功解除安裝</value>
   </data>
   <data name="Bootstrapper.Uninstall.RobloxRunning" xml:space="preserve">
-    <value>Roblox 目前正在執行，但必須在解除安裝 SleepStrap 之前關閉。 您是否要立即關閉 Roblox 嗎？</value>
+    <value>Roblox 目前正在執行，但必須在解除安裝 SleepBlox 之前關閉。 您是否要立即關閉 Roblox 嗎？</value>
   </data>
   <data name="Bootstrapper.WMFNotFound" xml:space="preserve">
     <value>你似乎缺乏 Windows 媒體基礎元件，這很大機會是你的 Windows 作業系統是N版本，請先安裝它然後再開啓 Roblox。</value>
@@ -276,22 +276,22 @@
     <value>連接錯誤</value>
   </data>
   <data name="Dialog.Connectivity.UnableToConnect" xml:space="preserve">
-    <value>SleepStrap 無法連接到 {0}</value>
+    <value>SleepBlox 無法連接到 {0}</value>
     <comment>{0} is the name of a service (i.e. Roblox, GitHub)</comment>
   </data>
   <data name="Dialog.Exception.CopyLogContents" xml:space="preserve">
     <value>複製日誌內容</value>
   </data>
   <data name="Dialog.Exception.Info.1" xml:space="preserve">
-    <value>執行 SleepStrap 時發生未知錯誤</value>
+    <value>執行 SleepBlox 時發生未知錯誤</value>
   </data>
   <data name="Dialog.Exception.Info.2" xml:space="preserve">
-    <value>請先瀏覽[SleepStrap Wiki]({0}) 來看此問題是否已解決。
+    <value>請先瀏覽[SleepBlox Wiki]({0}) 來看此問題是否已解決。
 
 如果還沒解決的話，那請透過[GitHub 問題]({1}) 中報告此問題，並附上所建立的日誌檔案副本。</value>
   </data>
   <data name="Dialog.Exception.Title" xml:space="preserve">
-    <value>SleepStrap異常</value>
+    <value>SleepBlox異常</value>
   </data>
   <data name="Common.Custom" xml:space="preserve">
     <value>自訂義</value>
@@ -306,10 +306,10 @@
     <value>假 Byfron (2023年)</value>
   </data>
   <data name="Enums.BootstrapperStyle.ClassicFluentDialog" xml:space="preserve">
-    <value>SleepStrap (經典)</value>
+    <value>SleepBlox (經典)</value>
   </data>
   <data name="Enums.BootstrapperStyle.FluentAeroDialog" xml:space="preserve">
-    <value>SleepStrap (透明)</value>
+    <value>SleepBlox (透明)</value>
   </data>
   <data name="Enums.BootstrapperStyle.LegacyDialog2008" xml:space="preserve">
     <value>經典 (2008年 - 2011年)</value>
@@ -387,10 +387,10 @@
     <value>淺色</value>
   </data>
   <data name="InstallChecker.Updated" xml:space="preserve">
-    <value>SleepStrap 已經更新至 v{0}</value>
+    <value>SleepBlox 已經更新至 v{0}</value>
   </data>
   <data name="InstallChecker.VersionDifferentThanInstalled" xml:space="preserve">
-    <value>你所執行的 SleepStrap 版本與你目前安裝的版本不同，
+    <value>你所執行的 SleepBlox 版本與你目前安裝的版本不同，
 請問你是否需要更新到去目前最新的版本嗎？</value>
   </data>
   <data name="Menu.About.Contributors" xml:space="preserve">
@@ -400,7 +400,7 @@
     <value>程式碼</value>
   </data>
   <data name="Menu.About.Contributors.Description" xml:space="preserve">
-    <value>以下是為 SleepStrap 有顯著的貢獻的人，幫助它成為現在的樣子。</value>
+    <value>以下是為 SleepBlox 有顯著的貢獻的人，幫助它成為現在的樣子。</value>
   </data>
   <data name="Menu.About.Contributors.FeatureIdeas" xml:space="preserve">
     <value>功能建議</value>
@@ -446,7 +446,7 @@
     <value>請注意，不是全部你已改變的設定都會即時套用，直到你關閉了全部目前執行中的 Roblox 程序。</value>
   </data>
   <data name="Menu.AlreadyRunning.Title" xml:space="preserve">
-    <value>SleepStrap 已正在執行</value>
+    <value>SleepBlox 已正在執行</value>
   </data>
   <data name="Menu.Appearance.Bootstrapper.Description" xml:space="preserve">
     <value>你可以讓它變得十分特別、懷舊或甚至像Roblox。</value>
@@ -473,7 +473,7 @@
     <value>標題</value>
   </data>
   <data name="Menu.Appearance.Description" xml:space="preserve">
-    <value>配置 SleepStrap 的外觀。</value>
+    <value>配置 SleepBlox 的外觀。</value>
   </data>
   <data name="Menu.Appearance.Global.Theme.Title" xml:space="preserve">
     <value>全局主題</value>
@@ -497,10 +497,10 @@
     <value>外觀</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Description" xml:space="preserve">
-    <value>SleepStrap 將在啓動 Roblox 時自動檢查並更新。</value>
+    <value>SleepBlox 將在啓動 Roblox 時自動檢查並更新。</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Title" xml:space="preserve">
-    <value>自動更新 SleepStrap</value>
+    <value>自動更新 SleepBlox</value>
   </data>
   <data name="Menu.Behaviour.ConfirmLaunches.Description" xml:space="preserve">
     <value>防止因意外啓動另一個 Roblox 程序而導致當前執行的程式被關閉。</value>
@@ -509,7 +509,7 @@
     <value>在啓動另一個 Roblox 程序時顯示的確認訊息</value>
   </data>
   <data name="Menu.Behaviour.Description" xml:space="preserve">
-    <value>配置 SleepStrap 在啓動 Roblox 時應執行的操作。</value>
+    <value>配置 SleepBlox 在啓動 Roblox 時應執行的操作。</value>
   </data>
   <data name="Menu.Behaviour.ForceRobloxReinstall.Description" xml:space="preserve">
     <value>Roblox 會在下次啓動時進行全新安裝。</value>
@@ -629,10 +629,10 @@
     <value>圖示檔案</value>
   </data>
   <data name="Menu.InstallLocation.CantInstall" xml:space="preserve">
-    <value>SleepStrap 無法在此路徑安裝。請選擇其他路徑，或透過點擊重設按鈕來使用預設路徑。</value>
+    <value>SleepBlox 無法在此路徑安裝。請選擇其他路徑，或透過點擊重設按鈕來使用預設路徑。</value>
   </data>
   <data name="Menu.InstallLocation.NotEmpty" xml:space="preserve">
-    <value>你所選擇用來安裝 SleepStrap 的資料夾已經存在而且不是空的。強烈建議你將 SleepStrap 安裝到自己的獨立資料夾中。
+    <value>你所選擇用來安裝 SleepBlox 的資料夾已經存在而且不是空的。強烈建議你將 SleepBlox 安裝到自己的獨立資料夾中。
 
 建議變更為以下路徑：
 {0}
@@ -645,7 +645,7 @@
     <value>你必須設定一個安裝路徑</value>
   </data>
   <data name="Menu.InstallLocation.NoWritePerms" xml:space="preserve">
-    <value>SleepStrap 對你選擇的安裝路徑沒有寫入權限，請選擇其他路徑。</value>
+    <value>SleepBlox 對你選擇的安裝路徑沒有寫入權限，請選擇其他路徑。</value>
   </data>
   <data name="Menu.Integrations.ActivityTracking" xml:space="preserve">
     <value>活動追蹤</value>
@@ -696,7 +696,7 @@
     <value>不要在離開遊戲後返回主介面</value>
   </data>
   <data name="Menu.Integrations.EnableActivityTracking.Description" xml:space="preserve">
-    <value>允許 SleepStrap 去偵測你正在玩什麽 Roblox 遊戲。部份其他功能可能會要求開啓此功能。</value>
+    <value>允許 SleepBlox 去偵測你正在玩什麽 Roblox 遊戲。部份其他功能可能會要求開啓此功能。</value>
   </data>
   <data name="Menu.Integrations.EnableActivityTracking.Title" xml:space="preserve">
     <value>開啓活動追蹤</value>
@@ -787,7 +787,7 @@
     <value>已儲存設定！</value>
   </data>
   <data name="Menu.Title" xml:space="preserve">
-    <value>SleepStrap 設定</value>
+    <value>SleepBlox 設定</value>
   </data>
   <data name="Dialog.LanguageSelector.Header" xml:space="preserve">
     <value>選擇首選啓動器語言</value>
@@ -817,7 +817,7 @@
     <value>使用者介面和布局</value>
   </data>
   <data name="Menu.FastFlags.ManagerEnabled.Title" xml:space="preserve">
-    <value>允許 SleepStrap 管理 Fast Flags</value>
+    <value>允許 SleepBlox 管理 Fast Flags</value>
   </data>
   <data name="Menu.FastFlags.ManagerEnabled.Description" xml:space="preserve">
     <value>停用此選項會防止任何在此設定的內容套用到 Roblox。</value>
@@ -844,7 +844,7 @@
     <value>等級 3 (最高)</value>
   </data>
   <data name="Dialog.Connectivity.UnableToDownload" xml:space="preserve">
-    <value>SleepStrap未能下載Roblox</value>
+    <value>SleepBlox未能下載Roblox</value>
   </data>
   <data name="Dialog.Connectivity.UnableToDownloadReason" xml:space="preserve">
     <value>目前無法下載Roblox。請閱讀此頁面以獲取更多資訊：{0}</value>
@@ -865,7 +865,7 @@
     <value>你所輸入'{0}'的條目無效，因為他的值必須是數字。</value>
   </data>
   <data name="Logger.NoWriteMode" xml:space="preserve">
-    <value>這次啓動的日誌檔案沒有被寫入因為 SleepStrap 未能夠寫入至在'{0}'的資料夾</value>
+    <value>這次啓動的日誌檔案沒有被寫入因為 SleepBlox 未能夠寫入至在'{0}'的資料夾</value>
   </data>
   <data name="Common.Default" xml:space="preserve">
     <value>預設</value>
@@ -880,7 +880,7 @@
     <value>你所輸入 '{0}' 條目無效，因為遊戲過濾器的格式不正確。</value>
   </data>
   <data name="Installer.Title" xml:space="preserve">
-    <value>SleepStrap 安裝程式</value>
+    <value>SleepBlox 安裝程式</value>
   </data>
   <data name="Installer.Welcome.Title" xml:space="preserve">
     <value>歡迎</value>
@@ -899,18 +899,18 @@
     <value>下一步</value>
   </data>
   <data name="Installer.Welcome.MainText" xml:space="preserve">
-    <value>感謝您下載 SleepStrap。
+    <value>感謝您下載 SleepBlox。
 
-下載 SleepStrap 的官方網站只會是 {0} 和 {1}，因此請你確保你是從官方來源下載 SleepStrap 的。
+下載 SleepBlox 的官方網站只會是 {0} 和 {1}，因此請你確保你是從官方來源下載 SleepBlox 的。
 
-此安裝過程是快速和簡單的，而你可以在完成安裝後配置任何 SleepStrap 的設定。</value>
+此安裝過程是快速和簡單的，而你可以在完成安裝後配置任何 SleepBlox 的設定。</value>
     <comment>{0} and {1} are URLs</comment>
   </data>
   <data name="Installer.Welcome.NextToContinue" xml:space="preserve">
     <value>請按「下一步」來繼續。</value>
   </data>
   <data name="Installer.Welcome.UpdateNotice" xml:space="preserve">
-    <value>正在嘗試安裝 SleepStrap 版本 {0}，但是最新版本是 {1}。請問你要不要下載最新版本？</value>
+    <value>正在嘗試安裝 SleepBlox 版本 {0}，但是最新版本是 {1}。請問你要不要下載最新版本？</value>
   </data>
   <data name="Installer.Install.Location.Title" xml:space="preserve">
     <value>選擇安裝位置</value>
@@ -931,16 +931,16 @@
     <value>開始選單圖示</value>
   </data>
   <data name="Installer.Completion.Text" xml:space="preserve">
-    <value>SleepStrap 已成功安裝。
+    <value>SleepBlox 已成功安裝。
 
-Roblox 尚未安裝，這情況會在你第一次使用 SleepStrap 來啓動 Roblox 時發生。但是，你在執行此操作之前，可能需要先配置 SleepStrap 的設定。
+Roblox 尚未安裝，這情況會在你第一次使用 SleepBlox 來啓動 Roblox 時發生。但是，你在執行此操作之前，可能需要先配置 SleepBlox 的設定。
 
-另外，請避免使用 「Roblox Player」 快捷方式來啟動 Roblox，因為 SleepStrap 不會與 Roblox 一起啓動。如果你從網站啓動時沒有顯示 SleepStrap，只需要在桌面使用 SleepStrap 來啓動 Roblox 即可修復這個問題。
+另外，請避免使用 「Roblox Player」 快捷方式來啟動 Roblox，因為 SleepBlox 不會與 Roblox 一起啓動。如果你從網站啓動時沒有顯示 SleepBlox，只需要在桌面使用 SleepBlox 來啓動 Roblox 即可修復這個問題。
 
 請問你想怎麼做？</value>
   </data>
   <data name="Installer.Completion.Settings.Title" xml:space="preserve">
-    <value>配置 SleepStrap 的設定</value>
+    <value>配置 SleepBlox 的設定</value>
   </data>
   <data name="Installer.Completion.Settings.Description" xml:space="preserve">
     <value>調整它提供的所有功能</value>
@@ -952,22 +952,22 @@ Roblox 尚未安裝，這情況會在你第一次使用 SleepStrap 來啓動 Rob
     <value>一切完成後，你將會進入 Roblox 應用程式的主介面</value>
   </data>
   <data name="Uninstaller.Title" xml:space="preserve">
-    <value>解除安裝 SleepStrap</value>
+    <value>解除安裝 SleepBlox</value>
   </data>
   <data name="Uninstaller.Text" xml:space="preserve">
-    <value>解除安裝將從你的系統中刪除 SleepStrap，並自動重新配置預設的 Roblox 啓動器，如果仍然安裝了的話。
+    <value>解除安裝將從你的系統中刪除 SleepBlox，並自動重新配置預設的 Roblox 啓動器，如果仍然安裝了的話。
 
 如果您因為使用 Roblox 時出現問題而要解除安裝或重新安裝，請先閱讀[此說明頁面]({0})。
 
-解除安裝過程可能無法完全刪除所有檔案，因此你可能需要手動刪除安裝 SleepStrap 時的剩餘檔案。
+解除安裝過程可能無法完全刪除所有檔案，因此你可能需要手動刪除安裝 SleepBlox 時的剩餘檔案。
 
-SleepStrap 已安裝在 "{1}"。</value>
+SleepBlox 已安裝在 "{1}"。</value>
   </data>
   <data name="Uninstaller.KeepData.Label" xml:space="preserve">
     <value>保留我的設定和模組</value>
   </data>
   <data name="Uninstaller.KeepData.Description" xml:space="preserve">
-    <value>它們將保留在安裝 SleepStrap 的位置，並在重新安裝時自動恢復。</value>
+    <value>它們將保留在安裝 SleepBlox 的位置，並在重新安裝時自動恢復。</value>
   </data>
   <data name="Uninstaller.Uninstall" xml:space="preserve">
     <value>解除安裝</value>
@@ -988,19 +988,19 @@ SleepStrap 已安裝在 "{1}"。</value>
     <value>你目前尚未安裝 WebView2 執行階段。如果沒有它，一些 Roblox 功能將無法正常運作，例如 Roblox 主介面應用程式。請問你想立即下載嗎？</value>
   </data>
   <data name="Dialog.CannotCreateShortcuts" xml:space="preserve">
-    <value>SleepStrap 無法建立桌面和開始選單的捷徑。請你稍後嘗試透過設定來建立它們。</value>
+    <value>SleepBlox 無法建立桌面和開始選單的捷徑。請你稍後嘗試透過設定來建立它們。</value>
   </data>
   <data name="Dialog.Exception.Info.2.Alt" xml:space="preserve">
-    <value>首先檢查 [SleepStrap Wiki]({0}) 以查看此問題是否已被修復。
+    <value>首先檢查 [SleepBlox Wiki]({0}) 以查看此問題是否已被修復。
 
-如果沒有，請將此異常報告給這個版本 (fork) 的維護者。不要將此報告到 SleepStrap 的 GitHub Issues (問題)，因為這是一個非官方的版本。</value>
+如果沒有，請將此異常報告給這個版本 (fork) 的維護者。不要將此報告到 SleepBlox 的 GitHub Issues (問題)，因為這是一個非官方的版本。</value>
     <comment>"fork" in general means "a variation of" or "a different version of". You can alternatively write the first sentence as "...to the maintainers of this version."</comment>
   </data>
   <data name="Installer.Install.Shortcuts.Description" xml:space="preserve">
     <value>這些是開啟多選啓動選單的通用快捷方式。稍後可以在設定中建立特定功能的捷徑。</value>
   </data>
   <data name="Menu.Shortcuts.Description" xml:space="preserve">
-    <value>配置如何輕鬆啓動 SleepStrap。</value>
+    <value>配置如何輕鬆啓動 SleepBlox。</value>
   </data>
   <data name="Menu.Shortcuts.General.Title" xml:space="preserve">
     <value>一般</value>
@@ -1040,7 +1040,7 @@ SleepStrap 已安裝在 "{1}"。</value>
     <value>你有未儲存的變更。你確定你要關閉而不儲存嗎？</value>
   </data>
   <data name="InstallChecker.VersionLessThanInstalled" xml:space="preserve">
-    <value>你啓動的 SleepStrap 版本比您目前安裝的版本舊。
+    <value>你啓動的 SleepBlox 版本比您目前安裝的版本舊。
 可能會出現問題並且您的設定可能會被變更。建議重新安裝。
 請問你確定要繼續嗎？</value>
   </data>
@@ -1053,7 +1053,7 @@ SleepStrap 已安裝在 "{1}"。</value>
   <data name="Dialog.PlayerError.HelpInformation" xml:space="preserve">
     <value>有關為什麼會發生這種情況以及如何解決此問題的信息，請閱讀[此幫助文章]({0})。
 
-檢查 Roblox 是否與[原始啓動器]({1})相容。如果不相容，那麼這不是 SleepStrap 問題。如果相容，請參閱說明文章。</value>
+檢查 Roblox 是否與[原始啓動器]({1})相容。如果不相容，那麼這不是 SleepBlox 問題。如果相容，請參閱說明文章。</value>
   </data>
   <data name="Common.NetworkError" xml:space="preserve">
     <value>由於網路錯誤，所以無法載入資料。</value>
@@ -1065,7 +1065,7 @@ SleepStrap 已安裝在 "{1}"。</value>
     <value>支持者</value>
   </data>
   <data name="About.Supporters.Description" xml:space="preserve">
-    <value>這些是使用 Ko-fi 來支持 SleepStrap 的贊助者們。在此由衷感謝每一個協助 SleepStrap 發展的贊助者們！
+    <value>這些是使用 Ko-fi 來支持 SleepBlox 的贊助者們。在此由衷感謝每一個協助 SleepBlox 發展的贊助者們！
 （在此處的人都按其總捐款額來排名。）</value>
   </data>
   <data name="JsonManager.SettingsLoadFailed" xml:space="preserve">
@@ -1096,12 +1096,12 @@ SleepStrap 已安裝在 "{1}"。</value>
     <value>本次啓動將不會檢查 Roblox 的更新情況，也不會套用對模組的變更。</value>
   </data>
   <data name="Dialog.Connectivity.RobloxUpgradeNeeded" xml:space="preserve">
-    <value>由於需要安裝或更新 Roblox，SleepStrap 無法繼續運行。</value>
+    <value>由於需要安裝或更新 Roblox，SleepBlox 無法繼續運行。</value>
   </data>
   <data name="Installer.Install.CannotOverwrite" xml:space="preserve">
-    <value>SleepStrap 之前已安裝到此位置並且仍然存在，但安裝程式無法覆蓋舊的可執行檔。
+    <value>SleepBlox 之前已安裝到此位置並且仍然存在，但安裝程式無法覆蓋舊的可執行檔。
 
-請從安裝路徑手動刪除 SleepStrap.exe 或嘗試重新啓動系統，然後重試安裝。</value>
+請從安裝路徑手動刪除 SleepBlox.exe 或嘗試重新啓動系統，然後重試安裝。</value>
   </data>
   <data name="Common.NotAvailable" xml:space="preserve">
     <value>無法使用</value>
@@ -1113,7 +1113,7 @@ SleepStrap 已安裝在 "{1}"。</value>
     <value>配置應用程式參數，例如 DPI 縮放行為和[全螢幕優化]({0})。</value>
   </data>
   <data name="Common.RobloxNotInstalled" xml:space="preserve">
-    <value>Roblox 尚未安裝。在嘗試使用此選項之前，請至少使用 SleepStrap 以啓動一次 Roblox。</value>
+    <value>Roblox 尚未安裝。在嘗試使用此選項之前，請至少使用 SleepBlox 以啓動一次 Roblox。</value>
   </data>
   <data name="Installer.ShouldCancel" xml:space="preserve">
     <value>您確定要取消安裝？</value>
@@ -1131,10 +1131,10 @@ SleepStrap 已安裝在 "{1}"。</value>
     <value>提取 Roblox 圖示到資料夾</value>
   </data>
   <data name="Menu.Shortcuts.ExtractIcons.Description" xml:space="preserve">
-    <value>允許您使用 SleepStrap 提供的 Roblox 圖示作為捷徑。 [看看如何。]({0})</value>
+    <value>允許您使用 SleepBlox 提供的 Roblox 圖示作為捷徑。 [看看如何。]({0})</value>
   </data>
   <data name="Dialog.RegistryWriteError" xml:space="preserve">
-    <value>SleepStrap 無法寫入 Windows 註冊表 (regedit)。防毒軟體可能會干擾並導致問題。請檢查以確保沒有任何東西會限制 SleepStrap 的操作。</value>
+    <value>SleepBlox 無法寫入 Windows 註冊表 (regedit)。防毒軟體可能會干擾並導致問題。請檢查以確保沒有任何東西會限制 SleepBlox 的操作。</value>
   </data>
   <data name="About.Supporters.Monthly" xml:space="preserve">
     <value>每月</value>
@@ -1158,12 +1158,12 @@ SleepStrap 已安裝在 "{1}"。</value>
   <data name="Menu.TestMode.Prompt" xml:space="preserve">
     <value>測試模式可以更輕鬆地測試你的設定如何影響 Roblox。
 
-啓用後，Roblox 會在關閉 SleepStrap 設定後自動啓動 ，並在關閉 Roblox 後重新開啓 SleepStrap 設定，如此循環直至你停用它。
+啓用後，Roblox 會在關閉 SleepBlox 設定後自動啓動 ，並在關閉 Roblox 後重新開啓 SleepBlox 設定，如此循環直至你停用它。
 
 請問你想啓用測試模式嗎？</value>
   </data>
   <data name="About.Translators.Description" xml:space="preserve">
-    <value>SleepStrap 的所有翻譯都是透過 [Crowdin]({0}) 進行眾包。這裡列出的每個人都慷慨地自願貢獻自己的時間和精力來幫助 SleepStrap 變為本地化。非常感謝這裡的每一個人！</value>
+    <value>SleepBlox 的所有翻譯都是透過 [Crowdin]({0}) 進行眾包。這裡列出的每個人都慷慨地自願貢獻自己的時間和精力來幫助 SleepBlox 變為本地化。非常感謝這裡的每一個人！</value>
   </data>
   <data name="Common.Navigation.Install" xml:space="preserve">
     <value>安裝</value>
@@ -1183,7 +1183,7 @@ SleepStrap 已安裝在 "{1}"。</value>
     <value>自訂</value>
   </data>
   <data name="Bootstrapper.FilesInUse" xml:space="preserve">
-    <value>SleepStrap 嘗試升級 Roblox，但無法升級因為 Roblox 的檔案仍在使用中。
+    <value>SleepBlox 嘗試升級 Roblox，但無法升級因為 Roblox 的檔案仍在使用中。
 
 請關閉所有可能使用 Roblox 檔案的應用程式，然後重新啓動。</value>
     <comment>This is *not* for when Roblox is still running when trying to upgrade. This applies to files being open (i.e. image assets)</comment>
@@ -1194,13 +1194,13 @@ SleepStrap 已安裝在 "{1}"。</value>
   </data>
   <data name="Common.Export" xml:space="preserve">
     <value>匯出</value>
-    <comment>Currently used under the "SleepStrap" settings tab for the button to export diagnostic data</comment>
+    <comment>Currently used under the "SleepBlox" settings tab for the button to export diagnostic data</comment>
   </data>
   <data name="App.OSDeprecation.Win7_81" xml:space="preserve">
     <value>Roblox 已不再支援 Windows 7 或 8.1。如果要繼續玩 Roblox，請升級到 Windows 10 或更高的作業系統。</value>
   </data>
   <data name="Bootstrapper.Status.UpgradingSleepStrap" xml:space="preserve">
-    <value>正在取得最新版的 SleepStrap...</value>
+    <value>正在取得最新版的 SleepBlox...</value>
   </data>
   <data name="Enums.CustomThemeTemplate.Blank" xml:space="preserve">
     <value>空白</value>
@@ -1359,7 +1359,7 @@ SleepStrap 已安裝在 "{1}"。</value>
   <data name="CustomTheme.Errors.SetupFailed" xml:space="preserve">
     <value>無法設定自訂啓動器：{0}。
 正在預設為 {1}。</value>
-    <comment>{0} is the error reason, {1} is the theme name (e.g. SleepStrap (Classic))</comment>
+    <comment>{0} is the error reason, {1} is the theme name (e.g. SleepBlox (Classic))</comment>
   </data>
   <data name="Menu.Appearance.CustomThemes.NoneSelected" xml:space="preserve">
     <value>未選擇自訂主題。</value>
@@ -1414,7 +1414,7 @@ SleepStrap 已安裝在 "{1}"。</value>
     <value>建立新的</value>
   </data>
   <data name="Menu.SleepStrap.Description" xml:space="preserve">
-    <value>配置與 SleepStrap 行為本身相關的選項。</value>
+    <value>配置與 SleepBlox 行為本身相關的選項。</value>
   </data>
   <data name="Menu.Behaviour.BackgroundUpdates.Title" xml:space="preserve">
     <value>背景更新</value>
@@ -1429,7 +1429,7 @@ SleepStrap 已安裝在 "{1}"。</value>
     <value>編輯</value>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>關於 SleepStrap</value>
+    <value>關於 SleepBlox</value>
   </data>
   <data name="Menu.FastFlags.Presets.EscapeMenuVersion.Title" xml:space="preserve">
     <value>首選的ESC選單版本</value>
@@ -1441,7 +1441,7 @@ SleepStrap 已安裝在 "{1}"。</value>
     <value>幀率(FPS)上限</value>
   </data>
   <data name="Menu.FastFlags.Presets.HideGuis.Description" xml:space="preserve">
-    <value>用[快捷鍵]({0}) 來切換。只會在加入了[SleepStrap群組]({1}) 後生效。</value>
+    <value>用[快捷鍵]({0}) 來切換。只會在加入了[SleepBlox群組]({1}) 後生效。</value>
   </data>
   <data name="Menu.FastFlags.Presets.HideGuis.Title" xml:space="preserve">
     <value>啓用隱藏介面功能</value>
@@ -1495,11 +1495,11 @@ SleepStrap 已安裝在 "{1}"。</value>
     <value>收集可在線上上傳的資訊以解決您遇到的問題。</value>
   </data>
   <data name="Menu.SleepStrap.ExportData.ExportConfig" xml:space="preserve">
-    <value>SleepStrap 配置設定</value>
+    <value>SleepBlox 配置設定</value>
     <comment>Label that appears next to a checkbox</comment>
   </data>
   <data name="Menu.SleepStrap.ExportData.ExportLogs" xml:space="preserve">
-    <value>所有 SleepStrap 日誌</value>
+    <value>所有 SleepBlox 日誌</value>
     <comment>Label that appears next to a checkbox</comment>
   </data>
   <data name="Menu.GBSEditor.Graphics.Description" xml:space="preserve">

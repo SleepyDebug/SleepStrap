@@ -57,7 +57,7 @@ weapons := [
 outputFile := A_ScriptDir "\grid_weapon_positions.csv"
 positions := []
 
-recorder := Gui("+AlwaysOnTop", "SleepStrap Grid Weapon Recorder")
+recorder := Gui("+AlwaysOnTop", "SleepBlox Grid Weapon Recorder")
 recorder.BackColor := "101014"
 recorder.SetFont("s10 cFFFFFF", "Segoe UI")
 recorder.MarginX := 18

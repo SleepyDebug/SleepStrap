@@ -22,7 +22,7 @@ namespace SleepStrap.UI.ViewModels.Settings
 
         public bool GBSEnabled = App.GlobalSettings.Loaded;
 
-        public string WindowTitle => $"SleepStrap {new Version(App.Version).ToString(3)}";
+        public string WindowTitle => $"{App.ProjectName} {new Version(App.Version).ToString(3)}";
         public string VersionText => $"v{new Version(App.Version).ToString(3)}";
 
         public bool TestModeEnabled

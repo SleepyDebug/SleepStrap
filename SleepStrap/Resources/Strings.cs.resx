@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Bootstrapper.AutoUpdateFailed" xml:space="preserve">
-    <value>SleepStrap nebyl schopen se automaticky aktualizovat na verzi {0}. Prosím aktualizujte ručně stažením a spuštěním z webové stránky.</value>
+    <value>SleepBlox nebyl schopen se automaticky aktualizovat na verzi {0}. Prosím aktualizujte ručně stažením a spuštěním z webové stránky.</value>
   </data>
   <data name="Bootstrapper.ConfirmLaunch" xml:space="preserve">
     <value>Roblox už běží, a spouštění další objektů se roblox zavře. Opravdu chcete pokračovat se spuštění?</value>
@@ -127,13 +127,13 @@
     <value>Roblox může být právě teď mimo provoz. Další informace viz {0}.</value>
   </data>
   <data name="Dialog.Connectivity.BadConnection" xml:space="preserve">
-    <value>Nelze navázat připojení, což pravděpodobně naznačuje špatné připojení k internetu nebo firewall block. Pokud je připojení v pořádku, ujistěte se, že váš antivirus neblokuje SleepStrap.</value>
+    <value>Nelze navázat připojení, což pravděpodobně naznačuje špatné připojení k internetu nebo firewall block. Pokud je připojení v pořádku, ujistěte se, že váš antivirus neblokuje SleepBlox.</value>
   </data>
   <data name="Bootstrapper.FirstRunUninstall" xml:space="preserve">
-    <value>První si musíš nainstalovat SleepStrap než odinstaluješ.</value>
+    <value>První si musíš nainstalovat SleepBlox než odinstaluješ.</value>
   </data>
   <data name="Bootstrapper.NotEnoughSpace" xml:space="preserve">
-    <value>SleepStrap nemá dostatek volného místa na disku aby instaloval Roblox. Prosím uvolněte nějaké místo na disku a zkuste to znovu.</value>
+    <value>SleepBlox nemá dostatek volného místa na disku aby instaloval Roblox. Prosím uvolněte nějaké místo na disku a zkuste to znovu.</value>
   </data>
   <data name="Bootstrapper.Status.ApplyingModifications" xml:space="preserve">
     <value>Aplikování Roblox modifikací...</value>
@@ -169,10 +169,10 @@
     <comment>Text for style previews that use text button that says "Cancel"</comment>
   </data>
   <data name="Bootstrapper.SuccessfullyUninstalled" xml:space="preserve">
-    <value>SleepStrap byl úspěšně odinstalován</value>
+    <value>SleepBlox byl úspěšně odinstalován</value>
   </data>
   <data name="Bootstrapper.Uninstall.RobloxRunning" xml:space="preserve">
-    <value>Roblox právě běží, ale musí být zavřen, před tím, než odinstalujete SleepStrap.
+    <value>Roblox právě běží, ale musí být zavřen, před tím, než odinstalujete SleepBlox.
 Chtěli nyní zavřít Roblox?</value>
   </data>
   <data name="Bootstrapper.WMFNotFound" xml:space="preserve">
@@ -277,22 +277,22 @@ Klikněte pro více informací</value>
     <value>Chyba připojení</value>
   </data>
   <data name="Dialog.Connectivity.UnableToConnect" xml:space="preserve">
-    <value>SleepStrap není schopen se připojit k {0}</value>
+    <value>SleepBlox není schopen se připojit k {0}</value>
     <comment>{0} is the name of a service (i.e. Roblox, GitHub)</comment>
   </data>
   <data name="Dialog.Exception.CopyLogContents" xml:space="preserve">
     <value>Kopírovat log obsah</value>
   </data>
   <data name="Dialog.Exception.Info.1" xml:space="preserve">
-    <value>Došlo k výjimce při běžení SleepStrapu</value>
+    <value>Došlo k výjimce při běžení SleepBloxu</value>
   </data>
   <data name="Dialog.Exception.Info.2" xml:space="preserve">
-    <value>Nejprve zkontrolujte [SleepStrap Wiki]({0}), zda byl tento problém již vyřešen opravou.
+    <value>Nejprve zkontrolujte [SleepBlox Wiki]({0}), zda byl tento problém již vyřešen opravou.
 
 Pokud ne, prosím nahlaste tuto výjimku prostřednictvím [GitHub issue]({1}) spolu s kopií log souboru, který byl vytvořen.</value>
   </data>
   <data name="Dialog.Exception.Title" xml:space="preserve">
-    <value>SleepStrap výjimka</value>
+    <value>SleepBlox výjimka</value>
   </data>
   <data name="Common.Custom" xml:space="preserve">
     <value>Vlastní</value>
@@ -307,10 +307,10 @@ Pokud ne, prosím nahlaste tuto výjimku prostřednictvím [GitHub issue]({1}) s
     <value>Falešný Byfron (2023)</value>
   </data>
   <data name="Enums.BootstrapperStyle.ClassicFluentDialog" xml:space="preserve">
-    <value>SleepStrap (Klasický)</value>
+    <value>SleepBlox (Klasický)</value>
   </data>
   <data name="Enums.BootstrapperStyle.FluentAeroDialog" xml:space="preserve">
-    <value>SleepStrap (Sklo)</value>
+    <value>SleepBlox (Sklo)</value>
   </data>
   <data name="Enums.BootstrapperStyle.LegacyDialog2008" xml:space="preserve">
     <value>Legacy (2008 - 2011)</value>
@@ -388,10 +388,10 @@ Pokud ne, prosím nahlaste tuto výjimku prostřednictvím [GitHub issue]({1}) s
     <value>Světlý</value>
   </data>
   <data name="InstallChecker.Updated" xml:space="preserve">
-    <value>SleepStrap byl aktualizován na v{0}</value>
+    <value>SleepBlox byl aktualizován na v{0}</value>
   </data>
   <data name="InstallChecker.VersionDifferentThanInstalled" xml:space="preserve">
-    <value>Verze SleepStrapu kterou jste spustili je jiná než tu kterou máte instalovanou. Chcete aktualizovat vaší instalovanou verzi?</value>
+    <value>Verze SleepBloxu kterou jste spustili je jiná než tu kterou máte instalovanou. Chcete aktualizovat vaší instalovanou verzi?</value>
   </data>
   <data name="Menu.About.Contributors" xml:space="preserve">
     <value>Přispěvatelé</value>
@@ -400,7 +400,7 @@ Pokud ne, prosím nahlaste tuto výjimku prostřednictvím [GitHub issue]({1}) s
     <value>Kód</value>
   </data>
   <data name="Menu.About.Contributors.Description" xml:space="preserve">
-    <value>Tohle jsou ti lidé, kteří významně přispěli a pomohli z SleepStrap udělat to, čím je teď.</value>
+    <value>Tohle jsou ti lidé, kteří významně přispěli a pomohli z SleepBlox udělat to, čím je teď.</value>
   </data>
   <data name="Menu.About.Contributors.FeatureIdeas" xml:space="preserve">
     <value>Nápady funkcí</value>
@@ -433,7 +433,7 @@ Pokud ne, prosím nahlaste tuto výjimku prostřednictvím [GitHub issue]({1}) s
     <value>Nahlásit chybu</value>
   </data>
   <data name="Menu.About.Title" xml:space="preserve">
-    <value>O SleepStrapu</value>
+    <value>O SleepBloxu</value>
   </data>
   <data name="Menu.About.Version" xml:space="preserve">
     <value>Verze {0}</value>
@@ -446,7 +446,7 @@ Pokud ne, prosím nahlaste tuto výjimku prostřednictvím [GitHub issue]({1}) s
     <value>Prosíme poznamenejte si, že všechny vaše změny se aplikují ihned až zavřete všechny otevřené instance Roblox.</value>
   </data>
   <data name="Menu.AlreadyRunning.Title" xml:space="preserve">
-    <value>SleepStrap již běží</value>
+    <value>SleepBlox již běží</value>
   </data>
   <data name="Menu.Appearance.Bootstrapper.Description" xml:space="preserve">
     <value>Můžete tomu změnit vzhled, aby to vypadalo jinak, retro, nebo prostě jako Roblox.</value>
@@ -473,7 +473,7 @@ Pokud ne, prosím nahlaste tuto výjimku prostřednictvím [GitHub issue]({1}) s
     <value>Název</value>
   </data>
   <data name="Menu.Appearance.Description" xml:space="preserve">
-    <value>Konfigurovat vzhled SleepStrapu.</value>
+    <value>Konfigurovat vzhled SleepBloxu.</value>
   </data>
   <data name="Menu.Appearance.Global.Theme.Title" xml:space="preserve">
     <value>Globální motiv</value>
@@ -497,10 +497,10 @@ Pokud ne, prosím nahlaste tuto výjimku prostřednictvím [GitHub issue]({1}) s
     <value>Vzhled</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Description" xml:space="preserve">
-    <value>SleepStrap automaticky kontroluje a aktualizuje se když se spouští Roblox.</value>
+    <value>SleepBlox automaticky kontroluje a aktualizuje se když se spouští Roblox.</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Title" xml:space="preserve">
-    <value>Automaticky aktualizovat SleepStrap</value>
+    <value>Automaticky aktualizovat SleepBlox</value>
   </data>
   <data name="Menu.Behaviour.ConfirmLaunches.Description" xml:space="preserve">
     <value>Prevence proti uzavření vaší existující hry při omylnému spuštění další.</value>
@@ -509,7 +509,7 @@ Pokud ne, prosím nahlaste tuto výjimku prostřednictvím [GitHub issue]({1}) s
     <value>Zeptat se k potvrzení při spouštění další instance Roblox</value>
   </data>
   <data name="Menu.Behaviour.Description" xml:space="preserve">
-    <value>Konfigurovat co by měl SleepStrap udělat při spuštění Robloxu.</value>
+    <value>Konfigurovat co by měl SleepBlox udělat při spuštění Robloxu.</value>
   </data>
   <data name="Menu.Behaviour.ForceRobloxReinstall.Description" xml:space="preserve">
     <value>Roblox se přeinstaluje při dalším spuštení.</value>
@@ -629,10 +629,10 @@ NEPOUŽÍVEJTE tohle aby jste importovali velké "Fast flags" listy udělané os
     <value>Ikonové soubory</value>
   </data>
   <data name="Menu.InstallLocation.CantInstall" xml:space="preserve">
-    <value>SleepStrap zde nelze nainstalovat. Zvolte prosím jiné umístění nebo se uchylte k použití výchozího umístění kliknutím na tlačítko reset.</value>
+    <value>SleepBlox zde nelze nainstalovat. Zvolte prosím jiné umístění nebo se uchylte k použití výchozího umístění kliknutím na tlačítko reset.</value>
   </data>
   <data name="Menu.InstallLocation.NotEmpty" xml:space="preserve">
-    <value>Složka do které jste se rozhodli nainstalovat SleepStrap již existuje a NENÍ prázdná. Je důrazně doporučeno aby byl SleepStrap nainstalován do své vlastní nezávislé složky.
+    <value>Složka do které jste se rozhodli nainstalovat SleepBlox již existuje a NENÍ prázdná. Je důrazně doporučeno aby byl SleepBlox nainstalován do své vlastní nezávislé složky.
 
 Je navrhováno změnit umístění do následujícího umístění:
 {0}
@@ -645,7 +645,7 @@ Při výběru 'Ne' bude toto varování ignorováno a bude pokračovat v instala
     <value>Musíš si nastavit lokaci pro instalaci</value>
   </data>
   <data name="Menu.InstallLocation.NoWritePerms" xml:space="preserve">
-    <value>SleepStrap nemá přístup k zápisu do umístění instalace kterou jste vybrali. Vyberte prosím jiné umístění.</value>
+    <value>SleepBlox nemá přístup k zápisu do umístění instalace kterou jste vybrali. Vyberte prosím jiné umístění.</value>
   </data>
   <data name="Menu.Integrations.ActivityTracking" xml:space="preserve">
     <value>Trackování aktivity</value>
@@ -696,7 +696,7 @@ Při výběru 'Ne' bude toto varování ignorováno a bude pokračovat v instala
     <value>Neukončovat do menu</value>
   </data>
   <data name="Menu.Integrations.EnableActivityTracking.Description" xml:space="preserve">
-    <value>Povoluje SleepStrap, aby detektoval, jaké hry na Robloxu hraješ. Určité funkce mohou vyžadovat toto.</value>
+    <value>Povoluje SleepBlox, aby detektoval, jaké hry na Robloxu hraješ. Určité funkce mohou vyžadovat toto.</value>
   </data>
   <data name="Menu.Integrations.EnableActivityTracking.Title" xml:space="preserve">
     <value>Povolit trackování aktivity</value>
@@ -787,7 +787,7 @@ Při výběru 'Ne' bude toto varování ignorováno a bude pokračovat v instala
     <value>Nastavení bylo uloženo!</value>
   </data>
   <data name="Menu.Title" xml:space="preserve">
-    <value>Nastavení SleepStrapu</value>
+    <value>Nastavení SleepBloxu</value>
   </data>
   <data name="Dialog.LanguageSelector.Header" xml:space="preserve">
     <value>Použít preferovaný jazyk</value>
@@ -817,7 +817,7 @@ Při výběru 'Ne' bude toto varování ignorováno a bude pokračovat v instala
     <value>Uživatelské Rozhrání a rozložení</value>
   </data>
   <data name="Menu.FastFlags.ManagerEnabled.Title" xml:space="preserve">
-    <value>Dovolit SleepStrap spravovat Fast Flags</value>
+    <value>Dovolit SleepBlox spravovat Fast Flags</value>
   </data>
   <data name="Menu.FastFlags.ManagerEnabled.Description" xml:space="preserve">
     <value>Vypnutí tohoto nastavení zakáže použití vlastní konfigurace v Robloxu.</value>
@@ -844,7 +844,7 @@ Při výběru 'Ne' bude toto varování ignorováno a bude pokračovat v instala
     <value>Úroveň 3 (Největší)</value>
   </data>
   <data name="Dialog.Connectivity.UnableToDownload" xml:space="preserve">
-    <value>SleepStrap nemůže stáhnout Roblox</value>
+    <value>SleepBlox nemůže stáhnout Roblox</value>
   </data>
   <data name="Dialog.Connectivity.UnableToDownloadReason" xml:space="preserve">
     <value>Roblox nemůže být v tuto dobu nainstalovaný. Prosím přečtěte si tuto stránku pro pomoc a více informací: {0}</value>
@@ -865,7 +865,7 @@ Při výběru 'Ne' bude toto varování ignorováno a bude pokračovat v instala
     <value>Záznam pro '{0}' není platný, protože hodnota musí být číslo</value>
   </data>
   <data name="Logger.NoWriteMode" xml:space="preserve">
-    <value>Žádný log soubor nebude zapsán pro toto spuštění, protože SleepStrap nemůže zapisovat do složky v '{0}'</value>
+    <value>Žádný log soubor nebude zapsán pro toto spuštění, protože SleepBlox nemůže zapisovat do složky v '{0}'</value>
   </data>
   <data name="Common.Default" xml:space="preserve">
     <value>Výchozí</value>
@@ -880,7 +880,7 @@ Při výběru 'Ne' bude toto varování ignorováno a bude pokračovat v instala
     <value>Položka '{0}' není platná, protože "place filter" nemá správný formát.</value>
   </data>
   <data name="Installer.Title" xml:space="preserve">
-    <value>Instalátor SleepStrapu</value>
+    <value>Instalátor SleepBloxu</value>
   </data>
   <data name="Installer.Welcome.Title" xml:space="preserve">
     <value>Vítejte</value>
@@ -899,18 +899,18 @@ Při výběru 'Ne' bude toto varování ignorováno a bude pokračovat v instala
     <value>Další</value>
   </data>
   <data name="Installer.Welcome.MainText" xml:space="preserve">
-    <value>Děkujeme za stažení SleepStrapu. 
+    <value>Děkujeme za stažení SleepBloxu.
 
-Jediné oficiální stránky pro stažení SleepStrapu jsou {0} a {1}, takže prosím ověřte, zda jste jej stáhli z oficiálního zdroje.
+Jediné oficiální stránky pro stažení SleepBloxu jsou {0} a {1}, takže prosím ověřte, zda jste jej stáhli z oficiálního zdroje.
 
-Instalační proces bude rychlý a jednoduchý a po instalaci budete moci nakonfigurovat jakékoliv nastavení SleepStrapu.</value>
+Instalační proces bude rychlý a jednoduchý a po instalaci budete moci nakonfigurovat jakékoliv nastavení SleepBloxu.</value>
     <comment>{0} and {1} are URLs</comment>
   </data>
   <data name="Installer.Welcome.NextToContinue" xml:space="preserve">
     <value>Pro pokračování klikněte na tlačítko 'Další'.</value>
   </data>
   <data name="Installer.Welcome.UpdateNotice" xml:space="preserve">
-    <value>Pokoušíte se nainstalovat verzi {0} SleepStrapu, ale nejnovější dostupná verze je {1}. Chcete ji stáhnout?</value>
+    <value>Pokoušíte se nainstalovat verzi {0} SleepBloxu, ale nejnovější dostupná verze je {1}. Chcete ji stáhnout?</value>
   </data>
   <data name="Installer.Install.Location.Title" xml:space="preserve">
     <value>Vyberte, kam chcete nainstalovat</value>
@@ -931,19 +931,19 @@ Instalační proces bude rychlý a jednoduchý a po instalaci budete moci nakonf
     <value>Ikona v Start menu</value>
   </data>
   <data name="Installer.Completion.Text" xml:space="preserve">
-    <value>SleepStrap byl úspěšně nainstalován.
+    <value>SleepBlox byl úspěšně nainstalován.
 
-Roblox ještě nebyl nainstalován, k čemuž dojde při prvním spuštění SleepStrapu. Než to uděláte, možná budete chtít nejdříve nakonfigurovat SleepStrap.
+Roblox ještě nebyl nainstalován, k čemuž dojde při prvním spuštění SleepBloxu. Než to uděláte, možná budete chtít nejdříve nakonfigurovat SleepBlox.
 
-Nepoužívejte také zkratku "Roblox Player" pro spuštění Robloxu, protože SleepStrap nebude spuštěn s Robloxem. Pokud se nespustí SleepStrap při spuštění z webové stránky, jednoduše spusťte SleepStrap jednou z plochy, abyste to opravili.
+Nepoužívejte také zkratku "Roblox Player" pro spuštění Robloxu, protože SleepBlox nebude spuštěn s Robloxem. Pokud se nespustí SleepBlox při spuštění z webové stránky, jednoduše spusťte SleepBlox jednou z plochy, abyste to opravili.
 
 Co chcete udělat?</value>
   </data>
   <data name="Installer.Completion.Settings.Title" xml:space="preserve">
-    <value>Nakonfigurovat nastavení SleepStrapu</value>
+    <value>Nakonfigurovat nastavení SleepBloxu</value>
   </data>
   <data name="Installer.Completion.Settings.Description" xml:space="preserve">
-    <value>Pohrajte si se všemi funkcemi SleepStrapu</value>
+    <value>Pohrajte si se všemi funkcemi SleepBloxu</value>
   </data>
   <data name="Installer.Completion.Launch.Title" xml:space="preserve">
     <value>Instalovat a spustit Roblox</value>
@@ -952,22 +952,22 @@ Co chcete udělat?</value>
     <value>Hodí vás do desktopové aplikace Robloxu po dokončení</value>
   </data>
   <data name="Uninstaller.Title" xml:space="preserve">
-    <value>Odinstalovat SleepStrap</value>
+    <value>Odinstalovat SleepBlox</value>
   </data>
   <data name="Uninstaller.Text" xml:space="preserve">
-    <value>Odinstalace odstraní SleepStrap z vašeho systému a automaticky znovu nastaví výchozího spouštěčtě Robloxu, pokud je stále nainstalován.
+    <value>Odinstalace odstraní SleepBlox z vašeho systému a automaticky znovu nastaví výchozího spouštěčtě Robloxu, pokud je stále nainstalován.
 
 Pokud odinstalujete nebo přeinstalujete, protože máte problémy s Robloxem, přečtěte si nejprve [tuto stránku pomoci]({0}).
 
-Odinstalace možná nebude moct odstranit všechny data sama, takže možná budete muset ručně vyčistit zbylé soubory po SleepStrapu.
+Odinstalace možná nebude moct odstranit všechny data sama, takže možná budete muset ručně vyčistit zbylé soubory po SleepBloxu.
 
-SleepStrap byl nainstalován na "{1}".</value>
+SleepBlox byl nainstalován na "{1}".</value>
   </data>
   <data name="Uninstaller.KeepData.Label" xml:space="preserve">
     <value>Uložit moje nastavení a módy</value>
   </data>
   <data name="Uninstaller.KeepData.Description" xml:space="preserve">
-    <value>Zůstanou uchovány na instalačním místě SleepStrapu, a budou automaticky obnoveny při přeinstalaci.</value>
+    <value>Zůstanou uchovány na instalačním místě SleepBloxu, a budou automaticky obnoveny při přeinstalaci.</value>
   </data>
   <data name="Uninstaller.Uninstall" xml:space="preserve">
     <value>Odinstalovat</value>
@@ -988,19 +988,19 @@ SleepStrap byl nainstalován na "{1}".</value>
     <value>Nemáte momentálně nainstalovaný WebView2 runtime. Různé funkce Robloxu nebudou bez něj fungovat správně, jako například desktopová aplikace. Chcete jej nyní stáhnout?</value>
   </data>
   <data name="Dialog.CannotCreateShortcuts" xml:space="preserve">
-    <value>SleepStrap nebyl schopen vytvořit zkratky na ploše a v menu Start. Zkuste je vytvořit později v nastavení.</value>
+    <value>SleepBlox nebyl schopen vytvořit zkratky na ploše a v menu Start. Zkuste je vytvořit později v nastavení.</value>
   </data>
   <data name="Dialog.Exception.Info.2.Alt" xml:space="preserve">
-    <value>Nejprve zkontrolujte [SleepStrapovou Wiki]({0}), jestli náhodou váš problém nebyl již vyřešen.
+    <value>Nejprve zkontrolujte [SleepBloxovou Wiki]({0}), jestli náhodou váš problém nebyl již vyřešen.
 
-Pokud ne, pak prosím nahlaste tento error správcům této forky. NENAHLAŠUJTE tuto chybu do GitHub repozitáře SleepStrapu, protože toto je neoficiální build.</value>
+Pokud ne, pak prosím nahlaste tento error správcům této forky. NENAHLAŠUJTE tuto chybu do GitHub repozitáře SleepBloxu, protože toto je neoficiální build.</value>
     <comment>"fork" in general means "a variation of" or "a different version of". You can alternatively write the first sentence as "...to the maintainers of this version."</comment>
   </data>
   <data name="Installer.Install.Shortcuts.Description" xml:space="preserve">
     <value>Tohle jsou obecné zkratky, které zobrazí spouštěcí nabídku s více možnostmi. Zkratky pro konkrétní funkce mohou být vytvořeny později v nastavení.</value>
   </data>
   <data name="Menu.Shortcuts.Description" xml:space="preserve">
-    <value>Nakonfigurujte, jak může být SleepStrap snadno spuštěn.</value>
+    <value>Nakonfigurujte, jak může být SleepBlox snadno spuštěn.</value>
   </data>
   <data name="Menu.Shortcuts.General.Title" xml:space="preserve">
     <value>Obecný</value>
@@ -1040,7 +1040,7 @@ Pokud ne, pak prosím nahlaste tento error správcům této forky. NENAHLAŠUJTE
     <value>Máte neuložené změny. Opravdu chcete ukončit bez uložení?</value>
   </data>
   <data name="InstallChecker.VersionLessThanInstalled" xml:space="preserve">
-    <value>Verze SleepStrapu, kterou jste spustili, je starší než ta, kterou máte právě nainstalovanou.
+    <value>Verze SleepBloxu, kterou jste spustili, je starší než ta, kterou máte právě nainstalovanou.
 Mohou nastat problémy a vaše nastavení mohou být změněny. Doporučuje se přeinstalovat.
 Opravdu chcete pokračovat?</value>
   </data>
@@ -1053,7 +1053,7 @@ Opravdu chcete pokračovat?</value>
   <data name="Dialog.PlayerError.HelpInformation" xml:space="preserve">
     <value>Pro informace o tom, proč k tomu může docházet a jak to lze vyřešit, si přečtěte [tento článek s nápovědou]({0}).
 
-Zkontrolujte, zda Roblox funguje [s původním spouštěčem]({1}). Pokud nefunguje, problém není způsoben SleepStrapem. Pokud ano, podívejte se na článek s nápovědou.</value>
+Zkontrolujte, zda Roblox funguje [s původním spouštěčem]({1}). Pokud nefunguje, problém není způsoben SleepBloxem. Pokud ano, podívejte se na článek s nápovědou.</value>
   </data>
   <data name="Common.NetworkError" xml:space="preserve">
     <value>Nepodařilo se načíst data kvůli chybám internetové sítě.</value>
@@ -1065,7 +1065,7 @@ Zkontrolujte, zda Roblox funguje [s původním spouštěčem]({1}). Pokud nefung
     <value>Podporovatelé</value>
   </data>
   <data name="About.Supporters.Description" xml:space="preserve">
-    <value>Tohle jsou lidé, kteří podpořili SleepStrap skrz Ko-fi. Velký dík všem zde!
+    <value>Tohle jsou lidé, kteří podpořili SleepBlox skrz Ko-fi. Velký dík všem zde!
 Každá osoba je zařazena podle celkového závazku.</value>
   </data>
   <data name="JsonManager.SettingsLoadFailed" xml:space="preserve">
@@ -1096,12 +1096,12 @@ Každá osoba je zařazena podle celkového závazku.</value>
     <value>Pro toto spuštění nebude Roblox kontrolován pro aktualizace a změny v módech nebudou aplikovány.</value>
   </data>
   <data name="Dialog.Connectivity.RobloxUpgradeNeeded" xml:space="preserve">
-    <value>Jelikož Roblox musí být nainstalován nebo potřebuje aktualizaci, SleepStrap nemůže pokračovat.</value>
+    <value>Jelikož Roblox musí být nainstalován nebo potřebuje aktualizaci, SleepBlox nemůže pokračovat.</value>
   </data>
   <data name="Installer.Install.CannotOverwrite" xml:space="preserve">
-    <value>SleepStrap byl nainstalován na toto místo a je stále přítomen, ale instalátor nemůže přepsat starý.exe soubor. 
+    <value>SleepBlox byl nainstalován na toto místo a je stále přítomen, ale instalátor nemůže přepsat starý.exe soubor.
 
-Prosím manuálně smažte SleepStrap.exe z instalačního místa nebo zkuste restartovat systém a poté zkuste instalaci znovu.</value>
+Prosím manuálně smažte SleepBlox.exe z instalačního místa nebo zkuste restartovat systém a poté zkuste instalaci znovu.</value>
   </data>
   <data name="Common.NotAvailable" xml:space="preserve">
     <value>Není k dispozici</value>
@@ -1113,7 +1113,7 @@ Prosím manuálně smažte SleepStrap.exe z instalačního místa nebo zkuste re
     <value>Konfigurace parametrů aplikace, jako je škálování DPI a [optimalizace pro rozlišení celé obrazovky]({0}).</value>
   </data>
   <data name="Common.RobloxNotInstalled" xml:space="preserve">
-    <value>Roblox již nebyl nainstalován. Před použitím této možnosti spusťte SleepStrap alespoň jednou.</value>
+    <value>Roblox již nebyl nainstalován. Před použitím této možnosti spusťte SleepBlox alespoň jednou.</value>
   </data>
   <data name="Installer.ShouldCancel" xml:space="preserve">
     <value>Opravdu chcete zrušit instalaci?</value>
@@ -1131,10 +1131,10 @@ Prosím manuálně smažte SleepStrap.exe z instalačního místa nebo zkuste re
     <value>Extrahovat ikony Robloxu do složky</value>
   </data>
   <data name="Menu.Shortcuts.ExtractIcons.Description" xml:space="preserve">
-    <value>Umožňuje používat rozsah Roblox ikon SleepStrapu pro zástupce. [Podívej se jak na to.]({0})</value>
+    <value>Umožňuje používat rozsah Roblox ikon SleepBloxu pro zástupce. [Podívej se jak na to.]({0})</value>
   </data>
   <data name="Dialog.RegistryWriteError" xml:space="preserve">
-    <value>SleepStrap není schopen zapisovat do registru Windows. Antivirus pravděpodobně zasahuje a způsobuje problémy. Prosím zkontrolujte, zda nemáte nic, co by omezilo funkci SleepStrapu.</value>
+    <value>SleepBlox není schopen zapisovat do registru Windows. Antivirus pravděpodobně zasahuje a způsobuje problémy. Prosím zkontrolujte, zda nemáte nic, co by omezilo funkci SleepBloxu.</value>
   </data>
   <data name="About.Supporters.Monthly" xml:space="preserve">
     <value>Měsíčně</value>
@@ -1156,14 +1156,14 @@ Prosím manuálně smažte SleepStrap.exe z instalačního místa nebo zkuste re
     <comment>See the prompt for more context</comment>
   </data>
   <data name="Menu.TestMode.Prompt" xml:space="preserve">
-    <value>Testovací režim usnadňuje opakované testování vlivu vašich nastavení na Roblox. 
+    <value>Testovací režim usnadňuje opakované testování vlivu vašich nastavení na Roblox.
 
 Pokud je zapnut, po zavření nastavení automaticky spustí Roblox a po zavření Robloxu znovu otevře nastavení v cyklu, dokud jej nevypnete.
 
 Chcete zapnout testovací režim?</value>
   </data>
   <data name="About.Translators.Description" xml:space="preserve">
-    <value>Všechny překlady SleepStrapu jsou crowdsourcovány skrz [Crowdin]({0}). Všichni uvedení zde jsou lidé, kteří velkoryse dobrovolili svůj čas a snahu přeložit SleepStrap. Obrovský dík všem!</value>
+    <value>Všechny překlady SleepBloxu jsou crowdsourcovány skrz [Crowdin]({0}). Všichni uvedení zde jsou lidé, kteří velkoryse dobrovolili svůj čas a snahu přeložit SleepBlox. Obrovský dík všem!</value>
   </data>
   <data name="Common.Navigation.Install" xml:space="preserve">
     <value>Instalovat</value>
@@ -1183,7 +1183,7 @@ Chcete zapnout testovací režim?</value>
     <value>Vlastní</value>
   </data>
   <data name="Bootstrapper.FilesInUse" xml:space="preserve">
-    <value>SleepStrap se pokusil aktualizovat Roblox, ale nemůže, protože soubory Robloxu jsou stále používány.
+    <value>SleepBlox se pokusil aktualizovat Roblox, ale nemůže, protože soubory Robloxu jsou stále používány.
 
 Zavřete všechny aplikace, které mohou používat soubory Robloxu, a znovu spusťte.</value>
     <comment>This is *not* for when Roblox is still running when trying to upgrade. This applies to files being open (i.e. image assets)</comment>
@@ -1194,10 +1194,10 @@ Zavřete všechny aplikace, které mohou používat soubory Robloxu, a znovu spu
   </data>
   <data name="Common.Export" xml:space="preserve">
     <value>Exportovat</value>
-    <comment>Currently used under the "SleepStrap" settings tab for the button to export diagnostic data</comment>
+    <comment>Currently used under the "SleepBlox" settings tab for the button to export diagnostic data</comment>
   </data>
   <data name="Dialog.Connectivity.Preventing" xml:space="preserve">
-    <value>Něco pravděpodobně brání SleepStrapu připojení k internetu.</value>
+    <value>Něco pravděpodobně brání SleepBloxu připojení k internetu.</value>
   </data>
   <data name="App.OSDeprecation.Win7_81" xml:space="preserve">
     <value>Roblox již nepodporuje Windows 7 ani 8.1. Pokud chcete dále hrát Roblox, aktualizujte prosím na Windows 10 nebo novější.</value>
@@ -1359,7 +1359,7 @@ Zavřete všechny aplikace, které mohou používat soubory Robloxu, a znovu spu
   <data name="CustomTheme.Errors.SetupFailed" xml:space="preserve">
     <value>Nepodařilo se zprovoznit vlastní bootstrapper: {0}.
 Používám motiv {1}.</value>
-    <comment>{0} is the error reason, {1} is the theme name (e.g. SleepStrap (Classic))</comment>
+    <comment>{0} is the error reason, {1} is the theme name (e.g. SleepBlox (Classic))</comment>
   </data>
   <data name="Menu.Appearance.CustomThemes.NoneSelected" xml:space="preserve">
     <value>Není vybrán žádný vlastní motiv.</value>
@@ -1426,7 +1426,7 @@ Používám motiv {1}.</value>
     <value>Upravit</value>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>O SleepStrapu</value>
+    <value>O SleepBloxu</value>
   </data>
   <data name="Menu.FastFlags.Presets.EscapeMenuVersion.Title" xml:space="preserve">
     <value>Vybraná verze escape nabídky</value>
@@ -1438,7 +1438,7 @@ Používám motiv {1}.</value>
     <value>Omezení snímků</value>
   </data>
   <data name="Menu.FastFlags.Presets.HideGuis.Description" xml:space="preserve">
-    <value>Přepíná se pomocí [klávesových zkratek]({0}). Funguje pouze, pokud jste ve [skupině SleepStrap na Robloxu]({1}).</value>
+    <value>Přepíná se pomocí [klávesových zkratek]({0}). Funguje pouze, pokud jste ve [skupině SleepBlox na Robloxu]({1}).</value>
   </data>
   <data name="Menu.FastFlags.Presets.HideGuis.Title" xml:space="preserve">
     <value>Povolit možnost skrýt GUI</value>
@@ -1483,11 +1483,11 @@ Používám motiv {1}.</value>
     <value>Shromažďujte informace, které lze nahrát online, abyste vyřešili problém, který máte.</value>
   </data>
   <data name="Menu.SleepStrap.ExportData.ExportConfig" xml:space="preserve">
-    <value>Konfigurace SleepStrap</value>
+    <value>Konfigurace SleepBlox</value>
     <comment>Label that appears next to a checkbox</comment>
   </data>
   <data name="Menu.SleepStrap.ExportData.ExportLogs" xml:space="preserve">
-    <value>Všechny SleepStrap logy</value>
+    <value>Všechny SleepBlox logy</value>
     <comment>Label that appears next to a checkbox</comment>
   </data>
   <data name="Menu.GBSEditor.Graphics.Description" xml:space="preserve">

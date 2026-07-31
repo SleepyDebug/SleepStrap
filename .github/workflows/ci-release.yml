@@ -26,13 +26,13 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: SleepStrap (Release) (${{ github.sha }})
+        name: SleepBlox (Release) (${{ github.sha }})
         path: .\SleepStrap\bin\x64\Release\net6.0-windows10.0.19041.0\win-x64\publish\*
 
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/tags/sleepstrap-')
+    if: startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/tags/sleepblox-')
     permissions:
       contents: write
 
@@ -40,18 +40,18 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: SleepStrap (Release) (${{ github.sha }})
+          name: SleepBlox (Release) (${{ github.sha }})
           path: release
 
       - name: Rename binaries
-        run: mv release/SleepStrap.exe SleepStrap-${{ github.ref_name }}.exe
+        run: mv release/SleepBlox.exe SleepBlox-${{ github.ref_name }}.exe
 
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
-          files: SleepStrap-${{ github.ref_name }}.exe
-          name: SleepStrap ${{ github.ref_name }}
+          files: SleepBlox-${{ github.ref_name }}.exe
+          name: SleepBlox ${{ github.ref_name }}
           fail_on_unmatched_files: true
 
   release-test:
@@ -65,16 +65,16 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: SleepStrap (Release) (${{ github.sha }})
+          name: SleepBlox (Release) (${{ github.sha }})
           path: release
 
       - name: Rename binaries
-        run: mv release/SleepStrap.exe SleepStrap-${{ github.ref_name }}.exe
+        run: mv release/SleepBlox.exe SleepBlox-${{ github.ref_name }}.exe
 
       - name: Create release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
-          files: SleepStrap-${{ github.ref_name }}.exe
-          name: SleepStrap ${{ github.ref_name }}
+          files: SleepBlox-${{ github.ref_name }}.exe
+          name: SleepBlox ${{ github.ref_name }}
           fail_on_unmatched_files: true

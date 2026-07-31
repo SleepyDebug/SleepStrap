@@ -14,8 +14,11 @@ namespace SleepStrap.Services
         private const string RtxShineTexturePath = "brdfLUT.dds";
         private const string MissingFlagValue = "__SLEEPSTRAP_FLAG_WAS_MISSING__";
         private const string RivalsSkyboxFixResource = "SleepStrap.RivalsSkyboxFix/CacheHeader.bin";
-        private const int SkyboxFaceSize = 512;
-        private const int EmbeddedSkyboxFaceSize = 1024;
+        // Roblox's sky512 filenames are misleading: their DDS payloads are
+        // 1024×1024 BC1 textures with 11 mip levels. The header below declares
+        // that exact layout, so every generated face must use this size too.
+        private const int RobloxSkyFaceSize = 1024;
+        private const int RobloxSkyTextureLength = 699_192;
 
         private static readonly byte[] RobloxSkyDdsHeader = Convert.FromBase64String(
             "RERTIHwAAAAHEAoAAAQAAAAEAAAAAAgAAAAAAAsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVVZFUgAAAABOVlRUAAECACAAAAAEAAAARFhUMQAAAAAAAAAAAAAAAAAAAAAAAAAACBBAAAAAAAAAAAAAAAAAAAAAAAA=");
@@ -59,12 +62,13 @@ namespace SleepStrap.Services
 
         private static string TextureModRoot => Path.Combine(Paths.Modifications, @"PlatformContent\pc\textures");
         private static string SkyboxModRoot => Path.Combine(TextureModRoot, "sky");
-        private static string RtxShineBackupRoot => Path.Combine(Paths.SleepStrapData, "Backups", "RtxShine");
-        private static string SkyboxBackupRoot => Path.Combine(Paths.SleepStrapData, "Backups", "Skybox");
-        private static string RivalsSkyboxCacheBackupRoot => Path.Combine(Paths.SleepStrapData, "Backups", "RivalsSkyboxCache");
-        private static string SkyboxCacheRoot => Path.Combine(Paths.SleepStrapData, "Skybox");
+        private static string RtxShineBackupRoot => Path.Combine(Paths.SleepBloxData, "Backups", "RtxShine");
+        private static string SkyboxBackupRoot => Path.Combine(Paths.SleepBloxData, "Backups", "Skybox");
+        private static string RivalsSkyboxCacheBackupRoot => Path.Combine(Paths.SleepBloxData, "Backups", "RivalsSkyboxCache");
+        private static string SkyboxCacheRoot => Path.Combine(Paths.SleepBloxData, "Skybox");
 
-        public static bool HasCachedSkybox => SkyboxFiles.All(file => File.Exists(Path.Combine(SkyboxCacheRoot, file)));
+        public static bool HasCachedSkybox => SkyboxFiles.All(file =>
+            IsRobloxSkyTexture(Path.Combine(SkyboxCacheRoot, file)));
 
         public static int CloseRobloxProcesses()
         {
@@ -109,7 +113,7 @@ namespace SleepStrap.Services
 
         public static async Task ImportSkyboxAsync(string sourcePath)
         {
-            string stagingRoot = Path.Combine(Paths.SleepStrapData, "Staging", Guid.NewGuid().ToString("N"));
+            string stagingRoot = Path.Combine(Paths.SleepBloxData, "Staging", Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(stagingRoot);
             try
             {
@@ -143,12 +147,33 @@ namespace SleepStrap.Services
                 return;
             }
 
-            if (!SkyboxGalleryService.IsPreset(selected))
-                return;
+            if (SkyboxGalleryService.IsPreset(selected))
+            {
+                // This runs during launch after Roblox has been closed. Rebuilding the
+                // chosen preset here prevents a previous sky from surviving in cache.
+                ApplyEmbeddedSkybox(SkyboxGalleryService.GetResourceFolder(selected), true);
+            }
+            else if (UserSkyboxService.IsUserSkyboxKey(selected))
+            {
+                // Importing a panorama never changes Roblox. Only materialize a
+                // selected imported sky at launch, and never resurrect its cached
+                // files after the imported-sky master setting has been disabled.
+                if (!UserSkyboxService.IsEnabled ||
+                    !UserSkyboxService.TryGetSkyboxDirectory(selected, out string sourceDirectory))
+                {
+                    RemoveCustomSkybox();
+                    return;
+                }
 
-            // This runs during launch after Roblox has been closed. Rebuilding the
-            // chosen preset here prevents a previous sky from surviving in cache.
-            ApplyEmbeddedSkybox(SkyboxGalleryService.GetResourceFolder(selected), true);
+                ApplyUserSkybox(sourceDirectory, true);
+            }
+            else if (!HasCachedSkybox)
+            {
+                // Preserve support for the older one-off panorama importer, but do
+                // not leave a broken selection pointing at stale texture files.
+                RemoveCustomSkybox();
+                return;
+            }
 
             if (applyRivalsFix)
                 ApplyRivalsSkyboxCompatibilityFix();
@@ -180,6 +205,28 @@ namespace SleepStrap.Services
 
                 using Stream input = assembly.GetManifestResourceStream(resourceName)
                     ?? throw new InvalidOperationException($"Could not load embedded sky file '{resourceName}'.");
+                WriteRobloxSkyTexture(input, Path.Combine(SkyboxCacheRoot, file));
+            }
+
+            ApplyCachedSkybox();
+        }
+
+        private static void ApplyUserSkybox(string sourceDirectory, bool createBackup)
+        {
+            if (String.IsNullOrWhiteSpace(sourceDirectory) || !Directory.Exists(sourceDirectory))
+                throw new InvalidDataException("The selected imported skybox files could not be found.");
+
+            if (createBackup && !App.Settings.Prop.DarkTexturesEnabled)
+                CreateBackupIfNeeded(SkyboxBackupRoot, GetSkyboxRelativePaths());
+
+            Directory.CreateDirectory(SkyboxCacheRoot);
+            foreach (string file in SkyboxFiles)
+            {
+                string sourcePath = Path.Combine(sourceDirectory, file);
+                if (!File.Exists(sourcePath))
+                    throw new InvalidDataException($"The selected imported skybox is missing '{file}'.");
+
+                using FileStream input = File.OpenRead(sourcePath);
                 WriteRobloxSkyTexture(input, Path.Combine(SkyboxCacheRoot, file));
             }
 
@@ -255,7 +302,7 @@ namespace SleepStrap.Services
 
         public static int DeployCachedSkyboxToInstalledVersions()
         {
-            if (!HasCachedSkybox || SkyboxFiles.Any(file => !IsDdsTexture(Path.Combine(SkyboxCacheRoot, file))))
+            if (!HasCachedSkybox || SkyboxFiles.Any(file => !IsRobloxSkyTexture(Path.Combine(SkyboxCacheRoot, file))))
                 throw new InvalidOperationException("The selected skybox has not been converted into Roblox texture files.");
 
             if (!Directory.Exists(Paths.Versions))
@@ -285,7 +332,7 @@ namespace SleepStrap.Services
 
         public static void SetDarkTextures(bool enabled)
         {
-            bool reapplyCustomSkybox = App.Settings.Prop.CustomSkyboxEnabled && HasCachedSkybox;
+            bool reapplyCustomSkybox = ShouldReapplySelectedSkybox();
             IReadOnlyList<string> rtxPaths = GetRtxTexturePaths();
             bool reapplyRtx = App.Settings.Prop.RtxShineEnabled;
 
@@ -331,7 +378,7 @@ namespace SleepStrap.Services
             else
                 ApplyBasicTextures();
 
-            if (App.Settings.Prop.CustomSkyboxEnabled && HasCachedSkybox)
+            if (ShouldReapplySelectedSkybox())
                 ApplyCachedSkybox();
         }
 
@@ -386,6 +433,19 @@ namespace SleepStrap.Services
         }
 
         private static IReadOnlyList<string> GetSkyboxRelativePaths() => SkyboxFiles.Select(file => $"sky/{file}").ToArray();
+
+        private static bool ShouldReapplySelectedSkybox()
+        {
+            if (!App.Settings.Prop.CustomSkyboxEnabled || !HasCachedSkybox)
+                return false;
+
+            string selected = App.Settings.Prop.CustomSkyboxSourceName;
+            if (!UserSkyboxService.IsUserSkyboxKey(selected))
+                return true;
+
+            return UserSkyboxService.IsEnabled &&
+                UserSkyboxService.TryGetSkyboxDirectory(selected, out _);
+        }
 
         private static IReadOnlyList<(string ResourceName, string RelativePath)> GetDarkTextureResources() =>
             Assembly.GetExecutingAssembly().GetManifestResourceNames()
@@ -737,9 +797,18 @@ namespace SleepStrap.Services
                 File.Copy(Path.Combine(SkyboxCacheRoot, file), Path.Combine(SkyboxModRoot, file), true);
         }
 
-        private static bool IsDdsTexture(string path)
+        /// <summary>
+        /// Checks for the exact DDS/BC1 layout Roblox expects for a sky face.
+        /// Checking only the magic bytes allowed old 512px imports whose header
+        /// incorrectly claimed a 1024px payload, which Roblox renders as gray.
+        /// </summary>
+        internal static bool IsRobloxSkyTexture(string path)
         {
             if (!File.Exists(path))
+                return false;
+
+            FileInfo fileInfo = new(path);
+            if (fileInfo.Length != RobloxSkyTextureLength)
                 return false;
 
             using FileStream input = File.OpenRead(path);
@@ -756,7 +825,11 @@ namespace SleepStrap.Services
             Span<byte> signature = stackalloc byte[4];
             bool alreadyDds = source.Read(signature) == signature.Length &&
                 signature[0] == (byte)'D' && signature[1] == (byte)'D' &&
-                signature[2] == (byte)'S' && signature[3] == (byte)' ';
+                signature[2] == (byte)'S' &&
+                // Standard DDS files use "DDS ". SleepStrap's Roblox-compatible
+                // files use the patched "DDS|" header, which must also be copied
+                // as DDS rather than passed to Image.FromStream.
+                (signature[3] == (byte)' ' || signature[3] == (byte)'|');
             source.Position = 0;
 
             if (alreadyDds)
@@ -772,7 +845,7 @@ namespace SleepStrap.Services
             }
 
             using Image loadedImage = Image.FromStream(source);
-            using var face = new Bitmap(EmbeddedSkyboxFaceSize, EmbeddedSkyboxFaceSize, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            using var face = new Bitmap(RobloxSkyFaceSize, RobloxSkyFaceSize, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             using (Graphics graphics = Graphics.FromImage(face))
             {
                 graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
@@ -838,7 +911,7 @@ namespace SleepStrap.Services
                 RestoreBackup(RtxShineBackupRoot, GetLegacyRtxTexturePaths());
 
             CreateBackupIfNeeded(RtxShineBackupRoot, relativePaths);
-            File.WriteAllText(versionMarker, "SleepStrap RTX material layer v3");
+            File.WriteAllText(versionMarker, "SleepBlox RTX material layer v3");
         }
 
         private static void CreateBackupIfNeeded(string backupRoot, IReadOnlyList<string> relativePaths)
@@ -886,7 +959,9 @@ namespace SleepStrap.Services
             Directory.Delete(backupRoot, true);
         }
 
-        private static void ConvertPanoramaToSkybox(string sourcePath, string outputRoot)
+        // Shared by the standalone importer. This writes only the six converted
+        // files to outputRoot; callers decide whether and where to deploy them.
+        internal static void ConvertPanoramaToSkybox(string sourcePath, string outputRoot)
         {
             using var loadedImage = Image.FromFile(sourcePath);
             if (loadedImage.Width < 512 || loadedImage.Height < 256)
@@ -916,7 +991,13 @@ namespace SleepStrap.Services
             {
                 byte[] facePixels = RenderFace(sourcePixels, panorama.Width, panorama.Height, face);
                 using FileStream output = File.Create(Path.Combine(outputRoot, $"sky512_{suffixes[face]}.tex"));
-                encoder.EncodeToStream(facePixels, SkyboxFaceSize, SkyboxFaceSize, BCnEncoder.Encoder.PixelFormat.Rgba32, output);
+                encoder.EncodeToStream(facePixels, RobloxSkyFaceSize, RobloxSkyFaceSize, BCnEncoder.Encoder.PixelFormat.Rgba32, output);
+
+                // Roblox expects its own DDS header variant even though the payload is
+                // standard mipmapped BC1/DXT1 data. Keep imported panoramas consistent
+                // with the embedded gallery and the standalone SleepSkybox converter.
+                output.Position = 0;
+                output.Write(RobloxSkyDdsHeader);
             }
         }
 
@@ -944,13 +1025,13 @@ namespace SleepStrap.Services
 
         private static byte[] RenderFace(byte[] panorama, int panoramaWidth, int panoramaHeight, int face)
         {
-            byte[] output = new byte[SkyboxFaceSize * SkyboxFaceSize * 4];
-            Parallel.For(0, SkyboxFaceSize, y =>
+            byte[] output = new byte[RobloxSkyFaceSize * RobloxSkyFaceSize * 4];
+            Parallel.For(0, RobloxSkyFaceSize, y =>
             {
-                for (int x = 0; x < SkyboxFaceSize; x++)
+                for (int x = 0; x < RobloxSkyFaceSize; x++)
                 {
-                    double u = (2.0 * (x + 0.5) / SkyboxFaceSize) - 1.0;
-                    double v = (2.0 * (y + 0.5) / SkyboxFaceSize) - 1.0;
+                    double u = (2.0 * (x + 0.5) / RobloxSkyFaceSize) - 1.0;
+                    double v = (2.0 * (y + 0.5) / RobloxSkyFaceSize) - 1.0;
                     (double dx, double dy, double dz) = GetDirection(face, u, v);
                     double length = Math.Sqrt((dx * dx) + (dy * dy) + (dz * dz));
                     dx /= length; dy /= length; dz /= length;
@@ -958,7 +1039,7 @@ namespace SleepStrap.Services
                     double latitude = Math.Asin(Math.Clamp(dy, -1.0, 1.0));
                     double sourceX = ((longitude / (2.0 * Math.PI)) + 0.5) * panoramaWidth;
                     double sourceY = (0.5 - (latitude / Math.PI)) * panoramaHeight;
-                    SampleBilinear(panorama, panoramaWidth, panoramaHeight, sourceX, sourceY, output, ((y * SkyboxFaceSize) + x) * 4);
+                    SampleBilinear(panorama, panoramaWidth, panoramaHeight, sourceX, sourceY, output, ((y * RobloxSkyFaceSize) + x) * 4);
                 }
             });
             return output;

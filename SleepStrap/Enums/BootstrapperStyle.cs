@@ -8,7 +8,7 @@ namespace SleepStrap.Enums
         ProgressDialog,
         ClassicFluentDialog,
         ByfronDialog,
-        [EnumName(StaticName = "SleepStrap")]
+        [EnumName(StaticName = "SleepBlox")]
         FluentDialog,
         FluentAeroDialog,
         CustomDialog

@@ -1,37 +1,37 @@
 {
   "profiles": {
-    "SleepStrap (Launch)": {
+    "SleepBlox (Launch)": {
       "commandName": "Project"
     },
-    "SleepStrap (Quiet Launch)": {
+    "SleepBlox (Quiet Launch)": {
       "commandName": "Project",
       "commandLineArgs": "-quiet"
     },
-    "SleepStrap (Uninstall)": {
+    "SleepBlox (Uninstall)": {
       "commandName": "Project",
       "commandLineArgs": "-uninstall"
     },
-    "SleepStrap (Quiet Uninstall)": {
+    "SleepBlox (Quiet Uninstall)": {
       "commandName": "Project",
       "commandLineArgs": "-uninstall -quiet"
     },
-    "SleepStrap (Menu)": {
+    "SleepBlox (Menu)": {
       "commandName": "Project",
       "commandLineArgs": "-menu"
     },
-    "SleepStrap (Deeplink)": {
+    "SleepBlox (Deeplink)": {
       "commandName": "Project",
       "commandLineArgs": "-player \"roblox://experiences/start?placeId=13700835620\""
     },
-    "SleepStrap (Studio Launch)": {
+    "SleepBlox (Studio Launch)": {
       "commandName": "Project",
       "commandLineArgs": "-studio"
     },
-    "SleepStrap (Watcher)": {
+    "SleepBlox (Watcher)": {
       "commandName": "Project",
       "commandLineArgs": "-watcher"
     },
-    "SleepStrap (Bloxshade)": {
+    "SleepBlox (Bloxshade)": {
       "commandName": "Project",
       "commandLineArgs": "-bloxshade"
     }

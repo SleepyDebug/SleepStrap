@@ -158,10 +158,28 @@ namespace SleepStrap
             }
         }
 
+        public static bool DoesAnyMutexExist(params string[] names)
+        {
+            return names.Any(DoesMutexExist);
+        }
+
         public static void KillBackgroundUpdater()
         {
-            using EventWaitHandle handle = new EventWaitHandle(false, EventResetMode.AutoReset, "SleepStrap-BackgroundUpdaterKillEvent");
-            handle.Set();
+            SignalBackgroundUpdater(App.BackgroundUpdaterKillEventName);
+            SignalBackgroundUpdater(App.LegacyBackgroundUpdaterKillEventName);
+        }
+
+        private static void SignalBackgroundUpdater(string eventName)
+        {
+            try
+            {
+                using EventWaitHandle handle = EventWaitHandle.OpenExisting(eventName);
+                handle.Set();
+            }
+            catch (WaitHandleCannotBeOpenedException)
+            {
+                // No background updater with this identity is running.
+            }
         }
     }
 }

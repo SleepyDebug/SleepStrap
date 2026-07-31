@@ -13,7 +13,7 @@ namespace SleepStrap.UI.ViewModels.Settings
             RestoreNvidiaChangesCommand = new AsyncRelayCommand(RestoreNvidiaChangesAsync);
         }
 
-        public string VersionText => $"SleepStrap {new Version(App.Version).ToString(3)}";
+        public string VersionText => $"{App.ProjectName} {new Version(App.Version).ToString(3)}";
         public ICommand ResetSettingsCommand { get; }
         public IAsyncRelayCommand RestoreNvidiaChangesCommand { get; }
 
@@ -22,7 +22,7 @@ namespace SleepStrap.UI.ViewModels.Settings
             if (App.Settings.Prop.NvidiaBlurredTexturesProfileBackup.Count == 0)
             {
                 Frontend.ShowMessageBox(
-                    "SleepStrap does not have a saved NVIDIA profile backup to restore. Use NVIDIA Control Panel → Manage 3D settings → Program Settings → Roblox VR → Restore.",
+                    $"{App.ProjectName} does not have a saved NVIDIA profile backup to restore. Use NVIDIA Control Panel → Manage 3D settings → Program Settings → Roblox VR → Restore.",
                     MessageBoxImage.Information);
                 return;
             }
@@ -34,7 +34,7 @@ namespace SleepStrap.UI.ViewModels.Settings
             }
 
             if (Frontend.ShowMessageBox(
-                "Restore the saved NVIDIA Roblox VR profile now? This only restores values SleepStrap saved before Blur was enabled.",
+                $"Restore the saved NVIDIA Roblox VR profile now? This only restores values {App.ProjectName} saved before Blur was enabled.",
                 MessageBoxImage.Warning, MessageBoxButton.YesNo, MessageBoxResult.No) != MessageBoxResult.Yes)
             {
                 return;
@@ -56,14 +56,14 @@ namespace SleepStrap.UI.ViewModels.Settings
             catch (Exception ex)
             {
                 App.Logger.WriteException("OtherViewModel::RestoreNvidiaChanges", ex);
-                Frontend.ShowMessageBox($"SleepStrap could not restore the NVIDIA changes.\n\n{ex.Message}", MessageBoxImage.Error);
+                Frontend.ShowMessageBox($"{App.ProjectName} could not restore the NVIDIA changes.\n\n{ex.Message}", MessageBoxImage.Error);
             }
         }
 
         private void ResetSettings()
         {
             MessageBoxResult result = Frontend.ShowMessageBox(
-                "Reset all SleepStrap settings to their defaults? This will remove your selected textures, skybox, font, clipping and PC preferences.",
+                $"Reset all {App.ProjectName} settings to their defaults? This will remove your selected textures, skybox, font, clipping and PC preferences.",
                 MessageBoxImage.Warning, MessageBoxButton.YesNo, MessageBoxResult.No);
             if (result != MessageBoxResult.Yes)
                 return;
@@ -72,14 +72,14 @@ namespace SleepStrap.UI.ViewModels.Settings
             {
                 App.Settings.Prop = new Models.Persistable.Settings();
                 App.Settings.Save();
-                Frontend.ShowMessageBox("SleepStrap settings were reset. Reopen SleepStrap to reload the defaults.", MessageBoxImage.Information);
+                Frontend.ShowMessageBox($"{App.ProjectName} settings were reset. Reopen {App.ProjectName} to reload the defaults.", MessageBoxImage.Information);
                 OnPropertyChanged(nameof(CloseSleepStrapOnLaunch));
                 OnPropertyChanged(nameof(OverrideLegacyBloxstrapSettings));
             }
             catch (Exception ex)
             {
                 App.Logger.WriteException("OtherViewModel::ResetSettings", ex);
-                Frontend.ShowMessageBox($"SleepStrap could not reset its settings.\n\n{ex.Message}", MessageBoxImage.Error);
+                Frontend.ShowMessageBox($"{App.ProjectName} could not reset its settings.\n\n{ex.Message}", MessageBoxImage.Error);
             }
         }
 
@@ -115,7 +115,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                 catch (Exception ex)
                 {
                     App.Logger.WriteException("OtherViewModel::OverrideLegacyBloxstrapSettings", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not update the FastFlag override.\n\n{ex.Message}", System.Windows.MessageBoxImage.Error);
+                    Frontend.ShowMessageBox($"{App.ProjectName} could not update the FastFlag override.\n\n{ex.Message}", System.Windows.MessageBoxImage.Error);
                     OnPropertyChanged(nameof(OverrideLegacyBloxstrapSettings));
                 }
             }

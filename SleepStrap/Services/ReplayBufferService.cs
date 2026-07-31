@@ -268,7 +268,7 @@ namespace SleepStrap.Services
 
         private void RegisterHotkey()
         {
-            _hotkeyWindow = new HwndSource(new HwndSourceParameters("SleepStrap Replay Hotkey")
+            _hotkeyWindow = new HwndSource(new HwndSourceParameters($"{App.ProjectName} Replay Hotkey")
             {
                 Width = 0,
                 Height = 0,

@@ -59,26 +59,7 @@ namespace SleepStrap
                 }
             }
 
-            using (var uninstallKey = Registry.CurrentUser.CreateSubKey(App.UninstallKey))
-            {
-                uninstallKey.SetValueSafe("DisplayIcon", $"{Paths.Application},0");
-                uninstallKey.SetValueSafe("DisplayName", App.ProjectName);
-
-                uninstallKey.SetValueSafe("DisplayVersion", App.Version);
-
-                if (uninstallKey.GetValue("InstallDate") is null)
-                    uninstallKey.SetValueSafe("InstallDate", DateTime.Now.ToString("yyyyMMdd"));
-
-                uninstallKey.SetValueSafe("InstallLocation", Paths.Base);
-                uninstallKey.SetValueSafe("NoRepair", 1);
-                uninstallKey.SetValueSafe("Publisher", App.ProjectOwner);
-                uninstallKey.SetValueSafe("ModifyPath", $"\"{Paths.Application}\" -settings");
-                uninstallKey.SetValueSafe("QuietUninstallString", $"\"{Paths.Application}\" -uninstall -quiet");
-                uninstallKey.SetValueSafe("UninstallString", $"\"{Paths.Application}\" -uninstall");
-                uninstallKey.SetValueSafe("HelpLink", App.ProjectHelpLink);
-                uninstallKey.SetValueSafe("URLInfoAbout", App.ProjectSupportLink);
-                uninstallKey.SetValueSafe("URLUpdateInfo", App.ProjectDownloadLink);
-            }
+            WriteUninstallRegistration();
 
             WindowsRegistry.RegisterApis();
 
@@ -92,7 +73,8 @@ namespace SleepStrap
             if (CreateStartMenuShortcuts)
                 Shortcut.Create(Paths.Application, "", StartMenuShortcut);
 
-            // Keep configuration from an earlier SleepStrap installation.
+            // Keep configuration from the existing installation, including one
+            // discovered through the legacy SleepStrap uninstall registration.
             App.Settings.Load(false);
             App.State.Load(false);
             App.FastFlags.Load(false);
@@ -104,6 +86,73 @@ namespace SleepStrap
 
             App.Logger.WriteLine(LOG_IDENT, "Installation finished");
 
+        }
+
+        /// <summary>
+        /// Promotes an existing SleepStrap installation to the public SleepBlox
+        /// identity without moving its directory, settings, Roblox modifications,
+        /// or version cache. This runs once: the new uninstall registration causes
+        /// later startups to use the SleepBlox identity directly.
+        /// </summary>
+        public static void MigrateLegacyInstallation()
+        {
+            const string LOG_IDENT = "Installer::MigrateLegacyInstallation";
+
+            try
+            {
+                if (!Paths.Initialized || !File.Exists(Paths.Application))
+                    return;
+
+                WriteUninstallRegistration();
+                WindowsRegistry.RegisterApis();
+                WindowsRegistry.RegisterPlayer();
+
+                if (App.IsStudioVisible)
+                    WindowsRegistry.RegisterStudio();
+
+                Shortcut.Create(Paths.Application, "", DesktopShortcut);
+                Shortcut.Create(Paths.Application, "", StartMenuShortcut);
+
+                // Preserve existing desktop/start-menu/browser shortcuts while making
+                // the old executable name run the rebranded binary too. Do not try to
+                // overwrite it when this very process is still running under that name.
+                string legacyExecutable = Path.Combine(Paths.Base, $"{App.LegacyProjectName}.exe");
+                if (!String.Equals(Paths.Process, legacyExecutable, StringComparison.OrdinalIgnoreCase) &&
+                    File.Exists(legacyExecutable))
+                {
+                    File.Copy(Paths.Application, legacyExecutable, true);
+                }
+
+                App.Logger.WriteLine(LOG_IDENT, "Migrated the legacy installation to the SleepBlox identity");
+            }
+            catch (Exception ex)
+            {
+                // The active app remains usable even if an old shortcut or registry
+                // key cannot be rewritten. A later SleepBlox launch will retry.
+                App.Logger.WriteLine(LOG_IDENT, "Could not complete the legacy-install migration");
+                App.Logger.WriteException(LOG_IDENT, ex);
+            }
+        }
+
+        private static void WriteUninstallRegistration()
+        {
+            using RegistryKey uninstallKey = Registry.CurrentUser.CreateSubKey(App.UninstallKey);
+            uninstallKey.SetValueSafe("DisplayIcon", $"{Paths.Application},0");
+            uninstallKey.SetValueSafe("DisplayName", App.ProjectName);
+            uninstallKey.SetValueSafe("DisplayVersion", App.Version);
+
+            if (uninstallKey.GetValue("InstallDate") is null)
+                uninstallKey.SetValueSafe("InstallDate", DateTime.Now.ToString("yyyyMMdd"));
+
+            uninstallKey.SetValueSafe("InstallLocation", Paths.Base);
+            uninstallKey.SetValueSafe("NoRepair", 1);
+            uninstallKey.SetValueSafe("Publisher", App.ProjectOwner);
+            uninstallKey.SetValueSafe("ModifyPath", $"\"{Paths.Application}\" -settings");
+            uninstallKey.SetValueSafe("QuietUninstallString", $"\"{Paths.Application}\" -uninstall -quiet");
+            uninstallKey.SetValueSafe("UninstallString", $"\"{Paths.Application}\" -uninstall");
+            uninstallKey.SetValueSafe("HelpLink", App.ProjectHelpLink);
+            uninstallKey.SetValueSafe("URLInfoAbout", App.ProjectSupportLink);
+            uninstallKey.SetValueSafe("URLUpdateInfo", App.ProjectDownloadLink);
         }
 
         private bool ValidateLocation()
@@ -413,14 +462,14 @@ namespace SleepStrap
             {
                 int closedProcessCount = Services.ProcessShutdownService.CloseOtherSleepStrapProcesses();
                 if (closedProcessCount > 0)
-                    App.Logger.WriteLine(LOG_IDENT, $"Closed {closedProcessCount} other SleepStrap process(es)");
+                    App.Logger.WriteLine(LOG_IDENT, $"Closed {closedProcessCount} other {App.ProjectName} process(es)");
             }
             catch (Exception ex)
             {
-                App.Logger.WriteLine(LOG_IDENT, "Could not close other SleepStrap processes");
+                App.Logger.WriteLine(LOG_IDENT, $"Could not close other {App.ProjectName} processes");
                 App.Logger.WriteException(LOG_IDENT, ex);
                 Frontend.ShowMessageBox(
-                    $"SleepStrap could not close its other running processes.\n\n{ex.Message}",
+                    $"{App.ProjectName} could not close its other running processes.\n\n{ex.Message}",
                     MessageBoxImage.Error);
                 return;
             }
@@ -618,7 +667,7 @@ namespace SleepStrap
             {
 #pragma warning disable CS0162 // Unreachable code detected
                 if (OpenReleaseNotes)
-                    Utilities.ShellExecute($"https://github.com/{App.ProjectRepository}/wiki/Release-notes-for-SleepStrap-v{currentVer}");
+                    Utilities.ShellExecute(App.ProjectDownloadLink);
 #pragma warning restore CS0162 // Unreachable code detected
             }
             else

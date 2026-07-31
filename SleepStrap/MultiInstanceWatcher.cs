@@ -9,7 +9,10 @@ namespace SleepStrap
             try
             {
                 // Prevent race conditions by checking for other launcher processes too.
-                int count = Process.GetProcesses().Count(x => x.ProcessName is "RobloxPlayerBeta" or "SleepStrap");
+                int count = Process.GetProcesses().Count(x =>
+                    x.ProcessName.Equals("RobloxPlayerBeta", StringComparison.OrdinalIgnoreCase)
+                    || x.ProcessName.Equals(App.ProjectName, StringComparison.OrdinalIgnoreCase)
+                    || x.ProcessName.Equals(App.LegacyProjectName, StringComparison.OrdinalIgnoreCase));
                 count -= 1; // ignore the current process
                 return count;
             }
@@ -23,7 +26,7 @@ namespace SleepStrap
 
         private static void FireInitialisedEvent()
         {
-            using EventWaitHandle initEventHandle = new EventWaitHandle(false, EventResetMode.AutoReset, "SleepStrap-MultiInstanceWatcherInitialisationFinished");
+            using EventWaitHandle initEventHandle = new EventWaitHandle(false, EventResetMode.AutoReset, App.MultiInstanceWatcherEventName);
             initEventHandle.Set();
         }
 

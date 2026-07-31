@@ -1,16 +1,16 @@
-# SleepStrap 6.9.5
+# SleepBlox
 
-![SleepStrap icon](SleepStrap/SleepStrap.png)
+![SleepBlox icon](SleepStrap/SleepStrap.png)
 
-SleepStrap is a purple Windows launcher for Roblox with skyboxes, texture presets, visual modes, fonts, and Rivals display tools.
+SleepBlox is a Windows launcher for Roblox with skyboxes, texture presets, visual modes, fonts, and PC display tools.
 
-[Download SleepStrap 6.9.5](https://github.com/SleepyDebug/SleepStrap/releases/tag/sleepstrap-6.9.5) · [Discord](https://discord.gg/W3CMjx8C7s) · [Report an issue](https://github.com/SleepyDebug/SleepStrap/issues)
+[Download SleepBlox](https://github.com/SleepyDebug/SleepStrap/releases) · [Discord](https://discord.gg/W3CMjx8C7s) · [Report an issue](https://github.com/SleepyDebug/SleepStrap/issues)
 
 ## Repository layout
 
 | Path | Purpose |
 | --- | --- |
-| `SleepStrap/` | SleepStrap application source, resources, and publish profile |
+| `SleepStrap/` | SleepBlox application source, resources, and publish profile |
 | `vendor/Wpf.Ui/` | Vendored WPF UI dependency |
 | `scripts/` | Repository maintenance utilities |
 | `docs/` | Terms, risk notice, and upstream license notices |
@@ -18,7 +18,7 @@ SleepStrap is a purple Windows launcher for Roblox with skyboxes, texture preset
 
 ## Features
 
-- Purple SleepStrap interface, animated page transitions, and Sleep icon branding
+- SleepBlox interface, animated page transitions, and Sleep icon branding
 - Scrollable skybox gallery with 25 included presets
 - Reversible basic and dark texture packs
 - Clear and polished-metal RTX-style visual modes
@@ -41,8 +41,8 @@ The Windows x64 publish profile produces a self-contained single-file build, so 
 
 ## Safety notice
 
-SleepStrap is unofficial software. Its visual options replace local Roblox assets and settings; they do not inject code into the Roblox executable. No third-party launcher can guarantee protection from account enforcement. Read the full [Terms of Use and Risk Notice](docs/TERMS.md) before use.
+SleepBlox is unofficial software. Its visual options replace local Roblox assets and settings; they do not inject code into the Roblox executable. No third-party launcher can guarantee protection from account enforcement. Read the full [Terms of Use and Risk Notice](docs/TERMS.md) before use.
 
 ## Credits and licenses
 
-SleepStrap is derived from the open-source Fishstrap and Bloxstrap projects. Their names and copyrights belong to their respective owners. Required MIT notices are retained in [LICENSE](LICENSE) and [docs/licenses](docs/licenses).
+SleepBlox is derived from the open-source Fishstrap and Bloxstrap projects. Their names and copyrights belong to their respective owners. Required MIT notices are retained in [LICENSE](LICENSE) and [docs/licenses](docs/licenses).

@@ -312,7 +312,7 @@ namespace SleepStrap.UI.ViewModels.Settings
             {
                 App.Logger.WriteException("MacroViewModel::RunGridLoadout", ex);
                 Frontend.ShowMessageBox(
-                    $"SleepStrap could not apply that grid loadout.\n\n{ex.Message}",
+                    $"{App.ProjectName} could not apply that grid loadout.\n\n{ex.Message}",
                     MessageBoxImage.Error);
             }
             finally

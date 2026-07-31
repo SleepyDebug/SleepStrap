@@ -29,7 +29,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                     <StackPanel Margin="0,0,20,0">
-                        <TextBlock Text="Close SleepStrap after launch" FontSize="17" FontWeight="Medium" />
+                        <TextBlock Text="Close SleepBlox after launch" FontSize="17" FontWeight="Medium" />
                         <TextBlock Text="Off keeps the settings window open after Roblox starts." Margin="0,4,0,0"
                                    FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                     </StackPanel>
@@ -41,8 +41,8 @@
                 <Grid>
                     <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                     <StackPanel Margin="0,0,20,0">
-                        <TextBlock Text="Override old Bloxstrap settings" FontSize="17" FontWeight="Medium" />
-                        <TextBlock Text="SleepStrap replaces inherited ClientAppSettings and disables the legacy grey-sky FastFlag when it launches Roblox."
+                        <TextBlock Text="Override legacy launcher settings" FontSize="17" FontWeight="Medium" />
+                        <TextBlock Text="SleepBlox replaces inherited ClientAppSettings and disables the legacy grey-sky FastFlag when it launches Roblox."
                                    Margin="0,4,0,0" FontSize="12" TextWrapping="Wrap"
                                    Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                     </StackPanel>
@@ -63,7 +63,7 @@
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <StackPanel>
                     <TextBlock Text="Discord" FontSize="17" FontWeight="Medium" />
-                    <TextBlock Text="Updates, support, and the SleepStrap community." Margin="0,4,0,0"
+                    <TextBlock Text="Updates, support, and the SleepBlox community." Margin="0,4,0,0"
                                FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                 </StackPanel>
                 <ui:Anchor Grid.Column="1" Content="Join Discord" Icon="Chat24"
@@ -75,7 +75,7 @@
             <ui:CardExpander.Header>
                 <StackPanel>
                     <TextBlock Text="Terms of Use &amp; Risk Notice" FontSize="17" FontWeight="SemiBold" />
-                    <TextBlock Text="Important information before using SleepStrap" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="Important information before using SleepBlox" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                 </StackPanel>
             </ui:CardExpander.Header>
             <StackPanel>
@@ -83,27 +83,27 @@
                            Foreground="{DynamicResource TextFillColorSecondaryBrush}">
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="1. Unofficial software." />
                     <LineBreak />
-                    <Run Text="SleepStrap is an independent, community-made Roblox launcher and modification utility. It is not made, sponsored, endorsed, approved, or supported by Roblox Corporation. Roblox and related names, logos, and assets are trademarks or property of their respective owners." />
+                    <Run Text="SleepBlox is an independent, community-made Roblox launcher and modification utility. It is not made, sponsored, endorsed, approved, or supported by Roblox Corporation. Roblox and related names, logos, and assets are trademarks or property of their respective owners." />
                     <LineBreak /><LineBreak />
 
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="2. Fork and attribution." />
                     <LineBreak />
-                    <Run Text="SleepStrap is a fork derived from upstream open-source Roblox launcher projects and also uses code, libraries, concepts, and assets from the wider open-source software community. Those projects, their contributors, and included third-party projects remain separate works owned by their respective authors. Their retained license notices apply to the portions of software they cover. SleepStrap does not claim ownership of Roblox or third-party intellectual property." />
+                    <Run Text="SleepBlox is a fork derived from upstream open-source Roblox launcher projects and also uses code, libraries, concepts, and assets from the wider open-source software community. Those projects, their contributors, and included third-party projects remain separate works owned by their respective authors. Their retained license notices apply to the portions of software they cover. SleepBlox does not claim ownership of Roblox or third-party intellectual property." />
                     <LineBreak /><LineBreak />
 
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="3. Account enforcement and bans." />
                     <LineBreak />
-                    <Run Text="You use SleepStrap entirely at your own risk. SleepStrap changes local settings and may replace local Roblox assets, apply FastFlags, alter graphics behavior, change display settings, or interact with files used by Roblox. Roblox may change its rules, detection systems, client, or enforcement practices at any time. We do not promise that any feature is permitted by Roblox or safe from detection. We are not responsible for warnings, suspensions, account bans, hardware bans, lost access, deleted progress, lost purchases, moderation actions, or any other penalty connected directly or indirectly to installing, launching, configuring, or using SleepStrap." />
+                    <Run Text="You use SleepBlox entirely at your own risk. SleepBlox changes local settings and may replace local Roblox assets, apply FastFlags, alter graphics behavior, change display settings, or interact with files used by Roblox. Roblox may change its rules, detection systems, client, or enforcement practices at any time. We do not promise that any feature is permitted by Roblox or safe from detection. We are not responsible for warnings, suspensions, account bans, hardware bans, lost access, deleted progress, lost purchases, moderation actions, or any other penalty connected directly or indirectly to installing, launching, configuring, or using SleepBlox." />
                     <LineBreak /><LineBreak />
 
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="4. Your responsibility." />
                     <LineBreak />
-                    <Run Text="You are responsible for reviewing and following the Roblox Terms of Use, Community Standards, game rules, platform rules, and all laws that apply to you. You are responsible for deciding whether each modification, visual option, FastFlag, texture, font, skybox, display stretch, or other feature is appropriate for your account and computer. If you are not willing to accept the possibility of account enforcement or technical problems, do not use SleepStrap." />
+                    <Run Text="You are responsible for reviewing and following the Roblox Terms of Use, Community Standards, game rules, platform rules, and all laws that apply to you. You are responsible for deciding whether each modification, visual option, FastFlag, texture, font, skybox, display stretch, or other feature is appropriate for your account and computer. If you are not willing to accept the possibility of account enforcement or technical problems, do not use SleepBlox." />
                     <LineBreak /><LineBreak />
 
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="5. No warranty." />
                     <LineBreak />
-                    <Run Text="SleepStrap is provided as-is and as-available, without warranties or guarantees of any kind. We do not guarantee that it will always work, remain compatible with Roblox or Windows, improve performance, preserve files, avoid crashes, prevent data loss, or be free of bugs, security issues, interruptions, or false detections. Features can stop working after Roblox, Windows, graphics-driver, browser, or third-party service updates." />
+                    <Run Text="SleepBlox is provided as-is and as-available, without warranties or guarantees of any kind. We do not guarantee that it will always work, remain compatible with Roblox or Windows, improve performance, preserve files, avoid crashes, prevent data loss, or be free of bugs, security issues, interruptions, or false detections. Features can stop working after Roblox, Windows, graphics-driver, browser, or third-party service updates." />
                     <LineBreak /><LineBreak />
 
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="6. Device and data risk." />
@@ -113,17 +113,17 @@
 
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="7. Third-party content and services." />
                     <LineBreak />
-                    <Run Text="SleepStrap may open or depend on Roblox, Discord, Windows components, websites, open-source packages, or other third-party software and services. Those services have their own terms and privacy practices. We do not control them and are not responsible for their availability, content, security, behavior, fees, enforcement decisions, or changes." />
+                    <Run Text="SleepBlox may open or depend on Roblox, Discord, Windows components, websites, open-source packages, or other third-party software and services. Those services have their own terms and privacy practices. We do not control them and are not responsible for their availability, content, security, behavior, fees, enforcement decisions, or changes." />
                     <LineBreak /><LineBreak />
 
                     <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="8. Limitation of responsibility." />
                     <LineBreak />
-                    <Run Text="To the fullest extent allowed by applicable law, the SleepStrap maintainers, distributors, contributors, upstream project contributors, and third-party component authors are not liable for direct, indirect, incidental, special, consequential, exemplary, or punitive losses arising from SleepStrap. This includes account penalties, lost data, lost revenue, lost purchases, lost opportunities, interruption, device problems, and claims by other people, even if someone was told such harm could occur." />
+                    <Run Text="To the fullest extent allowed by applicable law, the SleepBlox maintainers, distributors, contributors, upstream project contributors, and third-party component authors are not liable for direct, indirect, incidental, special, consequential, exemplary, or punitive losses arising from SleepBlox. This includes account penalties, lost data, lost revenue, lost purchases, lost opportunities, interruption, device problems, and claims by other people, even if someone was told such harm could occur." />
                     <LineBreak /><LineBreak />
 
-                    <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="9. Continuing to use SleepStrap." />
+                    <Run FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="9. Continuing to use SleepBlox." />
                     <LineBreak />
-                    <Run Text="By installing, launching, or continuing to use SleepStrap, you confirm that you understand it is unofficial, accept the risks described above, and take responsibility for your choices. If you do not agree, stop using SleepStrap and remove it. These notices may be updated in later versions as features, platform rules, and risks change." />
+                    <Run Text="By installing, launching, or continuing to use SleepBlox, you confirm that you understand it is unofficial, accept the risks described above, and take responsibility for your choices. If you do not agree, stop using SleepBlox and remove it. These notices may be updated in later versions as features, platform rules, and risks change." />
                 </TextBlock>
             </StackPanel>
         </ui:CardExpander>
@@ -146,7 +146,7 @@
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                 <StackPanel>
                     <TextBlock Text="Reset settings" FontSize="17" FontWeight="SemiBold" />
-                    <TextBlock Text="Restore SleepStrap's defaults" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="Restore SleepBlox's defaults" Margin="0,3,0,0" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                 </StackPanel>
                 <ui:Button Grid.Column="1" Content="Reset" Icon="ArrowReset20" Command="{Binding ResetSettingsCommand}" VerticalAlignment="Center" />
             </Grid>

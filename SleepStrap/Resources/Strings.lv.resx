@@ -1,17 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Bootstrapper.AutoUpdateFailed" xml:space="preserve">
-    <value>SleepStrap nespēja automātiski atjaunoties uz versiju {0}. Lūdzu, atjauniniet to manuāli, lejupielādējot un palaižot to no mājslapas.</value>
+    <value>SleepBlox nespēja automātiski atjaunoties uz versiju {0}. Lūdzu, atjauniniet to manuāli, lejupielādējot un palaižot to no mājslapas.</value>
   </data>
   <data name="Bootstrapper.ConfirmLaunch" xml:space="preserve">
     <value>Roblox šobrīd jau ir palaists, un tas tiks aizvērts, atverot jaunu Roblox logu. Vai jūs esat pārliecināts, ka gribat turpināt palaišanu?</value>
@@ -127,13 +127,13 @@
     <value>Roblox šobrīd varētu nedarboties. Skatiet {0} priekš vairāk informācijas.</value>
   </data>
   <data name="Dialog.Connectivity.BadConnection" xml:space="preserve">
-    <value>Nevarēja izveidot savienojumu, kas norāda, ka interneta savienojums ir nestabils vai ugunsmūrī ir uzstādīta bloķēšana. Ja jūsu interneta savienojums ir labs, lūdzu pārbaudiet, vai jūsu antivīruss nebloķē SleepStrap.</value>
+    <value>Nevarēja izveidot savienojumu, kas norāda, ka interneta savienojums ir nestabils vai ugunsmūrī ir uzstādīta bloķēšana. Ja jūsu interneta savienojums ir labs, lūdzu pārbaudiet, vai jūsu antivīruss nebloķē SleepBlox.</value>
   </data>
   <data name="Bootstrapper.FirstRunUninstall" xml:space="preserve">
-    <value>Jums vajag vispirms instalēt SleepStrap, pirms jūs to atinstalējat.</value>
+    <value>Jums vajag vispirms instalēt SleepBlox, pirms jūs to atinstalējat.</value>
   </data>
   <data name="Bootstrapper.NotEnoughSpace" xml:space="preserve">
-    <value>SleepStrap nav pieejama pietiekami daudz vieta diskā, lai lejupielādētu un instalētu Roblox. Lūdzu atbrīvojiet vietu diskā un mēģiniet vēlreiz.</value>
+    <value>SleepBlox nav pieejama pietiekami daudz vieta diskā, lai lejupielādētu un instalētu Roblox. Lūdzu atbrīvojiet vietu diskā un mēģiniet vēlreiz.</value>
   </data>
   <data name="Bootstrapper.Status.ApplyingModifications" xml:space="preserve">
     <value>Uzstāda Roblox modifikācijas...</value>
@@ -169,10 +169,10 @@
     <comment>Text for style previews that use text button that says "Cancel"</comment>
   </data>
   <data name="Bootstrapper.SuccessfullyUninstalled" xml:space="preserve">
-    <value>SleepStrap veiksmīgi tika atinstalēts</value>
+    <value>SleepBlox veiksmīgi tika atinstalēts</value>
   </data>
   <data name="Bootstrapper.Uninstall.RobloxRunning" xml:space="preserve">
-    <value>Roblox šobrīd ir palaists, bet to ir vajadzīgs aizvērt pirms SleepStrap atinstalēšanas. Vai jūs vēlaties aizvērt Roblox tagad?</value>
+    <value>Roblox šobrīd ir palaists, bet to ir vajadzīgs aizvērt pirms SleepBlox atinstalēšanas. Vai jūs vēlaties aizvērt Roblox tagad?</value>
   </data>
   <data name="Bootstrapper.WMFNotFound" xml:space="preserve">
     <value>Roblox funkcionēšanai ir vajadzīga Windows Media Foundation komponentu izmantošana. Izskatās, ka jums tie nav, visdrīzāk, jo jūs izmantojat N Windows versiju. Lūdzu instalējot tos   un tad atveriet Roblox.</value>
@@ -276,22 +276,22 @@ Spiedied šeit priekš vairāk informācijas</value>
     <value>Savienojuma kļūda</value>
   </data>
   <data name="Dialog.Connectivity.UnableToConnect" xml:space="preserve">
-    <value>SleepStrap nespēj savienoties ar {0}</value>
+    <value>SleepBlox nespēj savienoties ar {0}</value>
     <comment>{0} is the name of a service (i.e. Roblox, GitHub)</comment>
   </data>
   <data name="Dialog.Exception.CopyLogContents" xml:space="preserve">
     <value>Kopēt žurnāla saturu</value>
   </data>
   <data name="Dialog.Exception.Info.1" xml:space="preserve">
-    <value>Notika izņēmums palaižot SleepStrap</value>
+    <value>Notika izņēmums palaižot SleepBlox</value>
   </data>
   <data name="Dialog.Exception.Info.2" xml:space="preserve">
-    <value>Pārbaudiet [SleepStrap Vikipēdiju]({0}), lai redzētu vai šai problēmai jau ir atrasts risinājums.
+    <value>Pārbaudiet [SleepBlox Vikipēdiju]({0}), lai redzētu vai šai problēmai jau ir atrasts risinājums.
 
 Ja nav, tad lūdzu ziņojiet par šo izņēmumu caur [GitHub issue]({1}) līdzās ar žurnāla faila kopiju, kas tika izveidota.</value>
   </data>
   <data name="Dialog.Exception.Title" xml:space="preserve">
-    <value>SleepStrap Izņēmums</value>
+    <value>SleepBlox Izņēmums</value>
   </data>
   <data name="Common.Custom" xml:space="preserve">
     <value>Pielāgots</value>
@@ -306,10 +306,10 @@ Ja nav, tad lūdzu ziņojiet par šo izņēmumu caur [GitHub issue]({1}) līdzā
     <value>Viltots Byfron (2023)</value>
   </data>
   <data name="Enums.BootstrapperStyle.ClassicFluentDialog" xml:space="preserve">
-    <value>SleepStrap (Klasiskais)</value>
+    <value>SleepBlox (Klasiskais)</value>
   </data>
   <data name="Enums.BootstrapperStyle.FluentAeroDialog" xml:space="preserve">
-    <value>SleepStrap (Stikls)</value>
+    <value>SleepBlox (Stikls)</value>
   </data>
   <data name="Enums.BootstrapperStyle.LegacyDialog2008" xml:space="preserve">
     <value>Vēsturisks (2008 - 2011)</value>
@@ -387,10 +387,10 @@ Ja nav, tad lūdzu ziņojiet par šo izņēmumu caur [GitHub issue]({1}) līdzā
     <value>Gaišs</value>
   </data>
   <data name="InstallChecker.Updated" xml:space="preserve">
-    <value>SleepStrap ir ticis jaunināts uz v{0}</value>
+    <value>SleepBlox ir ticis jaunināts uz v{0}</value>
   </data>
   <data name="InstallChecker.VersionDifferentThanInstalled" xml:space="preserve">
-    <value>Tā SleepStrap versija, ko tu esi atvēris, ir atšķirīga tai versijai, kas tev šobrīd ir instalēta. Vai tu vēlies jaunināt savu pašreiz instalēto versiju?</value>
+    <value>Tā SleepBlox versija, ko tu esi atvēris, ir atšķirīga tai versijai, kas tev šobrīd ir instalēta. Vai tu vēlies jaunināt savu pašreiz instalēto versiju?</value>
   </data>
   <data name="Menu.About.Contributors" xml:space="preserve">
     <value>Līdzstrādnieki</value>
@@ -399,7 +399,7 @@ Ja nav, tad lūdzu ziņojiet par šo izņēmumu caur [GitHub issue]({1}) līdzā
     <value>Kods</value>
   </data>
   <data name="Menu.About.Contributors.Description" xml:space="preserve">
-    <value>Šie ir tie cilvēki, kas ir devuši ievērojamu ieguldījumu SleepStrap, palīdzot izveidot to tādu, kāds tas ir.</value>
+    <value>Šie ir tie cilvēki, kas ir devuši ievērojamu ieguldījumu SleepBlox, palīdzot izveidot to tādu, kāds tas ir.</value>
   </data>
   <data name="Menu.About.Contributors.FeatureIdeas" xml:space="preserve">
     <value>Funkciju Idejas</value>
@@ -445,7 +445,7 @@ Ja nav, tad lūdzu ziņojiet par šo izņēmumu caur [GitHub issue]({1}) līdzā
     <value>Lūdzu ņemiet vērā, ka visas izmaiņas netiks piemērotas, kamēr jūs neaizvērsiet visus šobrīd atvērtos Roblox logus.</value>
   </data>
   <data name="Menu.AlreadyRunning.Title" xml:space="preserve">
-    <value>SleepStrap jau ir atvērts</value>
+    <value>SleepBlox jau ir atvērts</value>
   </data>
   <data name="Menu.Appearance.Bootstrapper.Description" xml:space="preserve">
     <value>Tu vari likt tam izskatīties citādāk, retro, vai pat līdzīgu Roblox.</value>
@@ -472,7 +472,7 @@ Ja nav, tad lūdzu ziņojiet par šo izņēmumu caur [GitHub issue]({1}) līdzā
     <value>Virsraksts</value>
   </data>
   <data name="Menu.Appearance.Description" xml:space="preserve">
-    <value>Konfigurēt, kā SleepStrap būtu jaizskatas.</value>
+    <value>Konfigurēt, kā SleepBlox būtu jaizskatas.</value>
   </data>
   <data name="Menu.Appearance.Global.Theme.Title" xml:space="preserve">
     <value>Globālā Tēma</value>
@@ -496,10 +496,10 @@ Ja nav, tad lūdzu ziņojiet par šo izņēmumu caur [GitHub issue]({1}) līdzā
     <value>Izskats</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Description" xml:space="preserve">
-    <value>SleepStrap automātiski pārbaudīs un atjauninās sevi, kad Roblox tiek palaists.</value>
+    <value>SleepBlox automātiski pārbaudīs un atjauninās sevi, kad Roblox tiek palaists.</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Title" xml:space="preserve">
-    <value>Automātiski jaunināt SleepStrap</value>
+    <value>Automātiski jaunināt SleepBlox</value>
   </data>
   <data name="Menu.Behaviour.ConfirmLaunches.Description" xml:space="preserve">
     <value>Nepieļaut esošās spēles aizvēršanu no nejaušas jaunas palaišanas.</value>
@@ -508,7 +508,7 @@ Ja nav, tad lūdzu ziņojiet par šo izņēmumu caur [GitHub issue]({1}) līdzā
     <value>Parādīt uzvedni, lai apstiprinātu, kad palaižot jaunu Roblox logu</value>
   </data>
   <data name="Menu.Behaviour.Description" xml:space="preserve">
-    <value>Konfigurēt, ko SleepStrap darīt, kad Roblox tiek palaists.</value>
+    <value>Konfigurēt, ko SleepBlox darīt, kad Roblox tiek palaists.</value>
   </data>
   <data name="Menu.Behaviour.ForceRobloxReinstall.Description" xml:space="preserve">
     <value>Roblox tiks no jauna instalēts nākošajā palaišanas reizē.</value>
@@ -630,10 +630,10 @@ NELIETOJIET to, lai importētu lielus citu personu izveidotus “karogu sarakstu
     <value>Ikonu faili</value>
   </data>
   <data name="Menu.InstallLocation.CantInstall" xml:space="preserve">
-    <value>SleepStrap nevar tikt instalēts šajā vietā. Lūdzu izvēlēties citu vietu, vai izmantojat noklusēja vietu, spiežot atiestatīšanas pogu.</value>
+    <value>SleepBlox nevar tikt instalēts šajā vietā. Lūdzu izvēlēties citu vietu, vai izmantojat noklusēja vietu, spiežot atiestatīšanas pogu.</value>
   </data>
   <data name="Menu.InstallLocation.NotEmpty" xml:space="preserve">
-    <value>Mape, kurā jūs esat izvēlējies instalēt SleepStrap jau kaut kas eksistē un tā NAV tukša. Ir stipri ieteicams SleepStrap instalēt savā patstāvīgajā mapē.
+    <value>Mape, kurā jūs esat izvēlējies instalēt SleepBlox jau kaut kas eksistē un tā NAV tukša. Ir stipri ieteicams SleepBlox instalēt savā patstāvīgajā mapē.
 
 Mainīt ir ieteicams uz šo vietu:
 {0}
@@ -646,7 +646,7 @@ Izvēloties 'Nē' šis brīdinājums tiks ignorēts un instalēšana tiks turpin
     <value>Jums ir nepieciešams izvēlēties instalēšanas vietu</value>
   </data>
   <data name="Menu.InstallLocation.NoWritePerms" xml:space="preserve">
-    <value>SleepStrap nav piekļuva rakstīšanai tajā instalēšanas vietā, ko esat izvēlējušies. Lūdzu izvēleties citu vietu.</value>
+    <value>SleepBlox nav piekļuva rakstīšanai tajā instalēšanas vietā, ko esat izvēlējušies. Lūdzu izvēleties citu vietu.</value>
   </data>
   <data name="Menu.Integrations.ActivityTracking" xml:space="preserve">
     <value>Aktivitātes izsekošana</value>
@@ -697,7 +697,7 @@ Izvēloties 'Nē' šis brīdinājums tiks ignorēts un instalēšana tiks turpin
     <value>Neiziet uz darbavirsmas aplikāciju</value>
   </data>
   <data name="Menu.Integrations.EnableActivityTracking.Description" xml:space="preserve">
-    <value>Ļauj SleepStrap noteikt, kuru Roblox spēli jūs spēlējat. Dažām funkcijām šis var būt vajadzīgs.</value>
+    <value>Ļauj SleepBlox noteikt, kuru Roblox spēli jūs spēlējat. Dažām funkcijām šis var būt vajadzīgs.</value>
   </data>
   <data name="Menu.Integrations.EnableActivityTracking.Title" xml:space="preserve">
     <value>Iespējot aktivitātes izsekošanu</value>
@@ -788,7 +788,7 @@ Izvēloties 'Nē' šis brīdinājums tiks ignorēts un instalēšana tiks turpin
     <value>Iestatījumi saglabāti!</value>
   </data>
   <data name="Menu.Title" xml:space="preserve">
-    <value>SleepStrap Iestatījumi</value>
+    <value>SleepBlox Iestatījumi</value>
   </data>
   <data name="Dialog.LanguageSelector.Header" xml:space="preserve">
     <value>Izvēlieties vēlamo valodu</value>
@@ -818,7 +818,7 @@ Izvēloties 'Nē' šis brīdinājums tiks ignorēts un instalēšana tiks turpin
     <value>Lietotāja Interfeiss un Izkārtojums</value>
   </data>
   <data name="Menu.FastFlags.ManagerEnabled.Title" xml:space="preserve">
-    <value>Ļaut SleepStrap pārvaldīt Ātros Karogus</value>
+    <value>Ļaut SleepBlox pārvaldīt Ātros Karogus</value>
   </data>
   <data name="Menu.FastFlags.ManagerEnabled.Description" xml:space="preserve">
     <value>Ja jūs šo atspējosiet, nekas kas ir ticis šeit konfigurēts netiks pielietots Roblox.</value>
@@ -845,7 +845,7 @@ Izvēloties 'Nē' šis brīdinājums tiks ignorēts un instalēšana tiks turpin
     <value>Līmenis 3 (Augstākais)</value>
   </data>
   <data name="Dialog.Connectivity.UnableToDownload" xml:space="preserve">
-    <value>SleepStrap nespēj lejupielādēt Roblox</value>
+    <value>SleepBlox nespēj lejupielādēt Roblox</value>
   </data>
   <data name="Dialog.Connectivity.UnableToDownloadReason" xml:space="preserve">
     <value>Roblox šobrīd nevar tikt lejupielādēts. Lūdzu izlasiet sekojošo palīdzības lapu priekš vairāk informācijas: {0}</value>
@@ -866,7 +866,7 @@ Izvēloties 'Nē' šis brīdinājums tiks ignorēts un instalēšana tiks turpin
     <value>{0} Ieraksts nav derīgs, jo vērtībai vajag būt skaitlim</value>
   </data>
   <data name="Logger.NoWriteMode" xml:space="preserve">
-    <value>Šai palaišanai nebūs žurnāla fails, jo SleepStrap nav iespējams rakstīt mapē '{0}'</value>
+    <value>Šai palaišanai nebūs žurnāla fails, jo SleepBlox nav iespējams rakstīt mapē '{0}'</value>
   </data>
   <data name="Common.Default" xml:space="preserve">
     <value>Noklusējums</value>
@@ -881,7 +881,7 @@ Izvēloties 'Nē' šis brīdinājums tiks ignorēts un instalēšana tiks turpin
     <value>{0} Ieraksts nav derīgs, jo vietas filtrs nav pareizi formatēts.</value>
   </data>
   <data name="Installer.Title" xml:space="preserve">
-    <value>SleepStrap Instalētājs</value>
+    <value>SleepBlox Instalētājs</value>
   </data>
   <data name="Installer.Welcome.Title" xml:space="preserve">
     <value>Sveicināti</value>
@@ -900,18 +900,18 @@ Izvēloties 'Nē' šis brīdinājums tiks ignorēts un instalēšana tiks turpin
     <value>Nākošais</value>
   </data>
   <data name="Installer.Welcome.MainText" xml:space="preserve">
-    <value>Paldies, ka lejupielādējāt SleepStrap.
+    <value>Paldies, ka lejupielādējāt SleepBlox.
 
-Vienīgās oficiālās vietnes, no kurām lejupielādēt SleepStrap ir {0} un {1}, tāpēc lūdzu pārbaudiet vai jūs ielādējāt SleepStrap no oficiāla avota.
+Vienīgās oficiālās vietnes, no kurām lejupielādēt SleepBlox ir {0} un {1}, tāpēc lūdzu pārbaudiet vai jūs ielādējāt SleepBlox no oficiāla avota.
 
-Šis instalēšans process būs ātrs un vienkāršs, un jūs varēsiet konfigurēt jebkuru no SleepStrap iestatījumiem pēc instalācijas.</value>
+Šis instalēšans process būs ātrs un vienkāršs, un jūs varēsiet konfigurēt jebkuru no SleepBlox iestatījumiem pēc instalācijas.</value>
     <comment>{0} and {1} are URLs</comment>
   </data>
   <data name="Installer.Welcome.NextToContinue" xml:space="preserve">
     <value>Lūdzu spiedied uz 'Nākamais', lai turpinātu.</value>
   </data>
   <data name="Installer.Welcome.UpdateNotice" xml:space="preserve">
-    <value>Jūs cenšaties instalēt SleepStrap versiju {0}, bet jaunākā versija ir iegūstama {1}. Vai jūs vēlaties to lejupielādēt?</value>
+    <value>Jūs cenšaties instalēt SleepBlox versiju {0}, bet jaunākā versija ir iegūstama {1}. Vai jūs vēlaties to lejupielādēt?</value>
   </data>
   <data name="Installer.Install.Location.Title" xml:space="preserve">
     <value>Izvēlieties vietu, kur instalēt</value>
@@ -932,16 +932,16 @@ Vienīgās oficiālās vietnes, no kurām lejupielādēt SleepStrap ir {0} un {1
     <value>Sākuma Izvēlnes ikona</value>
   </data>
   <data name="Installer.Completion.Text" xml:space="preserve">
-    <value>SleepStrap ir ticis veiksmīgi instalēts.
+    <value>SleepBlox ir ticis veiksmīgi instalēts.
 
-Roblox vēl nav ticis instalēts, tas notiks, kad jūs to palaidīsiet ar SleepStrap pirmo reizi. Bet, pirms jūs to darat, jūs varētu vēlēties konfigurēt SleepStrap iestatījumus vispirms.
+Roblox vēl nav ticis instalēts, tas notiks, kad jūs to palaidīsiet ar SleepBlox pirmo reizi. Bet, pirms jūs to darat, jūs varētu vēlēties konfigurēt SleepBlox iestatījumus vispirms.
 
-Neizmantojat "Roblox Player" īsceļu, lai atvērtu Roblox, jo SleepStrap nepalaidīsies kopā ar Roblox.
-Ja neredzat SleepStrap parādāmies, kad palaižat Roblox no mājaslapas, vienkārši vienreiz palaižat Roblox ar SleepStrap no darbavirsmas, lai šo problēmu salabotu.
+Neizmantojat "Roblox Player" īsceļu, lai atvērtu Roblox, jo SleepBlox nepalaidīsies kopā ar Roblox.
+Ja neredzat SleepBlox parādāmies, kad palaižat Roblox no mājaslapas, vienkārši vienreiz palaižat Roblox ar SleepBlox no darbavirsmas, lai šo problēmu salabotu.
 Ko tu vēlies darīt?</value>
   </data>
   <data name="Installer.Completion.Settings.Title" xml:space="preserve">
-    <value>Konfigurēt SleepStrap iestatījumus</value>
+    <value>Konfigurēt SleepBlox iestatījumus</value>
   </data>
   <data name="Installer.Completion.Settings.Description" xml:space="preserve">
     <value>Mainīt un izmantot visas funkcijas, kas ir pieejamas</value>
@@ -953,21 +953,21 @@ Ko tu vēlies darīt?</value>
     <value>Jūs tiksiet ielikti darbavirsmas aplikācijā, kad viss būs gatavs</value>
   </data>
   <data name="Uninstaller.Title" xml:space="preserve">
-    <value>Atinstalēt SleepStrap</value>
+    <value>Atinstalēt SleepBlox</value>
   </data>
   <data name="Uninstaller.Text" xml:space="preserve">
-    <value>Atinstalējot, SleepStrap tiks izņemts no jūsu sistēmas, un automātiski rekonfigurēs Roblox uz noklusējuma palaidēju, ja tas vēl ir ielādēts.
+    <value>Atinstalējot, SleepBlox tiks izņemts no jūsu sistēmas, un automātiski rekonfigurēs Roblox uz noklusējuma palaidēju, ja tas vēl ir ielādēts.
 
 Ja jūs atinstalējat vai pārinstalējat, jo jums ir problēms are Roblox, izlasiet [šo palīdzības lapu]({0}) vispirms.
 
-Atinstalēšans process varētu nebūt spējīgs pilnībā visu izdzēst, tāpēc jums vajadzēs manuāli dzēst pāri palikušos failus vietā, kur SleepStrap bija instalēts.
-SleepStrap tika instalēts "{1}".</value>
+Atinstalēšans process varētu nebūt spējīgs pilnībā visu izdzēst, tāpēc jums vajadzēs manuāli dzēst pāri palikušos failus vietā, kur SleepBlox bija instalēts.
+SleepBlox tika instalēts "{1}".</value>
   </data>
   <data name="Uninstaller.KeepData.Label" xml:space="preserve">
     <value>Paturēt manus iestatījumus un modifikācijas</value>
   </data>
   <data name="Uninstaller.KeepData.Description" xml:space="preserve">
-    <value>Tie atradīsies vietā, kur SleepStrap tika instalēts, un automātiski tiks atgriezti, kad atkal instalēsiet SleepStrap.</value>
+    <value>Tie atradīsies vietā, kur SleepBlox tika instalēts, un automātiski tiks atgriezti, kad atkal instalēsiet SleepBlox.</value>
   </data>
   <data name="Uninstaller.Uninstall" xml:space="preserve">
     <value>Atinstalēt</value>
@@ -988,19 +988,19 @@ SleepStrap tika instalēts "{1}".</value>
     <value>Jums šobrīd nav instalēts WebView2 runtime. Dažas Roblox funkcijas nestrādās pareizi bez tā, piemēram, darbavirsmas aplikācija. Vai jūs vēlaties to lejupielādēt tagad?</value>
   </data>
   <data name="Dialog.CannotCreateShortcuts" xml:space="preserve">
-    <value>SleepStrap nespēja izveidot īsceļu priekš Darbavirsmas un Sākuma izvēlnes. Pamēģiniet tos uztaisīt caur iestatījumiem.</value>
+    <value>SleepBlox nespēja izveidot īsceļu priekš Darbavirsmas un Sākuma izvēlnes. Pamēģiniet tos uztaisīt caur iestatījumiem.</value>
   </data>
   <data name="Dialog.Exception.Info.2.Alt" xml:space="preserve">
-    <value>Pārbaudiet [SleepStrap Vikipēdija]({0}), lai redzētu vai šai problēmai jau ir risinājums.
+    <value>Pārbaudiet [SleepBlox Vikipēdija]({0}), lai redzētu vai šai problēmai jau ir risinājums.
 
-Ja nav, tad lūdzu ziņojiet par šo izņēmumu šī fork veidotājiem. NEZIŅOJIET par šo SleepStrap GitHub issues sadaļā, jo šī ir neoficiāla uzbūve.</value>
+Ja nav, tad lūdzu ziņojiet par šo izņēmumu šī fork veidotājiem. NEZIŅOJIET par šo SleepBlox GitHub issues sadaļā, jo šī ir neoficiāla uzbūve.</value>
     <comment>"fork" in general means "a variation of" or "a different version of". You can alternatively write the first sentence as "...to the maintainers of this version."</comment>
   </data>
   <data name="Installer.Install.Shortcuts.Description" xml:space="preserve">
     <value>Šie ir vispārēji īsceļi, kas atver multi-izvēļu izvēlni. Īsceļi priekš specifiskām funkcijām var tikt izveidoti vēlāk iestatījumos.</value>
   </data>
   <data name="Menu.Shortcuts.Description" xml:space="preserve">
-    <value>Konfigurē, kā SleepStrap tiek palaists.</value>
+    <value>Konfigurē, kā SleepBlox tiek palaists.</value>
   </data>
   <data name="Menu.Shortcuts.General.Title" xml:space="preserve">
     <value>Vispārīgi</value>
@@ -1040,7 +1040,7 @@ Ja nav, tad lūdzu ziņojiet par šo izņēmumu šī fork veidotājiem. NEZIŅOJ
     <value>Jums ir nesaglabātas izmaiņas. Vai esat pārliecināts, ka gribat aizvērt bez saglabāšanas?</value>
   </data>
   <data name="InstallChecker.VersionLessThanInstalled" xml:space="preserve">
-    <value>Tā SleepStrap versija, kuru esat palaiduši, ir vecāka nekā versija, kas jums jau ir instalēta.
+    <value>Tā SleepBlox versija, kuru esat palaiduši, ir vecāka nekā versija, kas jums jau ir instalēta.
 Var notikt problēmas un jūsu iestatījumi var tikt mainīti. Pārinstalācija ir ieteicama.
 Vai jūs esat drošs, ka vēlaties turpināt?</value>
   </data>
@@ -1055,7 +1055,7 @@ Vai jūs esat drošs, ka vēlaties turpināt?</value>
 
 
 Pārbaudiet vai Roblox strādā ar [oriģinālo palaidēju]({1}).
-Ja nē, tad šī nav SleepStrap problēma. Ja jā, tad skatiet palīdzības rakstu.</value>
+Ja nē, tad šī nav SleepBlox problēma. Ja jā, tad skatiet palīdzības rakstu.</value>
   </data>
   <data name="Common.NetworkError" xml:space="preserve">
     <value>Nevarēja ielādet datus, dēļ tīkla kļūdas.</value>
@@ -1067,7 +1067,7 @@ Ja nē, tad šī nav SleepStrap problēma. Ja jā, tad skatiet palīdzības raks
     <value>Atbalstītāji</value>
   </data>
   <data name="About.Supporters.Description" xml:space="preserve">
-    <value>Šie ir tie cilvēki, kas ir atbalstījuši SleepStrap caur Ko-fi. Milzīgs paldies visiem šeit!
+    <value>Šie ir tie cilvēki, kas ir atbalstījuši SleepBlox caur Ko-fi. Milzīgs paldies visiem šeit!
 Katrs cilvēks ir sarindots pēc viņu atbalsta.</value>
   </data>
   <data name="JsonManager.SettingsLoadFailed" xml:space="preserve">
@@ -1098,12 +1098,12 @@ Katrs cilvēks ir sarindots pēc viņu atbalsta.</value>
     <value>Šajā palaišanas reizē, Roblox netiks pārbaudīts priekš atjauninājumiem, un izmaiņas modifikācijām netiks pielietotas.</value>
   </data>
   <data name="Dialog.Connectivity.RobloxUpgradeNeeded" xml:space="preserve">
-    <value>Tāpēc, ka Roblox vajag tikt instalētam vai jauninātam, SleepStrap nevar turpināt.</value>
+    <value>Tāpēc, ka Roblox vajag tikt instalētam vai jauninātam, SleepBlox nevar turpināt.</value>
   </data>
   <data name="Installer.Install.CannotOverwrite" xml:space="preserve">
-    <value>SleepStrap jau ir ticis instalēts šajā vietā iepriekš un joprojām te atrodas, bet instalētājs nevar pārrakstīt veco izpildāmo failu.
+    <value>SleepBlox jau ir ticis instalēts šajā vietā iepriekš un joprojām te atrodas, bet instalētājs nevar pārrakstīt veco izpildāmo failu.
 
-Lūdzu manuāli dzēsiet SleepStrap.exe no instalēšanas vietas, vai pamēģiniet restartēt datoru, un tad vēlreiz mēģiniet instalēt.</value>
+Lūdzu manuāli dzēsiet SleepBlox.exe no instalēšanas vietas, vai pamēģiniet restartēt datoru, un tad vēlreiz mēģiniet instalēt.</value>
   </data>
   <data name="Common.NotAvailable" xml:space="preserve">
     <value>Nav pieejams</value>
@@ -1115,7 +1115,7 @@ Lūdzu manuāli dzēsiet SleepStrap.exe no instalēšanas vietas, vai pamēģini
     <value>Konfigurēt aplikācijas parametrus, kā DPI mēroga uzvedība un [pilnekrāna optimizācijas]({0}).</value>
   </data>
   <data name="Common.RobloxNotInstalled" xml:space="preserve">
-    <value>Roblox vēl nav ticis instalēts. Lūdzu atveriet Roblox izmantojot SleepStrap vismaz vienu reizi, pirms cenšaties izmantot šo opciju.</value>
+    <value>Roblox vēl nav ticis instalēts. Lūdzu atveriet Roblox izmantojot SleepBlox vismaz vienu reizi, pirms cenšaties izmantot šo opciju.</value>
   </data>
   <data name="Installer.ShouldCancel" xml:space="preserve">
     <value>Vai jūs esat drošs, ka vēlaties atcelt instalāciju?</value>
@@ -1132,10 +1132,10 @@ Lūdzu manuāli dzēsiet SleepStrap.exe no instalēšanas vietas, vai pamēģini
     <value>Izvilkt Roblox ikonas uz mapi</value>
   </data>
   <data name="Menu.Shortcuts.ExtractIcons.Description" xml:space="preserve">
-    <value>Ļauj jums izmantot SleepStrap Roblox ikonas priekš jūsu īsceļiem. [Redzēt kā.]({0})</value>
+    <value>Ļauj jums izmantot SleepBlox Roblox ikonas priekš jūsu īsceļiem. [Redzēt kā.]({0})</value>
   </data>
   <data name="Dialog.RegistryWriteError" xml:space="preserve">
-    <value>SleepStrap nespēj rakstīt iekš Windows Registry. Visticamāk, antivīruss iejaucas un rada problēmas. Lūdzu pārbaudiet, vai nav nekas, kas varētu traucēt SleepStrap darbībām.</value>
+    <value>SleepBlox nespēj rakstīt iekš Windows Registry. Visticamāk, antivīruss iejaucas un rada problēmas. Lūdzu pārbaudiet, vai nav nekas, kas varētu traucēt SleepBlox darbībām.</value>
   </data>
   <data name="About.Supporters.Monthly" xml:space="preserve">
     <value>Ikmēneša</value>
@@ -1163,7 +1163,7 @@ Kamēr iespējots, tas automātiski atvērs Roblox pēc iestatījumu aizvēršan
 Vai jūs vēlaties iespējot testēšanas režīmu?</value>
   </data>
   <data name="About.Translators.Description" xml:space="preserve">
-    <value>Visi SleepStrap tulkojumi ir izveidoti ar sabiedrības palīdzību caur [Crowdin]({0}). Visi šeit minētie cilvēki ir dāsni veltījuši savu laiku un pūles, lai palīdzētu lokalizēt SleepStrap. Liels paldies visiem šeit!</value>
+    <value>Visi SleepBlox tulkojumi ir izveidoti ar sabiedrības palīdzību caur [Crowdin]({0}). Visi šeit minētie cilvēki ir dāsni veltījuši savu laiku un pūles, lai palīdzētu lokalizēt SleepBlox. Liels paldies visiem šeit!</value>
   </data>
   <data name="Common.Navigation.Install" xml:space="preserve">
     <value>Instalēt</value>
@@ -1183,9 +1183,9 @@ Vai jūs vēlaties iespējot testēšanas režīmu?</value>
     <value>Pielāgot</value>
   </data>
   <data name="Bootstrapper.FilesInUse" xml:space="preserve">
-    <value>SleepStrap centās jaunināt Roblox, bet nevarēja, jo Roblox faili vēl tiek izmantoti.
+    <value>SleepBlox centās jaunināt Roblox, bet nevarēja, jo Roblox faili vēl tiek izmantoti.
 
-Lūdzu aizveriet jebkuras aplikācijas, kas varētu izmantot Roblox failu un vēlreiz atveriet SleepStrap.</value>
+Lūdzu aizveriet jebkuras aplikācijas, kas varētu izmantot Roblox failu un vēlreiz atveriet SleepBlox.</value>
     <comment>This is *not* for when Roblox is still running when trying to upgrade. This applies to files being open (i.e. image assets)</comment>
   </data>
   <data name="FileTypes.ZipArchive" xml:space="preserve">
@@ -1194,13 +1194,13 @@ Lūdzu aizveriet jebkuras aplikācijas, kas varētu izmantot Roblox failu un vē
   </data>
   <data name="Common.Export" xml:space="preserve">
     <value>Eksportēt</value>
-    <comment>Currently used under the "SleepStrap" settings tab for the button to export diagnostic data</comment>
+    <comment>Currently used under the "SleepBlox" settings tab for the button to export diagnostic data</comment>
   </data>
   <data name="App.OSDeprecation.Win7_81" xml:space="preserve">
     <value>Roblox vairs neatbalsta Windows 7 vai 8.1. Lai turpinātu spēlēt Roblox, lūdzu atjauniniet Windows uz 10 vai jaunāku.</value>
   </data>
   <data name="Bootstrapper.Status.UpgradingSleepStrap" xml:space="preserve">
-    <value>Iegūst jaunāko SleepStrap...</value>
+    <value>Iegūst jaunāko SleepBlox...</value>
   </data>
   <data name="Enums.CustomThemeTemplate.Blank" xml:space="preserve">
     <value>Tukšs</value>
@@ -1359,7 +1359,7 @@ Lūdzu aizveriet jebkuras aplikācijas, kas varētu izmantot Roblox failu un vē
   <data name="CustomTheme.Errors.SetupFailed" xml:space="preserve">
     <value>Neizdevās uzstādīt pielāgotu palaišanas ielādētāju: {0}.
 Noklusējums uz {1}.</value>
-    <comment>{0} is the error reason, {1} is the theme name (e.g. SleepStrap (Classic))</comment>
+    <comment>{0} is the error reason, {1} is the theme name (e.g. SleepBlox (Classic))</comment>
   </data>
   <data name="Menu.Appearance.CustomThemes.NoneSelected" xml:space="preserve">
     <value>Neviena pielāgota tēma nav izvēlēta.</value>
@@ -1414,7 +1414,7 @@ Noklusējums uz {1}.</value>
     <value>Izveidot Jaunu</value>
   </data>
   <data name="Menu.SleepStrap.Description" xml:space="preserve">
-    <value>Konfigurē opcijas saistītas ar paša SleepStrap uzvedību.</value>
+    <value>Konfigurē opcijas saistītas ar paša SleepBlox uzvedību.</value>
   </data>
   <data name="Menu.Behaviour.BackgroundUpdates.Title" xml:space="preserve">
     <value>Fona atjauninājumi</value>
@@ -1430,7 +1430,7 @@ Nav ieteicams, ja tev ir lēns internets. Vismaz 3GB ar brīvu vietu ir nepiecie
     <value>Rediģēt</value>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Par SleepStrap</value>
+    <value>Par SleepBlox</value>
   </data>
   <data name="Menu.FastFlags.Presets.EscapeMenuVersion.Title" xml:space="preserve">
     <value>Vēlamā escape izvēlnes versija</value>
@@ -1442,7 +1442,7 @@ Nav ieteicams, ja tev ir lēns internets. Vismaz 3GB ar brīvu vietu ir nepiecie
     <value>Kadru sekundē limits</value>
   </data>
   <data name="Menu.FastFlags.Presets.HideGuis.Description" xml:space="preserve">
-    <value>Iespējots ar [taustiņu kombinācijām]({0}). Strādā tikai. ja tu esi [SleepStrap grupā]({1}).</value>
+    <value>Iespējots ar [taustiņu kombinācijām]({0}). Strādā tikai. ja tu esi [SleepBlox grupā]({1}).</value>
   </data>
   <data name="Menu.FastFlags.Presets.HideGuis.Title" xml:space="preserve">
     <value>Iespējot spēju paslēpt GUI</value>
@@ -1497,11 +1497,11 @@ Nav ieteicams, ja tev ir lēns internets. Vismaz 3GB ar brīvu vietu ir nepiecie
     <value>Savākt informāciju, kas var tikt augšupielādēta tiešsaistē, lai palīdzētu atrisināt problēmu, kas jums ir.</value>
   </data>
   <data name="Menu.SleepStrap.ExportData.ExportConfig" xml:space="preserve">
-    <value>SleepStrap konfigurācija</value>
+    <value>SleepBlox konfigurācija</value>
     <comment>Label that appears next to a checkbox</comment>
   </data>
   <data name="Menu.SleepStrap.ExportData.ExportLogs" xml:space="preserve">
-    <value>Visi SleepStrap žurnāli</value>
+    <value>Visi SleepBlox žurnāli</value>
     <comment>Label that appears next to a checkbox</comment>
   </data>
   <data name="Menu.GBSEditor.Graphics.Description" xml:space="preserve">

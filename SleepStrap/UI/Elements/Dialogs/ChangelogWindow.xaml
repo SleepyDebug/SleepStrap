@@ -12,17 +12,18 @@
             <StackPanel Orientation="Horizontal">
                 <Image Source="/SleepStrap.ico" Width="48" Height="48" Margin="0,0,14,0" />
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="SleepStrap" FontSize="25" FontWeight="SemiBold" Foreground="White" />
+                    <TextBlock Text="SleepBlox" FontSize="25" FontWeight="SemiBold" Foreground="White" />
                     <TextBlock x:Name="VersionText" Margin="0,2,0,0" FontSize="13" Foreground="#B8FFFFFF" />
                 </StackPanel>
             </StackPanel>
             <Border Margin="0,22,0,18" Height="1" Background="#45FFFFFF" />
             <TextBlock Text="What's new" FontSize="20" FontWeight="SemiBold" Foreground="White" />
             <StackPanel Margin="0,14,0,0">
-                <TextBlock Text="• Added Favoriting" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
-                <TextBlock Text="• Text Colors (beta)" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
-                <TextBlock Text="• Gradient Background" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
-                <TextBlock Text="• Cool stuff" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="-experimental things :)" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="Fixed custom panorama sky conversion" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="Custom skies now use Roblox's 1024px texture format" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="Old broken imports are marked for re-import" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
+                <TextBlock Text="Made the standalone sky converter match the app" FontSize="15" Foreground="#E8FFFFFF" Margin="0,4" />
             </StackPanel>
             <TextBlock Text="Made by sleepy :)" Margin="0,22,0,20" FontSize="14" Foreground="#B8FFFFFF" />
             <Button Content="OK WHATEVER" Click="OkWhatever_Click" Height="40" HorizontalAlignment="Stretch"

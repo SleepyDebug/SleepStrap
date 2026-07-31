@@ -62,7 +62,7 @@ namespace SleepStrap.Services
             {
                 App.Logger.WriteException("AutoRejoinSchedulerService", ex);
                 Frontend.ShowMessageBox(
-                    $"SleepStrap could not complete Auto Rejoin.\n\n{ex.Message}",
+                    $"{App.ProjectName} could not complete Auto Rejoin.\n\n{ex.Message}",
                     MessageBoxImage.Error);
             }
             finally
