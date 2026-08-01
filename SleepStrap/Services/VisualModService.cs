@@ -816,6 +816,104 @@ namespace SleepStrap.Services
             return input.Read(header) == header.Length && header.SequenceEqual(RobloxSkyDdsHeader);
         }
 
+        /// <summary>
+        /// Produces a PNG preview from a Roblox sky .tex file. The files are
+        /// DDS/BC1 data with a Roblox-specific header, so regular image loaders
+        /// cannot open them directly.
+        /// </summary>
+        internal static void CreateSkyTexturePreview(string texturePath, string destinationPath)
+        {
+            if (!IsRobloxSkyTexture(texturePath))
+                throw new InvalidDataException("The selected file is not a valid Roblox sky texture.");
+
+            byte[] encoded = File.ReadAllBytes(texturePath);
+            int dataOffset = RobloxSkyDdsHeader.Length;
+            int baseMipSize = RobloxSkyFaceSize * RobloxSkyFaceSize / 2;
+            if (encoded.Length < dataOffset + baseMipSize)
+                throw new InvalidDataException("The selected Roblox sky texture is incomplete.");
+
+            byte[] pixels = new byte[RobloxSkyFaceSize * RobloxSkyFaceSize * 4];
+            const int blocksPerRow = RobloxSkyFaceSize / 4;
+            for (int blockY = 0; blockY < blocksPerRow; blockY++)
+            {
+                for (int blockX = 0; blockX < blocksPerRow; blockX++)
+                {
+                    int sourceOffset = dataOffset + (((blockY * blocksPerRow) + blockX) * 8);
+                    ushort first = (ushort)(encoded[sourceOffset] | (encoded[sourceOffset + 1] << 8));
+                    ushort second = (ushort)(encoded[sourceOffset + 2] | (encoded[sourceOffset + 3] << 8));
+                    uint indices = (uint)(encoded[sourceOffset + 4] |
+                        (encoded[sourceOffset + 5] << 8) |
+                        (encoded[sourceOffset + 6] << 16) |
+                        (encoded[sourceOffset + 7] << 24));
+
+                    uint[] colors = BuildBc1Palette(first, second);
+                    for (int y = 0; y < 4; y++)
+                    {
+                        for (int x = 0; x < 4; x++)
+                        {
+                            int colorIndex = (int)((indices >> (2 * ((y * 4) + x))) & 0x3);
+                            uint color = colors[colorIndex];
+                            int destinationOffset = ((((blockY * 4) + y) * RobloxSkyFaceSize) + (blockX * 4) + x) * 4;
+                            pixels[destinationOffset] = (byte)color;
+                            pixels[destinationOffset + 1] = (byte)(color >> 8);
+                            pixels[destinationOffset + 2] = (byte)(color >> 16);
+                            pixels[destinationOffset + 3] = (byte)(color >> 24);
+                        }
+                    }
+                }
+            }
+
+            using var face = new Bitmap(RobloxSkyFaceSize, RobloxSkyFaceSize, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            var rectangle = new Rectangle(0, 0, face.Width, face.Height);
+            BitmapData bitmapData = face.LockBits(rectangle, ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            try { Marshal.Copy(pixels, 0, bitmapData.Scan0, pixels.Length); }
+            finally { face.UnlockBits(bitmapData); }
+
+            using var preview = new Bitmap(384, 192, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            using (Graphics graphics = Graphics.FromImage(preview))
+            {
+                graphics.Clear(Color.Black);
+                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                graphics.DrawImage(face, 0, 0, preview.Width, preview.Height);
+            }
+            preview.Save(destinationPath, ImageFormat.Png);
+        }
+
+        private static uint[] BuildBc1Palette(ushort first, ushort second)
+        {
+            uint firstColor = ExpandRgb565(first, 255);
+            uint secondColor = ExpandRgb565(second, 255);
+            var colors = new uint[4] { firstColor, secondColor, 0, 0 };
+            if (first > second)
+            {
+                colors[2] = BlendBgra(firstColor, secondColor, 2, 1, 3);
+                colors[3] = BlendBgra(firstColor, secondColor, 1, 2, 3);
+            }
+            else
+            {
+                colors[2] = BlendBgra(firstColor, secondColor, 1, 1, 2);
+                colors[3] = 0;
+            }
+            return colors;
+        }
+
+        private static uint ExpandRgb565(ushort color, byte alpha)
+        {
+            byte red = (byte)(((color >> 11) & 0x1F) * 255 / 31);
+            byte green = (byte)(((color >> 5) & 0x3F) * 255 / 63);
+            byte blue = (byte)((color & 0x1F) * 255 / 31);
+            return (uint)(blue | (green << 8) | (red << 16) | (alpha << 24));
+        }
+
+        private static uint BlendBgra(uint first, uint second, int firstWeight, int secondWeight, int divisor)
+        {
+            byte blue = (byte)(((first & 0xFF) * firstWeight + (second & 0xFF) * secondWeight) / divisor);
+            byte green = (byte)((((first >> 8) & 0xFF) * firstWeight + ((second >> 8) & 0xFF) * secondWeight) / divisor);
+            byte red = (byte)((((first >> 16) & 0xFF) * firstWeight + ((second >> 16) & 0xFF) * secondWeight) / divisor);
+            byte alpha = (byte)((((first >> 24) & 0xFF) * firstWeight + ((second >> 24) & 0xFF) * secondWeight) / divisor);
+            return (uint)(blue | (green << 8) | (red << 16) | (alpha << 24));
+        }
+
         private static void WriteRobloxSkyTexture(Stream input, string destination)
         {
             using MemoryStream source = new();
@@ -964,10 +1062,13 @@ namespace SleepStrap.Services
         internal static void ConvertPanoramaToSkybox(string sourcePath, string outputRoot)
         {
             using var loadedImage = Image.FromFile(sourcePath);
-            if (loadedImage.Width < 512 || loadedImage.Height < 256)
-                throw new InvalidDataException("Choose a panorama that is at least 512 × 256 pixels.");
             double aspectRatio = loadedImage.Width / (double)loadedImage.Height;
-            if (aspectRatio < 1.8 || aspectRatio > 2.2)
+            bool isCubeCross = Math.Abs(aspectRatio - (4d / 3d)) < 0.02 &&
+                loadedImage.Width % 4 == 0 && loadedImage.Height % 3 == 0 &&
+                Math.Abs((loadedImage.Width / 4) - (loadedImage.Height / 3)) <= 1;
+            if (!isCubeCross && (loadedImage.Width < 512 || loadedImage.Height < 256))
+                throw new InvalidDataException("Choose a panorama that is at least 512 × 256 pixels.");
+            if (!isCubeCross && (aspectRatio < 1.8 || aspectRatio > 2.2))
                 throw new InvalidDataException("Sky images must be equirectangular panoramas with a 2:1 width-to-height ratio.");
 
             using var panorama = new Bitmap(loadedImage.Width, loadedImage.Height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
@@ -987,6 +1088,12 @@ namespace SleepStrap.Services
                 }
             };
 
+            if (isCubeCross)
+            {
+                ConvertCubeCrossToSkybox(panorama, outputRoot, encoder);
+                return;
+            }
+
             for (int face = 0; face < suffixes.Length; face++)
             {
                 byte[] facePixels = RenderFace(sourcePixels, panorama.Width, panorama.Height, face);
@@ -996,6 +1103,44 @@ namespace SleepStrap.Services
                 // Roblox expects its own DDS header variant even though the payload is
                 // standard mipmapped BC1/DXT1 data. Keep imported panoramas consistent
                 // with the embedded gallery and the standalone SleepSkybox converter.
+                output.Position = 0;
+                output.Write(RobloxSkyDdsHeader);
+            }
+        }
+
+        // Cube-cross layout used by SleepBlox's downloadable template:
+        //          UP
+        // BACK / LEFT / FRONT / RIGHT
+        //          DOWN
+        private static void ConvertCubeCrossToSkybox(Bitmap cubeCross, string outputRoot, BcEncoder encoder)
+        {
+            int faceWidth = cubeCross.Width / 4;
+            int faceHeight = cubeCross.Height / 3;
+            (string Suffix, int Column, int Row)[] faces =
+            {
+                ("rt", 3, 1), ("lf", 1, 1), ("up", 1, 0),
+                ("dn", 1, 2), ("ft", 2, 1), ("bk", 0, 1)
+            };
+
+            foreach ((string suffix, int column, int row) in faces)
+            {
+                using var sourceFace = cubeCross.Clone(
+                    new Rectangle(column * faceWidth, row * faceHeight, faceWidth, faceHeight),
+                    System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                using var resizedFace = new Bitmap(RobloxSkyFaceSize, RobloxSkyFaceSize, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                using (Graphics graphics = Graphics.FromImage(resizedFace))
+                {
+                    graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                    graphics.DrawImage(sourceFace, 0, 0, resizedFace.Width, resizedFace.Height);
+                }
+
+                byte[] facePixels = ReadBgraPixels(resizedFace);
+                for (int offset = 0; offset < facePixels.Length; offset += 4)
+                    (facePixels[offset], facePixels[offset + 2]) = (facePixels[offset + 2], facePixels[offset]);
+
+                using FileStream output = File.Create(Path.Combine(outputRoot, $"sky512_{suffix}.tex"));
+                encoder.EncodeToStream(facePixels, RobloxSkyFaceSize, RobloxSkyFaceSize, BCnEncoder.Encoder.PixelFormat.Rgba32, output);
                 output.Position = 0;
                 output.Write(RobloxSkyDdsHeader);
             }

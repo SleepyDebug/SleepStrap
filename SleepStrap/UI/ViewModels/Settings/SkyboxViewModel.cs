@@ -57,6 +57,9 @@ namespace SleepStrap.UI.ViewModels.Settings
             {
                 IsBusy = true;
                 UserSkyboxService.Rename(choice.SelectionKey, name);
+                // Update immediately. Do not wait for the gallery event because the
+                // page can remain open while a user renames several imported skies.
+                ReloadChoices();
                 StatusText = $"Renamed to {name}.";
             }
             catch (Exception ex)
@@ -79,8 +82,12 @@ namespace SleepStrap.UI.ViewModels.Settings
             try
             {
                 IsBusy = true;
+                string deletedName = choice.Name;
                 UserSkyboxService.Delete(choice.SelectionKey);
-                StatusText = $"Deleted {choice.Name}.";
+                // The selected item and its action buttons must disappear in the
+                // same interaction, even when the gallery event is delayed.
+                ReloadChoices();
+                StatusText = $"Deleted {deletedName}.";
             }
             catch (Exception ex)
             {

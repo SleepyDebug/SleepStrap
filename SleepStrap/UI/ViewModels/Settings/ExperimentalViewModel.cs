@@ -14,7 +14,8 @@ namespace SleepStrap.UI.ViewModels.Settings
         private bool _isImportingCustomSkybox;
         private string _customSkyboxName = "";
         private string _customSkyboxSourcePath = "";
-        private string _customSkyboxStatus = "Choose a 2:1 PNG panorama and give it a name.";
+        private IReadOnlyList<string> _customSkyboxTexturePaths = Array.Empty<string>();
+        private string _customSkyboxStatus = "Choose a 2:1 panorama or 4x3 cube-cross PNG and give it a name.";
 
         public ExperimentalViewModel()
         {
@@ -24,10 +25,18 @@ namespace SleepStrap.UI.ViewModels.Settings
                 () => !IsImportingCustomSkybox &&
                       !String.IsNullOrWhiteSpace(CustomSkyboxName) &&
                       File.Exists(CustomSkyboxSourcePath));
+            ChooseCustomSkyboxTexturesCommand = new RelayCommand(ChooseCustomSkyboxTextures, () => !IsImportingCustomSkybox);
+            ImportCustomSkyboxTexturesCommand = new AsyncRelayCommand(
+                ImportCustomSkyboxTexturesAsync,
+                () => !IsImportingCustomSkybox &&
+                      !String.IsNullOrWhiteSpace(CustomSkyboxName) &&
+                      _customSkyboxTexturePaths.Count == 6);
         }
 
         public IRelayCommand ChooseCustomSkyboxPngCommand { get; }
         public IAsyncRelayCommand ImportCustomSkyboxCommand { get; }
+        public IRelayCommand ChooseCustomSkyboxTexturesCommand { get; }
+        public IAsyncRelayCommand ImportCustomSkyboxTexturesCommand { get; }
 
         public bool AutoClickerEnabled
         {
@@ -142,6 +151,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                 _customSkyboxName = name;
                 OnPropertyChanged(nameof(CustomSkyboxName));
                 ImportCustomSkyboxCommand.NotifyCanExecuteChanged();
+                ImportCustomSkyboxTexturesCommand.NotifyCanExecuteChanged();
             }
         }
 
@@ -163,6 +173,10 @@ namespace SleepStrap.UI.ViewModels.Settings
         public string CustomSkyboxSourceDisplay => String.IsNullOrWhiteSpace(CustomSkyboxSourcePath)
             ? "No PNG selected"
             : Path.GetFileName(CustomSkyboxSourcePath);
+
+        public string CustomSkyboxTextureSetDisplay => _customSkyboxTexturePaths.Count == 0
+            ? "Drop or choose all six sky512_*.tex files"
+            : $"{_customSkyboxTexturePaths.Count}/6 texture files selected";
 
         public string CustomSkyboxStatus
         {
@@ -189,6 +203,8 @@ namespace SleepStrap.UI.ViewModels.Settings
                 OnPropertyChanged(nameof(IsImportingCustomSkybox));
                 ChooseCustomSkyboxPngCommand.NotifyCanExecuteChanged();
                 ImportCustomSkyboxCommand.NotifyCanExecuteChanged();
+                ChooseCustomSkyboxTexturesCommand.NotifyCanExecuteChanged();
+                ImportCustomSkyboxTexturesCommand.NotifyCanExecuteChanged();
             }
         }
 
@@ -214,8 +230,8 @@ namespace SleepStrap.UI.ViewModels.Settings
         {
             var dialog = new OpenFileDialog
             {
-                Title = "Choose a 2:1 PNG sky panorama",
-                Filter = "PNG panorama (*.png)|*.png"
+                Title = "Choose a 2:1 panorama or 4x3 cube-cross sky PNG",
+                Filter = "Sky PNG (*.png)|*.png"
             };
 
             if (dialog.ShowDialog() != true)
@@ -255,6 +271,70 @@ namespace SleepStrap.UI.ViewModels.Settings
                 App.Logger.WriteException("ExperimentalViewModel::ImportCustomSkybox", ex);
                 Frontend.ShowMessageBox($"{App.ProjectName} could not import that skybox.\n\n{ex.Message}", MessageBoxImage.Error);
                 CustomSkyboxStatus = "Skybox import failed.";
+            }
+            finally
+            {
+                IsImportingCustomSkybox = false;
+            }
+        }
+
+        public void SetCustomSkyboxTextureFiles(IEnumerable<string> paths)
+        {
+            _customSkyboxTexturePaths = paths
+                .Where(path => !String.IsNullOrWhiteSpace(path) &&
+                               String.Equals(Path.GetExtension(path), ".tex", StringComparison.OrdinalIgnoreCase) &&
+                               File.Exists(path))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToArray();
+
+            if (String.IsNullOrWhiteSpace(CustomSkyboxName) && _customSkyboxTexturePaths.Count > 0)
+                CustomSkyboxName = new DirectoryInfo(Path.GetDirectoryName(_customSkyboxTexturePaths[0])!).Name;
+
+            OnPropertyChanged(nameof(CustomSkyboxTextureSetDisplay));
+            ImportCustomSkyboxTexturesCommand.NotifyCanExecuteChanged();
+            CustomSkyboxStatus = _customSkyboxTexturePaths.Count == 6
+                ? "Ready to add the six Roblox texture faces. It will stay disabled until you enable imported skyboxes."
+                : $"Select all six Roblox sky512 texture files ({_customSkyboxTexturePaths.Count}/6 selected).";
+        }
+
+        private void ChooseCustomSkyboxTextures()
+        {
+            var dialog = new OpenFileDialog
+            {
+                Title = "Choose all six Roblox sky512 texture files",
+                Filter = "Roblox sky textures (*.tex)|*.tex",
+                Multiselect = true
+            };
+
+            if (dialog.ShowDialog() == true)
+                SetCustomSkyboxTextureFiles(dialog.FileNames);
+        }
+
+        private async Task ImportCustomSkyboxTexturesAsync()
+        {
+            string displayName = CustomSkyboxName.Trim();
+            string[] texturePaths = _customSkyboxTexturePaths.ToArray();
+            if (String.IsNullOrWhiteSpace(displayName) || texturePaths.Length != 6)
+                return;
+
+            try
+            {
+                IsImportingCustomSkybox = true;
+                CustomSkyboxStatus = "Adding the six Roblox sky textures and generating their previewâ€¦";
+                await UserSkyboxService.ImportTextureSetAsync(texturePaths, displayName);
+                _customSkyboxTexturePaths = Array.Empty<string>();
+                CustomSkyboxName = "";
+                OnPropertyChanged(nameof(CustomSkyboxTextureSetDisplay));
+                ImportCustomSkyboxTexturesCommand.NotifyCanExecuteChanged();
+                CustomSkyboxStatus = CustomImportedSkyboxesEnabled
+                    ? $"{displayName} was added. You can select it in Skybox."
+                    : $"{displayName} was added and remains disabled until you enable imported skyboxes.";
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("ExperimentalViewModel::ImportCustomSkyboxTextures", ex);
+                Frontend.ShowMessageBox($"{App.ProjectName} could not import that texture set.\n\n{ex.Message}", MessageBoxImage.Error);
+                CustomSkyboxStatus = "Texture-set import failed.";
             }
             finally
             {

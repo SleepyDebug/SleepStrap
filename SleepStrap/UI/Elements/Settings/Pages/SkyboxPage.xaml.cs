@@ -52,7 +52,7 @@ namespace SleepStrap.UI.Elements.Settings.Pages
 
         private void SkyCard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (FindParent<Button>(e.OriginalSource as DependencyObject) is not null)
+            if (IsInsideInteractiveControl(e.OriginalSource as DependencyObject))
                 return;
             _pressedChoice = (sender as FrameworkElement)?.DataContext as SkyboxChoice;
             _favoriteTriggered = false;
@@ -66,6 +66,9 @@ namespace SleepStrap.UI.Elements.Settings.Pages
 
         private void SkyCard_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (IsInsideInteractiveControl(e.OriginalSource as DependencyObject))
+                return;
+
             _favoriteTimer.Stop();
             Mouse.Capture(null);
             if (!_favoriteTriggered && _pressedChoice is not null)
@@ -135,6 +138,25 @@ namespace SleepStrap.UI.Elements.Settings.Pages
                 child = VisualTreeHelper.GetParent(child);
             }
             return null;
+        }
+
+        // The card uses preview mouse events for long-press favourites. A WPF UI
+        // SymbolIcon is not always a direct visual child of its Button, so a
+        // visual-only parent walk can accidentally swallow the rename/delete click.
+        private static bool IsInsideInteractiveControl(DependencyObject? child)
+        {
+            while (child is not null)
+            {
+                if (child is Button || child is TextBox)
+                    return true;
+
+                DependencyObject? visualParent = null;
+                try { visualParent = VisualTreeHelper.GetParent(child); }
+                catch (InvalidOperationException) { }
+                child = visualParent ?? LogicalTreeHelper.GetParent(child);
+            }
+
+            return false;
         }
 
         private static T? FindChild<T>(DependencyObject parent, string? name = null) where T : FrameworkElement

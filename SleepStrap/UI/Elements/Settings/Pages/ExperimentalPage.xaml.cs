@@ -1,4 +1,5 @@
 using System.Windows.Controls;
+using System.Windows;
 using System.Windows.Input;
 
 using SleepStrap.UI.ViewModels.Settings;
@@ -83,6 +84,19 @@ namespace SleepStrap.UI.Elements.Settings.Pages
             if (modifiers.HasFlag(ModifierKeys.Windows)) parts.Add("Win");
             parts.Add(key.ToString());
             return String.Join(" + ", parts);
+        }
+
+        private void CustomSkyTextures_DragOver(object sender, DragEventArgs e)
+        {
+            e.Effects = e.Data.GetDataPresent(DataFormats.FileDrop) ? DragDropEffects.Copy : DragDropEffects.None;
+            e.Handled = true;
+        }
+
+        private void CustomSkyTextures_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetData(DataFormats.FileDrop) is string[] paths)
+                _viewModel.SetCustomSkyboxTextureFiles(paths);
+            e.Handled = true;
         }
     }
 }

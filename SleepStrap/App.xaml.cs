@@ -376,7 +376,7 @@ namespace SleepStrap
                 if (!LaunchSettings.BypassUpdateCheck)
                     Installer.HandleUpgrade();
 
-                bool isBackgroundHost = LaunchSettings.ClippingFlag.Active || LaunchSettings.ExperimentalFlag.Active;
+                bool isBackgroundHost = LaunchSettings.ClippingFlag.Active || LaunchSettings.ExperimentalFlag.Active || LaunchSettings.ChatShortcutsFlag.Active;
 
                 if (!isBackgroundHost && await Services.AppUpdateService.CheckAndPromptAsync())
                 {
@@ -397,6 +397,9 @@ namespace SleepStrap
 
                 if (!isBackgroundHost)
                     Services.ExperimentalClickerHostService.EnsureStarted();
+
+                if (!isBackgroundHost)
+                    Services.ChatShortcutsHostService.EnsureStarted();
 
                 LaunchHandler.ProcessLaunchArgs();
             }

@@ -41,6 +41,19 @@
                 <Grid>
                     <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
                     <StackPanel Margin="0,0,20,0">
+                        <TextBlock Text="Chat shortcuts" FontSize="17" FontWeight="Medium" />
+                        <TextBlock Text="Locally overlays h, m, l, t, and s chat calls with HP, Together, or Split labels. It never types, sends, or changes Roblox chat. Off by default."
+                                   Margin="0,4,0,0" FontSize="12" TextWrapping="Wrap"
+                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                    <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding ChatShortcutsEnabled, Mode=TwoWay}"
+                                     VerticalAlignment="Center" />
+                </Grid>
+
+                <Separator Margin="0,16" />
+                <Grid>
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                    <StackPanel Margin="0,0,20,0">
                         <TextBlock Text="Override legacy launcher settings" FontSize="17" FontWeight="Medium" />
                         <TextBlock Text="SleepBlox replaces inherited ClientAppSettings and disables the legacy grey-sky FastFlag when it launches Roblox."
                                    Margin="0,4,0,0" FontSize="12" TextWrapping="Wrap"

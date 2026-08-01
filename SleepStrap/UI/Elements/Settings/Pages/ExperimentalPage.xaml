@@ -154,7 +154,7 @@
             <ui:CardExpander.Header>
                 <StackPanel>
                     <TextBlock Text="Custom skyboxes" FontSize="17" FontWeight="SemiBold" />
-                    <TextBlock Text="Import a PNG panorama without changing Roblox" Margin="0,3,0,0" FontSize="12"
+                    <TextBlock Text="Import a PNG panorama or six Roblox .tex faces without changing Roblox" Margin="0,3,0,0" FontSize="12"
                                Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
                 </StackPanel>
             </ui:CardExpander.Header>
@@ -196,6 +196,28 @@
                 <ui:Button Content="Add skybox" Icon="Add20" Appearance="Primary" Margin="0,14,0,0"
                            HorizontalAlignment="Left" MinWidth="140"
                            Command="{Binding ImportCustomSkyboxCommand}" />
+
+                <Separator Margin="0,18" />
+
+                <TextBlock Text="Six Roblox .tex faces" FontSize="14" FontWeight="SemiBold" />
+                <TextBlock Text="Drag in all six sky512_*.tex files from a Roblox skybox, or choose them below. A preview is generated from the front face."
+                           Margin="0,4,0,0" FontSize="12" TextWrapping="Wrap"
+                           Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                <Border Margin="0,10,0,0" Padding="12,9" CornerRadius="8" BorderThickness="1"
+                        BorderBrush="#55FFFFFF" Background="#18000000"
+                        AllowDrop="True" DragOver="CustomSkyTextures_DragOver" Drop="CustomSkyTextures_Drop">
+                    <TextBlock Text="{Binding CustomSkyboxTextureSetDisplay}" FontSize="12" />
+                </Border>
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ui:Button Content="Choose .tex files" Icon="FolderOpen20"
+                               Command="{Binding ChooseCustomSkyboxTexturesCommand}" />
+                    <ui:Button Grid.Column="1" Content="Add .tex skybox" Icon="Add20" Appearance="Primary"
+                               Margin="10,0,0,0" Command="{Binding ImportCustomSkyboxTexturesCommand}" />
+                </Grid>
                 <TextBlock Text="{Binding CustomSkyboxStatus}" Margin="0,10,0,0" FontSize="12"
                            TextWrapping="Wrap"
                            Foreground="{DynamicResource TextFillColorSecondaryBrush}" />

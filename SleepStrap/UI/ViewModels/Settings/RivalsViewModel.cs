@@ -144,23 +144,25 @@ namespace SleepStrap.UI.ViewModels.Settings
             get => App.Settings.Prop.NvidiaBlurredTexturesEnabled;
             set
             {
-                // NVIDIA DRS changes can reset or crash the display driver on some
-                // systems. Keep this experimental feature disabled until a safe,
-                // non-elevated implementation is available.
-                if (value)
+                if (_isChangingNvidiaBlur || value == App.Settings.Prop.NvidiaBlurredTexturesEnabled)
+                    return;
+
+                if (value && Frontend.ShowMessageBox(
+                    "Blurred textures changes NVIDIA's Roblox VR driver profile and requires administrator permission. " +
+                    "It only works with an NVIDIA GPU and can affect the driver until you turn it back off. Rejoin Roblox after changing it. Continue?",
+                    MessageBoxImage.Warning,
+                    MessageBoxButton.YesNo,
+                    MessageBoxResult.No) != MessageBoxResult.Yes)
                 {
-                    NvidiaBlurStatus = "Disabled for safety";
                     OnPropertyChanged(nameof(NvidiaBlurredTexturesEnabled));
                     return;
                 }
-                App.Settings.Prop.NvidiaBlurredTexturesEnabled = false;
-                App.Settings.Save();
-                NvidiaBlurStatus = "Disabled for safety";
-                OnPropertyChanged(nameof(NvidiaBlurredTexturesEnabled));
+
+                _ = SetNvidiaBlurredTexturesAsync(value);
             }
         }
 
-        public bool CanChangeNvidiaBlur => false;
+        public bool CanChangeNvidiaBlur => !_isChangingNvidiaBlur;
 
         public string NvidiaBlurStatus
         {
@@ -186,12 +188,9 @@ namespace SleepStrap.UI.ViewModels.Settings
         public RivalsViewModel()
         {
             RemoveLegacyFpsCounter();
-            if (App.Settings.Prop.NvidiaBlurredTexturesEnabled)
-            {
-                App.Settings.Prop.NvidiaBlurredTexturesEnabled = false;
-                App.Settings.Save();
-            }
-            NvidiaBlurStatus = "Disabled for safety";
+            NvidiaBlurStatus = App.Settings.Prop.NvidiaBlurredTexturesEnabled
+                ? "Enabled - rejoin Roblox to apply"
+                : "Off";
             RefreshStatus();
         }
 

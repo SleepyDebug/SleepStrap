@@ -31,6 +31,8 @@ namespace SleepStrap.Models.Persistable
         public bool BackgroundUpdatesEnabled { get; set; } = false;
         public bool CloseSleepStrapOnLaunch { get; set; } = false;
         public bool OverrideLegacyBloxstrapSettings { get; set; } = false;
+        // Local display-only Roblox chat labels. Disabled by default.
+        public bool ChatShortcutsEnabled { get; set; } = false;
         public Dictionary<string, string> LegacyBloxstrapFlagBackup { get; set; } = new();
         public bool DebugDisableVersionPackageCleanup { get; set; } = false;
         public WebEnvironment WebEnvironment { get; set; } = WebEnvironment.Production;

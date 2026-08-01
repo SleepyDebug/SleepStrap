@@ -87,6 +87,25 @@ namespace SleepStrap.Services
             }
 
             string candidate = GetSkyboxDirectory(id);
+            // Repair skies imported by older builds. They keep their original PNG,
+            // so we can regenerate the six faces in the current Roblox format
+            // without touching Roblox or asking the user to recreate the entry.
+            if (_skyboxFileNames.Any(file => !IsRobloxSkyTexture(Path.Combine(candidate, file))))
+            {
+                string savedSource = Path.Combine(candidate, SourceFileName);
+                if (File.Exists(savedSource))
+                {
+                    try
+                    {
+                        VisualModService.ConvertPanoramaToSkybox(savedSource, candidate);
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Logger.WriteException("UserSkyboxService::Repair", ex);
+                    }
+                }
+            }
+
             if (_skyboxFileNames.Any(file => !IsRobloxSkyTexture(Path.Combine(candidate, file))))
                 return false;
 
@@ -178,6 +197,36 @@ namespace SleepStrap.Services
         }
 
         /// <summary>
+        /// Removes every imported skybox and its private PNG/texture folders.
+        /// Used by Reset Settings so old custom skies cannot reappear afterward.
+        /// </summary>
+        public static void DeleteAll()
+        {
+            List<string> names = Definitions.Select(definition => definition.Name).ToList();
+            if (Directory.Exists(Root))
+            {
+                FileAttributes attributes = File.GetAttributes(Root);
+                // Never recurse through a junction or symlink, even though this is
+                // our own data directory.
+                Directory.Delete(Root, (attributes & FileAttributes.ReparsePoint) == 0);
+            }
+
+            Definitions.Clear();
+            App.Settings.Prop.FavoriteSkyboxes?.RemoveAll(favorite =>
+                IsUserSkyboxKey(favorite) || names.Any(name =>
+                    String.Equals(name, favorite, StringComparison.OrdinalIgnoreCase)));
+            App.Settings.Prop.CustomImportedSkyboxesEnabled = false;
+            if (IsUserSkyboxKey(App.Settings.Prop.CustomSkyboxSourceName))
+            {
+                App.Settings.Prop.CustomSkyboxEnabled = false;
+                App.Settings.Prop.CustomSkyboxSourceName = "";
+            }
+
+            App.Settings.Save();
+            NotifyChanged();
+        }
+
+        /// <summary>
         /// Converts a 2:1 PNG panorama to six Roblox texture files and registers
         /// it in settings. It never writes to the live Roblox modifications folder.
         /// </summary>
@@ -210,6 +259,71 @@ namespace SleepStrap.Services
 
                 if (_skyboxFileNames.Any(file => !IsRobloxSkyTexture(Path.Combine(stagingRoot, file))))
                     throw new InvalidDataException("The imported skybox did not produce valid Roblox texture files.");
+
+                Directory.Move(stagingRoot, destinationRoot);
+                movedToDestination = true;
+                Definitions.Add(definition);
+                App.Settings.Save();
+                NotifyChanged();
+                return definition;
+            }
+            catch
+            {
+                if (Definitions.Remove(definition))
+                    App.Settings.Save();
+                if (movedToDestination && Directory.Exists(destinationRoot))
+                {
+                    try { Directory.Delete(destinationRoot, true); }
+                    catch { }
+                }
+                throw;
+            }
+            finally
+            {
+                if (Directory.Exists(stagingRoot))
+                {
+                    try { Directory.Delete(stagingRoot, true); }
+                    catch { }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Imports an already-converted six-face Roblox skybox. This keeps the
+        /// supplied .tex files byte-for-byte and uses the front face for its
+        /// gallery preview.
+        /// </summary>
+        public static async Task<UserSkyboxDefinition> ImportTextureSetAsync(
+            IEnumerable<string> texturePaths,
+            string displayName)
+        {
+            string name = ValidateDisplayName(displayName);
+            IReadOnlyDictionary<string, string> files = ValidateTextureSet(texturePaths);
+
+            string id = Guid.NewGuid().ToString("N");
+            string stagingRoot = Path.Combine(Root, $".staging-{id}");
+            string destinationRoot = GetSkyboxDirectory(id);
+            var definition = new UserSkyboxDefinition
+            {
+                Id = id,
+                Name = name,
+                CreatedUtc = DateTime.UtcNow
+            };
+
+            Directory.CreateDirectory(Root);
+            bool movedToDestination = false;
+            try
+            {
+                await Task.Run(() =>
+                {
+                    Directory.CreateDirectory(stagingRoot);
+                    foreach (string textureFileName in _skyboxFileNames)
+                        File.Copy(files[textureFileName], Path.Combine(stagingRoot, textureFileName), true);
+
+                    VisualModService.CreateSkyTexturePreview(
+                        Path.Combine(stagingRoot, "sky512_ft.tex"),
+                        Path.Combine(stagingRoot, PreviewFileName));
+                });
 
                 Directory.Move(stagingRoot, destinationRoot);
                 movedToDestination = true;
@@ -323,6 +437,32 @@ namespace SleepStrap.Services
                 throw new FileNotFoundException("The selected PNG could not be found.", sourcePath);
             if (!String.Equals(Path.GetExtension(sourcePath), ".png", StringComparison.OrdinalIgnoreCase))
                 throw new InvalidDataException("Choose a PNG panorama.");
+        }
+
+        private static IReadOnlyDictionary<string, string> ValidateTextureSet(IEnumerable<string> texturePaths)
+        {
+            var files = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (string path in texturePaths ?? Enumerable.Empty<string>())
+            {
+                if (String.IsNullOrWhiteSpace(path) || !File.Exists(path))
+                    throw new FileNotFoundException("One of the selected sky textures could not be found.", path);
+
+                string name = Path.GetFileName(path);
+                string? expectedName = _skyboxFileNames.FirstOrDefault(file =>
+                    String.Equals(file, name, StringComparison.OrdinalIgnoreCase));
+                if (expectedName is null)
+                    throw new InvalidDataException($"{name} is not one of the six Roblox sky512 texture files.");
+                if (!VisualModService.IsRobloxSkyTexture(path))
+                    throw new InvalidDataException($"{name} is not a valid Roblox sky .tex file.");
+                if (!files.TryAdd(expectedName, path))
+                    throw new InvalidDataException($"{name} was selected more than once.");
+            }
+
+            string[] missing = _skyboxFileNames.Where(file => !files.ContainsKey(file)).ToArray();
+            if (missing.Length > 0)
+                throw new InvalidDataException("Select all six Roblox sky textures: " + String.Join(", ", missing));
+
+            return files;
         }
 
         private static void CreatePreview(string sourcePath, string destinationPath)

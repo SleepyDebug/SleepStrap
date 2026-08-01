@@ -47,11 +47,12 @@ namespace SleepStrap
         public LaunchFlag ClippingFlag { get; } = new("clipping");
 
         public LaunchFlag ExperimentalFlag { get; } = new("experimental");
+        public LaunchFlag ChatShortcutsFlag { get; } = new("chatshortcuts");
 
 #if DEBUG
         public bool BypassUpdateCheck => true;
 #else
-        public bool BypassUpdateCheck => UninstallFlag.Active || WatcherFlag.Active || ClippingFlag.Active || ExperimentalFlag.Active;
+        public bool BypassUpdateCheck => UninstallFlag.Active || WatcherFlag.Active || ClippingFlag.Active || ExperimentalFlag.Active || ChatShortcutsFlag.Active;
 #endif
 
         public LaunchMode RobloxLaunchMode { get; set; } = LaunchMode.None;

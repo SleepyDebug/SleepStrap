@@ -60,6 +60,11 @@ namespace SleepStrap
                 App.Logger.WriteLine(LOG_IDENT, "Opening persistent experimental input service");
                 Services.ExperimentalClickerHostService.RunHostMode();
             }
+            else if (App.LaunchSettings.ChatShortcutsFlag.Active)
+            {
+                App.Logger.WriteLine(LOG_IDENT, "Opening persistent chat shortcuts service");
+                Services.ChatShortcutsHostService.RunHostMode();
+            }
             else if (App.LaunchSettings.MenuFlag.Active)
             {
                 App.Logger.WriteLine(LOG_IDENT, "Opening settings");
