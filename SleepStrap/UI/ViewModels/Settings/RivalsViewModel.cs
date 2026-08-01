@@ -10,6 +10,8 @@ namespace SleepStrap.UI.ViewModels.Settings
         private const string TargetFpsFlag = "DFIntTaskSchedulerTargetFps";
         private const string UnlockFpsFlag = "FFlagTaskSchedulerLimitTargetFpsTo2402";
         private const int StretchPercent = 75;
+        private bool _isChangingNvidiaBlur;
+        private string _nvidiaBlurStatus = String.Empty;
 
         public sealed record StretchPreset(string Name, int Percent)
         {
@@ -68,7 +70,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                 catch (Exception ex)
                 {
                     App.Logger.WriteException("RivalsViewModel::SetStretch", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not change the display stretch.\n\n{ex.Message}", MessageBoxImage.Error);
+                    Frontend.ShowMessageBox($"{App.ProjectName} could not change the display stretch.\n\n{ex.Message}", MessageBoxImage.Error);
                     OnPropertyChanged(nameof(StretchEnabled));
                     RefreshStatus();
                 }
@@ -99,7 +101,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                 {
                     App.Settings.Prop.RivalsStretchPercent = previous;
                     App.Logger.WriteException("RivalsViewModel::ChangeStrength", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not apply that stretch strength.\n\n{ex.Message}", MessageBoxImage.Error);
+                    Frontend.ShowMessageBox($"{App.ProjectName} could not apply that stretch strength.\n\n{ex.Message}", MessageBoxImage.Error);
                     OnPropertyChanged(nameof(SelectedStretchPercent));
                     RefreshStatus();
                 }
@@ -131,9 +133,44 @@ namespace SleepStrap.UI.ViewModels.Settings
                 catch (Exception ex)
                 {
                     App.Logger.WriteException("RivalsViewModel::ChangeFps", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not change the FPS limit.\n\n{ex.Message}", MessageBoxImage.Error);
+                    Frontend.ShowMessageBox($"{App.ProjectName} could not change the FPS limit.\n\n{ex.Message}", MessageBoxImage.Error);
                     OnPropertyChanged(nameof(SelectedFpsLimit));
                 }
+            }
+        }
+
+        public bool NvidiaBlurredTexturesEnabled
+        {
+            get => App.Settings.Prop.NvidiaBlurredTexturesEnabled;
+            set
+            {
+                if (_isChangingNvidiaBlur || value == App.Settings.Prop.NvidiaBlurredTexturesEnabled)
+                    return;
+
+                if (value && Frontend.ShowMessageBox(
+                    "Blurred textures changes NVIDIA's Roblox VR driver profile and requires administrator permission. " +
+                    "It only works with an NVIDIA GPU and can affect the driver until you turn it back off. Rejoin Roblox after changing it. Continue?",
+                    MessageBoxImage.Warning,
+                    MessageBoxButton.YesNo,
+                    MessageBoxResult.No) != MessageBoxResult.Yes)
+                {
+                    OnPropertyChanged(nameof(NvidiaBlurredTexturesEnabled));
+                    return;
+                }
+
+                _ = SetNvidiaBlurredTexturesAsync(value);
+            }
+        }
+
+        public bool CanChangeNvidiaBlur => !_isChangingNvidiaBlur;
+
+        public string NvidiaBlurStatus
+        {
+            get => _nvidiaBlurStatus;
+            private set
+            {
+                _nvidiaBlurStatus = value;
+                OnPropertyChanged(nameof(NvidiaBlurStatus));
             }
         }
 
@@ -151,7 +188,66 @@ namespace SleepStrap.UI.ViewModels.Settings
         public RivalsViewModel()
         {
             RemoveLegacyFpsCounter();
+            NvidiaBlurStatus = App.Settings.Prop.NvidiaBlurredTexturesEnabled
+                ? "Enabled - rejoin Roblox to apply"
+                : "Off";
             RefreshStatus();
+        }
+
+        private async Task SetNvidiaBlurredTexturesAsync(bool enable)
+        {
+            _isChangingNvidiaBlur = true;
+            OnPropertyChanged(nameof(CanChangeNvidiaBlur));
+            OnPropertyChanged(nameof(NvidiaBlurredTexturesEnabled));
+            NvidiaBlurStatus = enable ? "Applying NVIDIA profile..." : "Restoring NVIDIA profile...";
+
+            try
+            {
+                NvidiaBlurElevationBridge.HelperResult result =
+                    await NvidiaBlurElevationBridge.RunElevatedAsync(
+                        enable,
+                        App.Settings.Prop.NvidiaBlurredTexturesProfileBackup);
+
+                if (!result.Success)
+                {
+                    throw new InvalidOperationException(
+                        String.IsNullOrWhiteSpace(result.Error)
+                            ? "The NVIDIA profile helper failed."
+                            : result.Error);
+                }
+
+                if (enable)
+                {
+                    App.Settings.Prop.NvidiaBlurredTexturesProfileBackup =
+                        new Dictionary<string, string>(result.Backup, StringComparer.OrdinalIgnoreCase);
+                }
+                else
+                {
+                    App.Settings.Prop.NvidiaBlurredTexturesProfileBackup.Clear();
+                }
+
+                App.Settings.Prop.NvidiaBlurredTexturesEnabled = enable;
+                App.Settings.Save();
+                NvidiaBlurStatus = enable
+                    ? "Enabled - rejoin Roblox to apply"
+                    : "NVIDIA driver settings restored";
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("RivalsViewModel::SetNvidiaBlurredTextures", ex);
+                NvidiaBlurStatus = NvidiaBlurredTexturesEnabled
+                    ? "Enabled for the NVIDIA Roblox VR profile"
+                    : "NVIDIA profile was not changed";
+                Frontend.ShowMessageBox(
+                    $"{App.ProjectName} could not change the NVIDIA texture settings.\n\n{ex.Message}",
+                    MessageBoxImage.Error);
+            }
+            finally
+            {
+                _isChangingNvidiaBlur = false;
+                OnPropertyChanged(nameof(CanChangeNvidiaBlur));
+                OnPropertyChanged(nameof(NvidiaBlurredTexturesEnabled));
+            }
         }
 
         private void EnableStretch()

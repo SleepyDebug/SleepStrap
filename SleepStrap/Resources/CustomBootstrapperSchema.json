@@ -38,7 +38,7 @@
 				"FontFamily": "FontFamily"
 			}
 		},
-		"SleepStrapCustomBootstrapper": {
+		"SleepBloxCustomBootstrapper": {
 			"SuperClass": "Control",
 			"IsCreatable": true,
 			"Attributes": {

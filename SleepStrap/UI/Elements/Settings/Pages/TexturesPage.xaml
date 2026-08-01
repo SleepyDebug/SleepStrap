@@ -60,8 +60,8 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1" BorderBrush="#3DFFFFFF"
-                                Background="#B30A0A0C" ClipToBounds="True">
+                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1"
+                                BorderBrush="#3DFFFFFF" Background="#B30A0A0C" ClipToBounds="True">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="166" />
@@ -116,8 +116,8 @@
                 </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1" BorderBrush="#3DFFFFFF"
-                                Background="#B30A0A0C" ClipToBounds="True">
+                        <Border x:Name="Card" CornerRadius="10" BorderThickness="1"
+                                BorderBrush="#3DFFFFFF" Background="#B30A0A0C" ClipToBounds="True">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="142" />
@@ -182,6 +182,21 @@
                                Visibility="{Binding RestoreFontVisibility}" Margin="0,8,0,0" />
                     <ui:ProgressRing Width="22" Height="22" Margin="0,9,0,0" HorizontalAlignment="Center" IsIndeterminate="True"
                                      Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBlock Text="Font color" Margin="0,12,0,3" FontSize="12" />
+                    <Button x:Name="FontColorButton" Width="250" Height="38" Click="FontColorButton_Click" HorizontalContentAlignment="Left" Padding="8">
+                        <StackPanel Orientation="Horizontal">
+                            <Border x:Name="FontColorSwatch" Width="22" Height="22" CornerRadius="5" Margin="0,0,9,0" />
+                            <TextBlock x:Name="FontColorValue" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Popup x:Name="FontColorPopup" StaysOpen="False" AllowsTransparency="True">
+                        <Border Background="#F2121216" CornerRadius="12" Padding="14" BorderBrush="#55FFFFFF" BorderThickness="1">
+                            <StackPanel>
+                                <Image x:Name="FontColorWheel" Width="220" Height="220" MouseLeftButtonDown="FontColorWheel_MouseLeftButtonDown" />
+                                <TextBlock Text="Click the wheel to choose a color" FontSize="12" Margin="0,10,0,0" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                    </Popup>
                 </StackPanel>
             </Grid>
         </ui:CardExpander>

@@ -70,7 +70,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                 catch (Exception ex)
                 {
                     App.Logger.WriteException("VisualModsViewModel::SelectFont", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not apply that font.\n\n{ex.Message}", MessageBoxImage.Error);
+                    Frontend.ShowMessageBox($"{App.ProjectName} could not apply that font.\n\n{ex.Message}", MessageBoxImage.Error);
                     OnPropertyChanged(nameof(SelectedFont));
                 }
                 finally
@@ -88,6 +88,23 @@ namespace SleepStrap.UI.ViewModels.Settings
             {
                 _fontStatus = value;
                 OnPropertyChanged(nameof(FontStatus));
+            }
+        }
+
+        public string FontColor
+        {
+            get => App.Settings.Prop.SelectedFontColor;
+            set
+            {
+                string color = (value ?? "").Trim();
+                if (!System.Text.RegularExpressions.Regex.IsMatch(color, "^#[0-9A-Fa-f]{6}$"))
+                    return;
+                if (String.Equals(color, App.Settings.Prop.SelectedFontColor, StringComparison.OrdinalIgnoreCase))
+                    return;
+                App.Settings.Prop.SelectedFontColor = color.ToUpperInvariant();
+                App.Settings.Save();
+                OnPropertyChanged(nameof(FontColor));
+                FontStatus = $"Font color {App.Settings.Prop.SelectedFontColor} saved.";
             }
         }
 
@@ -163,7 +180,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                 catch (Exception ex)
                 {
                     App.Logger.WriteException("VisualModsViewModel::SetDarkTextures", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not switch the texture pack.\n\n{ex.Message}", MessageBoxImage.Error);
+                    Frontend.ShowMessageBox($"{App.ProjectName} could not switch the texture pack.\n\n{ex.Message}", MessageBoxImage.Error);
                     NotifyTexturePackSelectionChanged();
                     StatusText = "Texture switch failed.";
                 }
@@ -207,7 +224,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                 catch (Exception ex)
                 {
                     App.Logger.WriteException("VisualModsViewModel::SetRtxShine", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not change RTX shine.\n\n{ex.Message}", MessageBoxImage.Error);
+                    Frontend.ShowMessageBox($"{App.ProjectName} could not change RTX shine.\n\n{ex.Message}", MessageBoxImage.Error);
                     OnPropertyChanged(nameof(RtxShineEnabled));
                     StatusText = "RTX shine switch failed.";
                 }
@@ -276,7 +293,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                         App.Logger.WriteException("VisualModsViewModel::RollbackTextureEffect", rollbackException);
                     }
 
-                    Frontend.ShowMessageBox($"SleepStrap could not change the texture effect.\n\n{ex.Message}", MessageBoxImage.Error);
+                    Frontend.ShowMessageBox($"{App.ProjectName} could not change the texture effect.\n\n{ex.Message}", MessageBoxImage.Error);
                     OnPropertyChanged(nameof(SelectedTextureEffect));
                     StatusText = "Texture effect failed.";
                 }
@@ -331,7 +348,7 @@ namespace SleepStrap.UI.ViewModels.Settings
             catch (Exception ex)
             {
                 App.Logger.WriteException("VisualModsViewModel::ImportSkybox", ex);
-                Frontend.ShowMessageBox($"SleepStrap could not convert that panorama.\n\n{ex.Message}", MessageBoxImage.Error);
+                Frontend.ShowMessageBox($"{App.ProjectName} could not convert that panorama.\n\n{ex.Message}", MessageBoxImage.Error);
                 StatusText = "Skybox import failed.";
             }
             finally { IsBusy = false; }
@@ -353,7 +370,7 @@ namespace SleepStrap.UI.ViewModels.Settings
             catch (Exception ex)
             {
                 App.Logger.WriteException("VisualModsViewModel::RemoveSkybox", ex);
-                Frontend.ShowMessageBox($"SleepStrap could not restore the previous skybox.\n\n{ex.Message}", MessageBoxImage.Error);
+                Frontend.ShowMessageBox($"{App.ProjectName} could not restore the previous skybox.\n\n{ex.Message}", MessageBoxImage.Error);
                 StatusText = "Skybox restore failed.";
             }
             finally { IsBusy = false; }
@@ -388,7 +405,7 @@ namespace SleepStrap.UI.ViewModels.Settings
             catch (Exception ex)
             {
                 App.Logger.WriteException("VisualModsViewModel::RestoreFont", ex);
-                Frontend.ShowMessageBox($"SleepStrap could not restore the Roblox font.\n\n{ex.Message}", MessageBoxImage.Error);
+                Frontend.ShowMessageBox($"{App.ProjectName} could not restore the Roblox font.\n\n{ex.Message}", MessageBoxImage.Error);
             }
             finally
             {
@@ -401,7 +418,7 @@ namespace SleepStrap.UI.ViewModels.Settings
         {
             if (App.State.Prop.VisualModsWarningAcknowledged)
                 return true;
-            const string message = "Custom skyboxes and textures replace local Roblox asset files. They do not inject code or modify the Roblox executable, but they are unofficial and SleepStrap cannot guarantee that Roblox will never take enforcement action.\n\nContinue with visual mods?";
+            const string message = "Custom skyboxes and textures replace local Roblox asset files. They do not inject code or modify the Roblox executable, but they are unofficial and SleepBlox cannot guarantee that Roblox will never take enforcement action.\n\nContinue with visual mods?";
             if (Frontend.ShowMessageBox(message, MessageBoxImage.Warning, MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                 return false;
             App.State.Prop.VisualModsWarningAcknowledged = true;

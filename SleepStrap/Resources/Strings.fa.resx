@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -133,7 +133,7 @@
     <value>برای حذف نصب، ابتدا باید بلاکسترپ را نصب کنید.</value>
   </data>
   <data name="Bootstrapper.NotEnoughSpace" xml:space="preserve">
-    <value>SleepStrap فضای کافی برای دانلود و نصب Roblox ندارد. لطفاً مقداری حافظه را آزاد کنید و دوباره تلاش کنید.</value>
+    <value>SleepBlox فضای کافی برای دانلود و نصب Roblox ندارد. لطفاً مقداری حافظه را آزاد کنید و دوباره تلاش کنید.</value>
   </data>
   <data name="Bootstrapper.Status.ApplyingModifications" xml:space="preserve">
     <value>در حال اعمال کردن تغییرات روبلاکس...</value>
@@ -169,10 +169,10 @@
     <comment>Text for style previews that use text button that says "Cancel"</comment>
   </data>
   <data name="Bootstrapper.SuccessfullyUninstalled" xml:space="preserve">
-    <value>SleepStrap با موفقیت حذف شد</value>
+    <value>SleepBlox با موفقیت حذف شد</value>
   </data>
   <data name="Bootstrapper.Uninstall.RobloxRunning" xml:space="preserve">
-    <value>Roblox در حال اجرا است؛ ولی قبل از حذف نصب SleepStrap باید بسته شود. آیا میخواهید Roblox را الان بیندید?</value>
+    <value>Roblox در حال اجرا است؛ ولی قبل از حذف نصب SleepBlox باید بسته شود. آیا میخواهید Roblox را الان بیندید?</value>
   </data>
   <data name="Bootstrapper.WMFNotFound" xml:space="preserve">
     <value>روبلاکس نیاز به استفاده از اجزای Windows Media Foundation میباشد. همانا شما آنرا ندارید؛ و یا ممکن است شما درحال استفاده از نسخه N در Windows باشید. اول آنرا نصب کرده، و بعد روبلاکس را اجرا کنید.</value>
@@ -1100,7 +1100,7 @@
   <data name="Installer.Install.CannotOverwrite" xml:space="preserve">
     <value>بلاکسترپ قبلا در این مسیر نصب شده و هنوز در این مسیر وجود دارد، اما نصب کننده نمیتواند فایل اجرایی قدیمی را بازنویسی کند.
 
-لطفا به طور دستی "SleepStrap.exe" را از مسیر نصب کننده پاک کنید و یا سیستم خود را خاموش و روشن کنید، و بعد از آن دوباره نصب کننده را اجرا کنید.</value>
+لطفا به طور دستی "SleepBlox.exe" را از مسیر نصب کننده پاک کنید و یا سیستم خود را خاموش و روشن کنید، و بعد از آن دوباره نصب کننده را اجرا کنید.</value>
   </data>
   <data name="Common.NotAvailable" xml:space="preserve">
     <value>در دسترس نیست</value>
@@ -1193,7 +1193,7 @@
   </data>
   <data name="Common.Export" xml:space="preserve">
     <value>صدور</value>
-    <comment>Currently used under the "SleepStrap" settings tab for the button to export diagnostic data</comment>
+    <comment>Currently used under the "SleepBlox" settings tab for the button to export diagnostic data</comment>
   </data>
   <data name="App.OSDeprecation.Win7_81" xml:space="preserve">
     <value>روبلاکس دیگر بر روی ویندوز 7 و یا 8.1 پشتیبانی نمیشود. جهت ادامه دادن به بازی در روبلاکس، لطفا به ویندوز 10 یا جدیدتر بروزرسانی کنید.</value>
@@ -1381,7 +1381,7 @@
   <data name="CustomTheme.Errors.SetupFailed" xml:space="preserve">
     <value>راه‌اندازی بوت‌ استرپرِ دلخواه انجام نشد: {0}.
 به‌طور پیش‌فرض تنظیم می‌شود برروی {1}.</value>
-    <comment>{0} is the error reason, {1} is the theme name (e.g. SleepStrap (Classic))</comment>
+    <comment>{0} is the error reason, {1} is the theme name (e.g. SleepBlox (Classic))</comment>
   </data>
   <data name="Menu.Appearance.CustomThemes.NoneSelected" xml:space="preserve">
     <value>هیچ تم دلخواهی انتخاب نشده است.</value>

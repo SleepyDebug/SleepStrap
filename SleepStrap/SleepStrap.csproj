@@ -7,8 +7,8 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>True</UseWindowsForms>
     <ApplicationIcon>SleepStrap.ico</ApplicationIcon>
-    <Version>6.9.6.0</Version>
-    <FileVersion>6.9.6.0</FileVersion>
+    <Version>8.0.0</Version>
+    <FileVersion>8.0.0</FileVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Platforms>x64</Platforms>
@@ -18,7 +18,7 @@
          runtime files before startup so the clipping host cannot native-crash. -->
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-	<AssemblyName>SleepStrap</AssemblyName>
+	<AssemblyName>SleepBlox</AssemblyName>
     <Product>$(AssemblyName)</Product>
     <RootNamespace>SleepStrap</RootNamespace>
   </PropertyGroup>
@@ -105,6 +105,7 @@
     <Resource Include="Resources\SleepStrap\Previews\Basic.png" />
     <Resource Include="Resources\SleepStrap\Previews\Dark.png" />
     <Resource Include="Resources\SleepStrap\Previews\BasicRtx.png" />
+    <Resource Include="Resources\SleepStrap\Previews\Blur.png" />
     <Resource Include="Resources\SleepStrap\WeaponImages\**\*.png" />
   </ItemGroup>
 

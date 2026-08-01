@@ -14,6 +14,7 @@ namespace SleepStrap.Models.Persistable
         public bool DeveloperMode { get; set; } = false;
         public bool ForceLocalData { get; set; } = false;
         public bool CheckForUpdates { get; set; } = true;
+        public string LastShownChangelogVersion { get; set; } = "";
         public bool MultiInstanceLaunching { get; set; } = false;
         public bool ConfirmLaunches { get; set; } = true;
         public string Locale { get; set; } = "nil";
@@ -30,6 +31,8 @@ namespace SleepStrap.Models.Persistable
         public bool BackgroundUpdatesEnabled { get; set; } = false;
         public bool CloseSleepStrapOnLaunch { get; set; } = false;
         public bool OverrideLegacyBloxstrapSettings { get; set; } = false;
+        // Local display-only Roblox chat labels. Disabled by default.
+        public bool ChatShortcutsEnabled { get; set; } = false;
         public Dictionary<string, string> LegacyBloxstrapFlagBackup { get; set; } = new();
         public bool DebugDisableVersionPackageCleanup { get; set; } = false;
         public WebEnvironment WebEnvironment { get; set; } = WebEnvironment.Production;
@@ -56,8 +59,15 @@ namespace SleepStrap.Models.Persistable
         public Dictionary<string, string> RtxShineFlagBackup { get; set; } = new();
         public string SelectedFontName { get; set; } = "Roblox Default";
         public string SelectedFontSource { get; set; } = "";
+        public string SelectedFontColor { get; set; } = "#FFFFFF";
         public bool CustomSkyboxEnabled { get; set; } = false;
         public string CustomSkyboxSourceName { get; set; } = "";
+        public List<string> FavoriteSkyboxes { get; set; } = new();
+        // This is intentionally separate from CustomSkyboxEnabled: the latter
+        // describes the selected sky (including bundled presets), while this is
+        // the master switch for locally imported user panoramas.
+        public bool CustomImportedSkyboxesEnabled { get; set; } = false;
+        public List<UserSkyboxDefinition> UserSkyboxes { get; set; } = new();
 
         // SleepStrap Rivals display stretch
         public bool RivalsStretchEnabled { get; set; } = false;
@@ -69,6 +79,8 @@ namespace SleepStrap.Models.Persistable
         public Dictionary<string, string> RivalsFpsFlagBackup { get; set; } = new();
         public bool RivalsFpsCounterEnabled { get; set; } = false;
         public Dictionary<string, string> RivalsFpsCounterFlagBackup { get; set; } = new();
+        public bool NvidiaBlurredTexturesEnabled { get; set; } = false;
+        public Dictionary<string, string> NvidiaBlurredTexturesProfileBackup { get; set; } = new();
 
         // SleepStrap replay buffer
         public bool ClippingEnabled { get; set; } = false;
@@ -83,16 +95,23 @@ namespace SleepStrap.Models.Persistable
         public string ClippingMicrophoneDevice { get; set; } = "";
         public int ClippingMicrophoneVolume { get; set; } = 70;
 
-        // SleepStrap RIVALS loadout macro
+        // Experimental input tools
+        public bool ExperimentalAutoClickerEnabled { get; set; } = false;
+        public int ExperimentalAutoClickerHotkeyModifiers { get; set; } = 0;
+        public int ExperimentalAutoClickerHotkeyVirtualKey { get; set; } = 0x75; // F6
+        public int ExperimentalAutoClickerClicksPerSecond { get; set; } = 12;
+        public bool ExperimentalRobloxHoldToSpamEnabled { get; set; } = false;
+        public int ExperimentalRobloxHoldToSpamClicksPerSecond { get; set; } = 12;
+        // When enabled, hold-to-spam stays inactive until the local Roblox HUD
+        // scanner sees the Hand Gun/Handgun weapon label in the lower-right area.
+        public bool ExperimentalRobloxHoldToSpamHandgunOnly { get; set; } = false;
+
+        // SleepStrap RIVALS grid loadout and hourly rejoin
         public List<string> MacroMissingWeapons { get; set; } = new();
         public string MacroPrimaryWeapon { get; set; } = "Distortion";
         public string MacroSecondaryWeapon { get; set; } = "Warper";
         public string MacroMeleeWeapon { get; set; } = "Maul";
         public string MacroUtilityWeapon { get; set; } = "Grappler";
-        public bool MacroUseListLayout { get; set; } = false;
-        public bool MacroQuickRespawn { get; set; } = false;
-        public bool MacroAutoUtility { get; set; } = false;
-        public bool MacroAutoInspect { get; set; } = false;
         public bool MacroAutoRejoinHourly { get; set; } = false;
     }
 }

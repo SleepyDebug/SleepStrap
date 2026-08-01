@@ -7,6 +7,7 @@
       xmlns:dmodels="clr-namespace:SleepStrap.UI.ViewModels.Settings"
       mc:Ignorable="d" d:DataContext="{d:DesignInstance dmodels:RivalsViewModel, IsDesignTimeCreatable=True}"
       d:DesignHeight="650" d:DesignWidth="800" Title="PC" Scrollable="True">
+    <Grid>
     <StackPanel Margin="0,0,14,20">
         <Border Padding="18,14,18,12" CornerRadius="14" BorderThickness="0" Background="#C40A0A0C">
             <Grid>
@@ -54,5 +55,45 @@
                 </Grid>
         </ui:CardExpander>
 
+        <ui:CardExpander Margin="0,10,0,0" IsExpanded="True">
+            <ui:CardExpander.Header>
+                <StackPanel>
+                    <TextBlock Text="Blurred textures" FontSize="17" FontWeight="SemiBold" />
+                    <TextBlock Text="NVIDIA Roblox VR driver profile" Margin="0,3,0,0" FontSize="12"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </ui:CardExpander.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Driver texture blur" FontSize="14" />
+                    <TextBlock Text="{Binding NvidiaBlurStatus}" Margin="0,4,12,0" FontSize="12"
+                               Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+                <Border Grid.Column="1" Width="78" Height="58" Margin="0,0,14,0" CornerRadius="8" ClipToBounds="True"
+                        BorderBrush="#55FFFFFF" BorderThickness="1"
+                        MouseEnter="BlurPreview_MouseEnter">
+                    <Image Source="pack://application:,,,/Resources/SleepStrap/Previews/Blur.png" Stretch="UniformToFill" />
+                </Border>
+                <ui:ToggleSwitch Grid.Column="2"
+                                 IsChecked="{Binding NvidiaBlurredTexturesEnabled, Mode=TwoWay}"
+                                 IsEnabled="{Binding CanChangeNvidiaBlur}"
+                                 VerticalAlignment="Center" />
+            </Grid>
+        </ui:CardExpander>
+
     </StackPanel>
+    <Border x:Name="BlurPreviewOverlay" Visibility="Collapsed" Panel.ZIndex="100"
+            Background="#F0080A12" MouseLeave="BlurPreviewOverlay_MouseLeave"
+            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid>
+            <Image Source="pack://application:,,,/Resources/SleepStrap/Previews/Blur.png" Stretch="Uniform" Margin="24" />
+            <TextBlock Text="Blur preview" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28" FontSize="15" FontWeight="SemiBold" />
+        </Grid>
+    </Border>
+    </Grid>
 </ui:UiPage>

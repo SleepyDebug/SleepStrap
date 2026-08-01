@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Bootstrapper.AutoUpdateFailed" xml:space="preserve">
-    <value>SleepStrap kon niet automatisch updaten naar versie {0}. Update het alstublieft manueel door het te downloaden en openen via de website.</value>
+    <value>SleepBlox kon niet automatisch updaten naar versie {0}. Update het alstublieft manueel door het te downloaden en openen via de website.</value>
   </data>
   <data name="Bootstrapper.ConfirmLaunch" xml:space="preserve">
     <value>Roblox is nu al open, een ander venster openen zal het sluiten. Weet je zeker dat je een nieuw venster wilt openen?</value>
@@ -127,13 +127,13 @@
     <value>Roblox kan op dit moment problemen hebben. Zie {0} voor meer informatie.</value>
   </data>
   <data name="Dialog.Connectivity.BadConnection" xml:space="preserve">
-    <value>Een verbinding kon niet worden gemaakt, waarschijnlijk door een zwakke internetverbinding of een firewall blok. Als je verbinding in orde is, controleer dan of je antivirus SleepStrap niet blokkeert.</value>
+    <value>Een verbinding kon niet worden gemaakt, waarschijnlijk door een zwakke internetverbinding of een firewall blok. Als je verbinding in orde is, controleer dan of je antivirus SleepBlox niet blokkeert.</value>
   </data>
   <data name="Bootstrapper.FirstRunUninstall" xml:space="preserve">
-    <value>Je moet eerst SleepStrap installeren voordat je de installatie ongedaan maakt.</value>
+    <value>Je moet eerst SleepBlox installeren voordat je de installatie ongedaan maakt.</value>
   </data>
   <data name="Bootstrapper.NotEnoughSpace" xml:space="preserve">
-    <value>SleepStrap heeft niet genoeg schijfruimte om Roblox te downloaden en te installeren. Maak wat schijfruimte vrij en probeer het opnieuw.</value>
+    <value>SleepBlox heeft niet genoeg schijfruimte om Roblox te downloaden en te installeren. Maak wat schijfruimte vrij en probeer het opnieuw.</value>
   </data>
   <data name="Bootstrapper.Status.ApplyingModifications" xml:space="preserve">
     <value>Roblox-aanpassingen toepassen...</value>
@@ -169,10 +169,10 @@
     <comment>Text for style previews that use text button that says "Cancel"</comment>
   </data>
   <data name="Bootstrapper.SuccessfullyUninstalled" xml:space="preserve">
-    <value>SleepStrap is succesvol verwijderd</value>
+    <value>SleepBlox is succesvol verwijderd</value>
   </data>
   <data name="Bootstrapper.Uninstall.RobloxRunning" xml:space="preserve">
-    <value>Roblox is momenteel actief, maar moet worden gesloten voordat je SleepStrap kunt deïnstalleren. Wil je Roblox nu afsluiten?</value>
+    <value>Roblox is momenteel actief, maar moet worden gesloten voordat je SleepBlox kunt deïnstalleren. Wil je Roblox nu afsluiten?</value>
   </data>
   <data name="Bootstrapper.WMFNotFound" xml:space="preserve">
     <value>Roblox vereist het gebruik van Windows Media Foundation-componenten. Het lijkt erop dat deze ontbreken, waarschijnlijk omdat je een N editie van Windows gebruikt. Installeer ze eerst en start dan Roblox.</value>
@@ -276,22 +276,22 @@ Klik voor meer informatie</value>
     <value>Verbindingsfout</value>
   </data>
   <data name="Dialog.Connectivity.UnableToConnect" xml:space="preserve">
-    <value>SleepStrap kan niet verbinden met {0}</value>
+    <value>SleepBlox kan niet verbinden met {0}</value>
     <comment>{0} is the name of a service (i.e. Roblox, GitHub)</comment>
   </data>
   <data name="Dialog.Exception.CopyLogContents" xml:space="preserve">
     <value>Inhoud van logboek kopiëren</value>
   </data>
   <data name="Dialog.Exception.Info.1" xml:space="preserve">
-    <value>Er is een uitzondering opgetreden tijdens het uitvoeren van SleepStrap</value>
+    <value>Er is een uitzondering opgetreden tijdens het uitvoeren van SleepBlox</value>
   </data>
   <data name="Dialog.Exception.Info.2" xml:space="preserve">
-    <value>Controleer de [SleepStrap Wiki]({0}) om eerst te zien of dit probleem al is verholpen.
+    <value>Controleer de [SleepBlox Wiki]({0}) om eerst te zien of dit probleem al is verholpen.
 
 Als dat niet het geval is, rapporteer deze uitzondering dan alstublieft door een [GitHub-issue]({1}) aan te maken, samen met een kopie van het logbestand dat is aangemaakt.</value>
   </data>
   <data name="Dialog.Exception.Title" xml:space="preserve">
-    <value>SleepStrap-Uitzondering</value>
+    <value>SleepBlox-Uitzondering</value>
   </data>
   <data name="Common.Custom" xml:space="preserve">
     <value>Aangepast</value>
@@ -306,10 +306,10 @@ Als dat niet het geval is, rapporteer deze uitzondering dan alstublieft door een
     <value>Nep-Byfron (2023)</value>
   </data>
   <data name="Enums.BootstrapperStyle.ClassicFluentDialog" xml:space="preserve">
-    <value>SleepStrap (Klassiek)</value>
+    <value>SleepBlox (Klassiek)</value>
   </data>
   <data name="Enums.BootstrapperStyle.FluentAeroDialog" xml:space="preserve">
-    <value>SleepStrap (Doorzichtig)</value>
+    <value>SleepBlox (Doorzichtig)</value>
   </data>
   <data name="Enums.BootstrapperStyle.LegacyDialog2008" xml:space="preserve">
     <value>Legacy (2008-2011)</value>
@@ -387,10 +387,10 @@ Als dat niet het geval is, rapporteer deze uitzondering dan alstublieft door een
     <value>Licht</value>
   </data>
   <data name="InstallChecker.Updated" xml:space="preserve">
-    <value>SleepStrap is bijgewerkt naar v{0}</value>
+    <value>SleepBlox is bijgewerkt naar v{0}</value>
   </data>
   <data name="InstallChecker.VersionDifferentThanInstalled" xml:space="preserve">
-    <value>De versie van SleepStrap die je hebt gelanceerd is anders dan de versie die je momenteel hebt geïnstalleerd.
+    <value>De versie van SleepBlox die je hebt gelanceerd is anders dan de versie die je momenteel hebt geïnstalleerd.
 Wil je je huidige geïnstalleerde versie bijwerken?</value>
   </data>
   <data name="Menu.About.Contributors" xml:space="preserve">
@@ -400,7 +400,7 @@ Wil je je huidige geïnstalleerde versie bijwerken?</value>
     <value>Code</value>
   </data>
   <data name="Menu.About.Contributors.Description" xml:space="preserve">
-    <value>Dit zijn de mensen die een opmerkelijke bijdrage hebben geleverd aan SleepStrap en het hebben gemaakt tot wat het is.</value>
+    <value>Dit zijn de mensen die een opmerkelijke bijdrage hebben geleverd aan SleepBlox en het hebben gemaakt tot wat het is.</value>
   </data>
   <data name="Menu.About.Contributors.FeatureIdeas" xml:space="preserve">
     <value>Functie-ideeën</value>
@@ -446,7 +446,7 @@ Wil je je huidige geïnstalleerde versie bijwerken?</value>
     <value>Houd er rekening mee dat niet al je wijzigingen direct van toepassing zijn totdat je alle huidige open Roblox-instanties sluit.</value>
   </data>
   <data name="Menu.AlreadyRunning.Title" xml:space="preserve">
-    <value>SleepStrap wordt al uitgevoerd</value>
+    <value>SleepBlox wordt al uitgevoerd</value>
   </data>
   <data name="Menu.Appearance.Bootstrapper.Description" xml:space="preserve">
     <value>Je kunt het er anders, retro of zelfs net als Roblox laten uitzien.</value>
@@ -473,7 +473,7 @@ Wil je je huidige geïnstalleerde versie bijwerken?</value>
     <value>Titel</value>
   </data>
   <data name="Menu.Appearance.Description" xml:space="preserve">
-    <value>Configureer hoe SleepStrap eruit moet zien.</value>
+    <value>Configureer hoe SleepBlox eruit moet zien.</value>
   </data>
   <data name="Menu.Appearance.Global.Theme.Title" xml:space="preserve">
     <value>Globaal thema</value>
@@ -497,10 +497,10 @@ Wil je je huidige geïnstalleerde versie bijwerken?</value>
     <value>Uiterlijk</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Description" xml:space="preserve">
-    <value>SleepStrap zal zichzelf automatisch controleren en bijwerken bij het starten van Roblox.</value>
+    <value>SleepBlox zal zichzelf automatisch controleren en bijwerken bij het starten van Roblox.</value>
   </data>
   <data name="Menu.Behaviour.AutoUpdate.Title" xml:space="preserve">
-    <value>SleepStrap automatisch bijwerken</value>
+    <value>SleepBlox automatisch bijwerken</value>
   </data>
   <data name="Menu.Behaviour.ConfirmLaunches.Description" xml:space="preserve">
     <value>Voorkom dat je bestaande spel niet wordt afgesloten als je per ongeluk een ander spel start.</value>
@@ -509,7 +509,7 @@ Wil je je huidige geïnstalleerde versie bijwerken?</value>
     <value>Vraag om bevestiging wanneer een andere Roblox instantie wordt geopend</value>
   </data>
   <data name="Menu.Behaviour.Description" xml:space="preserve">
-    <value>Kies wat SleepStrap moet doen bij het opstarten van Roblox.</value>
+    <value>Kies wat SleepBlox moet doen bij het opstarten van Roblox.</value>
   </data>
   <data name="Menu.Behaviour.ForceRobloxReinstall.Description" xml:space="preserve">
     <value>Roblox wordt opnieuw geïnstalleerd bij de volgende lancering.</value>
@@ -629,10 +629,10 @@ Gebruik dit NIET om grote "vlaggenlijsten" te importeren die gemaakt zijn door a
     <value>Pictogrammenbestanden</value>
   </data>
   <data name="Menu.InstallLocation.CantInstall" xml:space="preserve">
-    <value>SleepStrap kan hier niet geïnstalleerd worden. Kies een andere locatie of gebruik de standaardlocatie door op de resetknop te klikken.</value>
+    <value>SleepBlox kan hier niet geïnstalleerd worden. Kies een andere locatie of gebruik de standaardlocatie door op de resetknop te klikken.</value>
   </data>
   <data name="Menu.InstallLocation.NotEmpty" xml:space="preserve">
-    <value>De map waarin je SleepStrap wilt installeren bestaat al en is NIET leeg. Het wordt sterk aangeraden om SleepStrap in zijn eigen onafhankelijke map te installeren.
+    <value>De map waarin je SleepBlox wilt installeren bestaat al en is NIET leeg. Het wordt sterk aangeraden om SleepBlox in zijn eigen onafhankelijke map te installeren.
 
 De volgende locatie wordt aanbevolen:
 {0}
@@ -645,7 +645,7 @@ Als je 'Nee' selecteert, wordt deze waarschuwing genegeerd en wordt de installat
     <value>Je moet een installatielocatie instellen</value>
   </data>
   <data name="Menu.InstallLocation.NoWritePerms" xml:space="preserve">
-    <value>SleepStrap heeft geen schrijftoegang tot de installatielocatie die je hebt geselecteerd. Kies een andere locatie.</value>
+    <value>SleepBlox heeft geen schrijftoegang tot de installatielocatie die je hebt geselecteerd. Kies een andere locatie.</value>
   </data>
   <data name="Menu.Integrations.ActivityTracking" xml:space="preserve">
     <value>Activiteit bijhouden</value>
@@ -696,7 +696,7 @@ Als je 'Nee' selecteert, wordt deze waarschuwing genegeerd en wordt de installat
     <value>Niet afsluiten naar bureaublad-app</value>
   </data>
   <data name="Menu.Integrations.EnableActivityTracking.Description" xml:space="preserve">
-    <value>Staat toe dat SleepStrap kan detecteren welk Roblox-spel je speelt. Bepaalde functies kunnen dit vereisen.</value>
+    <value>Staat toe dat SleepBlox kan detecteren welk Roblox-spel je speelt. Bepaalde functies kunnen dit vereisen.</value>
   </data>
   <data name="Menu.Integrations.EnableActivityTracking.Title" xml:space="preserve">
     <value>Activiteitentracking inschakelen</value>
@@ -787,7 +787,7 @@ Als je 'Nee' selecteert, wordt deze waarschuwing genegeerd en wordt de installat
     <value>Instellingen opgeslagen!</value>
   </data>
   <data name="Menu.Title" xml:space="preserve">
-    <value>SleepStrap Instellingen</value>
+    <value>SleepBlox Instellingen</value>
   </data>
   <data name="Dialog.LanguageSelector.Header" xml:space="preserve">
     <value>Kies voorkeurstaal</value>
@@ -817,7 +817,7 @@ Als je 'Nee' selecteert, wordt deze waarschuwing genegeerd en wordt de installat
     <value>Gebruikersinterface en lay-out</value>
   </data>
   <data name="Menu.FastFlags.ManagerEnabled.Title" xml:space="preserve">
-    <value>Sta SleepStrap toe om Fast Flags te beheren</value>
+    <value>Sta SleepBlox toe om Fast Flags te beheren</value>
   </data>
   <data name="Menu.FastFlags.ManagerEnabled.Description" xml:space="preserve">
     <value>Als je dit uitzet, zullen alle configuraties hier niet worden toegepast op Roblox.</value>
@@ -844,7 +844,7 @@ Als je 'Nee' selecteert, wordt deze waarschuwing genegeerd en wordt de installat
     <value>Level 3 (Hoogste)</value>
   </data>
   <data name="Dialog.Connectivity.UnableToDownload" xml:space="preserve">
-    <value>SleepStrap kan Roblox niet downloaden</value>
+    <value>SleepBlox kan Roblox niet downloaden</value>
   </data>
   <data name="Dialog.Connectivity.UnableToDownloadReason" xml:space="preserve">
     <value>Op dit moment kan Roblox niet worden gedownload. Lees alsjeblieft de volgende help-pagina voor meer informatie: {0}</value>
@@ -865,7 +865,7 @@ Als je 'Nee' selecteert, wordt deze waarschuwing genegeerd en wordt de installat
     <value>De invoer voor '{0}' is ongeldig, omdat de waarde een getal moet zijn</value>
   </data>
   <data name="Logger.NoWriteMode" xml:space="preserve">
-    <value>Er wordt geen logbestand aangemaakt voor deze start omdat SleepStrap niet kan schrijven naar de map op '{0}'</value>
+    <value>Er wordt geen logbestand aangemaakt voor deze start omdat SleepBlox niet kan schrijven naar de map op '{0}'</value>
   </data>
   <data name="Common.Default" xml:space="preserve">
     <value>Standaard</value>
@@ -880,7 +880,7 @@ Als je 'Nee' selecteert, wordt deze waarschuwing genegeerd en wordt de installat
     <value>De invoer voor '{0}' is niet geldig omdat de plaatsfilter niet correct is opgemaakt.</value>
   </data>
   <data name="Installer.Title" xml:space="preserve">
-    <value>SleepStrap Installer</value>
+    <value>SleepBlox Installer</value>
   </data>
   <data name="Installer.Welcome.Title" xml:space="preserve">
     <value>Welkom</value>
@@ -899,18 +899,18 @@ Als je 'Nee' selecteert, wordt deze waarschuwing genegeerd en wordt de installat
     <value>Volgende</value>
   </data>
   <data name="Installer.Welcome.MainText" xml:space="preserve">
-    <value>Bedankt voor het downloaden van SleepStrap.
+    <value>Bedankt voor het downloaden van SleepBlox.
 
-De enigste officiële websites om SleepStrap te downloaden zijn {0} en {1}, verifieer dat u ze van een officiële bron hebt.
+De enigste officiële websites om SleepBlox te downloaden zijn {0} en {1}, verifieer dat u ze van een officiële bron hebt.
 
-De installatie proces zal snel en eenvoudig zijn, dus u kunt na de installatie elke SleepStrap instelling veranderen.</value>
+De installatie proces zal snel en eenvoudig zijn, dus u kunt na de installatie elke SleepBlox instelling veranderen.</value>
     <comment>{0} and {1} are URLs</comment>
   </data>
   <data name="Installer.Welcome.NextToContinue" xml:space="preserve">
     <value>Klik alstublieft op 'Volgende' om door te gaan.</value>
   </data>
   <data name="Installer.Welcome.UpdateNotice" xml:space="preserve">
-    <value>U probeert de versie {0} van SleepStrap te installeren, terwijl de nieuwste versie {1} is. Wilt u deze downloaden?</value>
+    <value>U probeert de versie {0} van SleepBlox te installeren, terwijl de nieuwste versie {1} is. Wilt u deze downloaden?</value>
   </data>
   <data name="Installer.Install.Location.Title" xml:space="preserve">
     <value>Kies waar te installeren</value>
@@ -931,16 +931,16 @@ De installatie proces zal snel en eenvoudig zijn, dus u kunt na de installatie e
     <value>Start Menu icoon</value>
   </data>
   <data name="Installer.Completion.Text" xml:space="preserve">
-    <value>SleepStrap is met succes geïnstalleerd.
+    <value>SleepBlox is met succes geïnstalleerd.
 
-Roblox is nog niet geïnstalleerd, dat zal gebeuren wanneer je SleepStrap voor het eerst gebruikt. Voor dat je dit doet, wil je misschien SleepStrap's instellingen veranderen.
+Roblox is nog niet geïnstalleerd, dat zal gebeuren wanneer je SleepBlox voor het eerst gebruikt. Voor dat je dit doet, wil je misschien SleepBlox's instellingen veranderen.
 
-Vermijd ook het gebruik van de "Roblox Player" snelkoppeling om Roblox te spelen, omdat SleepStrap dan niet met Roblox lanceert. Als je SleepStrap niet ziet wanneer je Roblox lanceert vanaf de website, start dan eenmaal Roblox met SleepStrap op van je desktop om het op te lossen.
+Vermijd ook het gebruik van de "Roblox Player" snelkoppeling om Roblox te spelen, omdat SleepBlox dan niet met Roblox lanceert. Als je SleepBlox niet ziet wanneer je Roblox lanceert vanaf de website, start dan eenmaal Roblox met SleepBlox op van je desktop om het op te lossen.
 
 Wat wilt u doen?</value>
   </data>
   <data name="Installer.Completion.Settings.Title" xml:space="preserve">
-    <value>SleepStrap instellingen veranderen</value>
+    <value>SleepBlox instellingen veranderen</value>
   </data>
   <data name="Installer.Completion.Settings.Description" xml:space="preserve">
     <value>Pas alle functies aan die het heeft aan te bieden</value>
@@ -952,22 +952,22 @@ Wat wilt u doen?</value>
     <value>Opent de desktop app zodra alles gedaan is</value>
   </data>
   <data name="Uninstaller.Title" xml:space="preserve">
-    <value>Verwijder SleepStrap</value>
+    <value>Verwijder SleepBlox</value>
   </data>
   <data name="Uninstaller.Text" xml:space="preserve">
-    <value>De-installeren zal SleepStrap van uw systeem verwijderen en automatisch de standaard Roblox launcher opnieuw configureren als het nog steeds geïnstalleerd is.
+    <value>De-installeren zal SleepBlox van uw systeem verwijderen en automatisch de standaard Roblox launcher opnieuw configureren als het nog steeds geïnstalleerd is.
 
 Als u eerst problemen ondervindt met Roblox en probeert de de-installeren of opnieuw te installeren, lees dan [deze helppagina] ({0}).
 
-Het de-installatieproces kan zichzelf mogelijk niet volledig opschonen, dus u moet misschien handmatig de overgebleven bestanden opschonen waar SleepStrap is geïnstalleerd.
+Het de-installatieproces kan zichzelf mogelijk niet volledig opschonen, dus u moet misschien handmatig de overgebleven bestanden opschonen waar SleepBlox is geïnstalleerd.
 
-SleepStrap is geïnstalleerd op "{1}".</value>
+SleepBlox is geïnstalleerd op "{1}".</value>
   </data>
   <data name="Uninstaller.KeepData.Label" xml:space="preserve">
     <value>Mijn instellingen en modificaties behouden</value>
   </data>
   <data name="Uninstaller.KeepData.Description" xml:space="preserve">
-    <value>Ze zullen bewaard worden waar SleepStrap geïnstalleerd was, en zal automatisch herstelt worden op een herinstallatie.</value>
+    <value>Ze zullen bewaard worden waar SleepBlox geïnstalleerd was, en zal automatisch herstelt worden op een herinstallatie.</value>
   </data>
   <data name="Uninstaller.Uninstall" xml:space="preserve">
     <value>Verwijderen</value>
@@ -988,19 +988,19 @@ SleepStrap is geïnstalleerd op "{1}".</value>
     <value>De WebView2 runtime is momenteel niet geïnstalleerd. Sommige Roblox functies werken zonder deze niet goed, zoals de desktop app. Wilt u deze nu downloaden?</value>
   </data>
   <data name="Dialog.CannotCreateShortcuts" xml:space="preserve">
-    <value>SleepStrap kon geen snelkoppelingen maken voor het bureaublad en Start menu. Probeer ze later te maken via de instellingen.</value>
+    <value>SleepBlox kon geen snelkoppelingen maken voor het bureaublad en Start menu. Probeer ze later te maken via de instellingen.</value>
   </data>
   <data name="Dialog.Exception.Info.2.Alt" xml:space="preserve">
-    <value>Bekijk de [SleepStrap Wiki]({0}) eerst om te zien of dit probleem al is opgelost met een oplossing.
+    <value>Bekijk de [SleepBlox Wiki]({0}) eerst om te zien of dit probleem al is opgelost met een oplossing.
 
-Als dit niet het geval is, rapporteer dit probleem dan aan de beheerders van deze fork. Meld dit NIET aan de GitHub van SleepStrap, omdat dit niet een officiële versie is.</value>
+Als dit niet het geval is, rapporteer dit probleem dan aan de beheerders van deze fork. Meld dit NIET aan de GitHub van SleepBlox, omdat dit niet een officiële versie is.</value>
     <comment>"fork" in general means "a variation of" or "a different version of". You can alternatively write the first sentence as "...to the maintainers of this version."</comment>
   </data>
   <data name="Installer.Install.Shortcuts.Description" xml:space="preserve">
     <value>Dit zijn algemene snelkoppelingen die een opstart menu met meerdere keuzes opleveren. Snelkoppelingen voor specifieke functies kunnen later worden aangemaakt in de instellingen.</value>
   </data>
   <data name="Menu.Shortcuts.Description" xml:space="preserve">
-    <value>Stel in hoe SleepStrap gemakkelijk gestart kan worden.</value>
+    <value>Stel in hoe SleepBlox gemakkelijk gestart kan worden.</value>
   </data>
   <data name="Menu.Shortcuts.General.Title" xml:space="preserve">
     <value>Algemeen</value>
@@ -1040,8 +1040,8 @@ Als dit niet het geval is, rapporteer dit probleem dan aan de beheerders van dez
     <value>U hebt wijzigingen dat niet opgeslagen zijn. Bent u zeker dat u wilt afsluiten zonder op te slaan?</value>
   </data>
   <data name="InstallChecker.VersionLessThanInstalled" xml:space="preserve">
-    <value>De versie van SleepStrap die u hebt geopend is ouder dan de versie die je nu hebt geïnstalleerd.
-Er kunnen problemen zijn, en uw instellingen kunnen veranderd worden. Het is aanbevolen om SleepStrap te herinstalleren. Bent u zeker dat u wilt doorgaan?</value>
+    <value>De versie van SleepBlox die u hebt geopend is ouder dan de versie die je nu hebt geïnstalleerd.
+Er kunnen problemen zijn, en uw instellingen kunnen veranderd worden. Het is aanbevolen om SleepBlox te herinstalleren. Bent u zeker dat u wilt doorgaan?</value>
   </data>
   <data name="Dialog.PlayerError.FailedLaunch" xml:space="preserve">
     <value>Roblox kon niet starten.</value>
@@ -1052,7 +1052,7 @@ Er kunnen problemen zijn, en uw instellingen kunnen veranderd worden. Het is aan
   <data name="Dialog.PlayerError.HelpInformation" xml:space="preserve">
     <value>Voor informatie over hoe dit kan gebeuren en hoe het opgelost kan worden, lees je alstublieft [dit hulpartikel]({0}).
 
-Controleer of Roblox werkt met [de originele launcher]({1}). Als dit niet het geval is, is het geen SleepStrap-probleem. Verwijs dan naar het hulpartikel.</value>
+Controleer of Roblox werkt met [de originele launcher]({1}). Als dit niet het geval is, is het geen SleepBlox-probleem. Verwijs dan naar het hulpartikel.</value>
   </data>
   <data name="Common.NetworkError" xml:space="preserve">
     <value>Kon gegevens niet laden door een netwerkfout.</value>
@@ -1064,7 +1064,7 @@ Controleer of Roblox werkt met [de originele launcher]({1}). Als dit niet het ge
     <value>Supporters</value>
   </data>
   <data name="About.Supporters.Description" xml:space="preserve">
-    <value>Dit zijn de mensen die SleepStrap hebben ondersteund via Ko-fi. Een enorme dank aan iedereen hier!
+    <value>Dit zijn de mensen die SleepBlox hebben ondersteund via Ko-fi. Een enorme dank aan iedereen hier!
 Elke persoon hier is gerangschikt op basis van hun totale bijdrage.</value>
   </data>
   <data name="JsonManager.SettingsLoadFailed" xml:space="preserve">
@@ -1095,12 +1095,12 @@ Elke persoon hier is gerangschikt op basis van hun totale bijdrage.</value>
     <value>Voor deze launch zal Roblox niet gecontroleerd worden op upgrades, en wijzigingen aan mods zullen niet toegepast worden.</value>
   </data>
   <data name="Dialog.Connectivity.RobloxUpgradeNeeded" xml:space="preserve">
-    <value>Omdat Roblox geïnstalleerd of geüpdate moet worden, SleepStrap kan niet doorgaan.</value>
+    <value>Omdat Roblox geïnstalleerd of geüpdate moet worden, SleepBlox kan niet doorgaan.</value>
   </data>
   <data name="Installer.Install.CannotOverwrite" xml:space="preserve">
-    <value>SleepStrap is geïnstalleerd op deze locatie en is nog steeds aanwezig, maar het installatieprogramma kan het oude uitvoerbare niet overschrijven. 
+    <value>SleepBlox is geïnstalleerd op deze locatie en is nog steeds aanwezig, maar het installatieprogramma kan het oude uitvoerbare niet overschrijven.
 
-Verwijder handmatig SleepStrap.EXE van de installatielocatie of probeer je systeem opnieuw op te starten, en probeer daarna opnieuw te installeren.</value>
+Verwijder handmatig SleepBlox.EXE van de installatielocatie of probeer je systeem opnieuw op te starten, en probeer daarna opnieuw te installeren.</value>
   </data>
   <data name="Common.NotAvailable" xml:space="preserve">
     <value>Niet beschikbaar</value>
@@ -1112,7 +1112,7 @@ Verwijder handmatig SleepStrap.EXE van de installatielocatie of probeer je syste
     <value>Configureer applicatie parameters zoals DPI scaling behaviour en [fullscreen optimizations]({0}).</value>
   </data>
   <data name="Common.RobloxNotInstalled" xml:space="preserve">
-    <value>Roblox is nog niet geïnstalleerd. Start Roblox minstens eenmaal op via SleepStrap voordat u probeert deze optie te gebruiken.</value>
+    <value>Roblox is nog niet geïnstalleerd. Start Roblox minstens eenmaal op via SleepBlox voordat u probeert deze optie te gebruiken.</value>
   </data>
   <data name="Installer.ShouldCancel" xml:space="preserve">
     <value>Bent u zeker dat u de installatie wilt stoppen?</value>
@@ -1130,10 +1130,10 @@ Verwijder handmatig SleepStrap.EXE van de installatielocatie of probeer je syste
     <value>Extract Roblox iconen naar folder</value>
   </data>
   <data name="Menu.Shortcuts.ExtractIcons.Description" xml:space="preserve">
-    <value>Staat u toe om SleepStrap's collectie van Roblox iconen te gebruiken voor snelkoppelingen. [Zie hoe.]({0})</value>
+    <value>Staat u toe om SleepBlox's collectie van Roblox iconen te gebruiken voor snelkoppelingen. [Zie hoe.]({0})</value>
   </data>
   <data name="Dialog.RegistryWriteError" xml:space="preserve">
-    <value>SleepStrap kan niet naar het Windows-register schrijven. Een antivirus programma kan mogelijk storen en problemen veroorzaken. Controleer of er niet iets is dat de SleepStrap werking zou beperken.</value>
+    <value>SleepBlox kan niet naar het Windows-register schrijven. Een antivirus programma kan mogelijk storen en problemen veroorzaken. Controleer of er niet iets is dat de SleepBlox werking zou beperken.</value>
   </data>
   <data name="About.Supporters.Monthly" xml:space="preserve">
     <value>Maandelijks</value>
@@ -1155,14 +1155,14 @@ Verwijder handmatig SleepStrap.EXE van de installatielocatie of probeer je syste
     <comment>See the prompt for more context</comment>
   </data>
   <data name="Menu.TestMode.Prompt" xml:space="preserve">
-    <value>Test modus maakt het gemakkelijker om iteratief te testen hoe uw instellingen Roblox beïnvloeden. 
+    <value>Test modus maakt het gemakkelijker om iteratief te testen hoe uw instellingen Roblox beïnvloeden.
 
 Wanneer ingeschakeld, zal Roblox automatisch starten na het sluiten van de instellingen, en de Instellingen heropenen na het sluiten van Roblox, in een cyclus totdat u het uitschakelt.
 
 Wilt u de testmodus inschakelen?</value>
   </data>
   <data name="About.Translators.Description" xml:space="preserve">
-    <value>Alle vertalingen van SleepStrap zijn gecrowdsourcet via [Crowdin]({0}). Iedereen die hier op de lijst staat, zijn mensen die zich ruimhartig hebben ingezet voor het lokaliseren van SleepStrap. Een grote dank aan iedereen hier!</value>
+    <value>Alle vertalingen van SleepBlox zijn gecrowdsourcet via [Crowdin]({0}). Iedereen die hier op de lijst staat, zijn mensen die zich ruimhartig hebben ingezet voor het lokaliseren van SleepBlox. Een grote dank aan iedereen hier!</value>
   </data>
   <data name="Common.Navigation.Install" xml:space="preserve">
     <value>Installeer</value>
@@ -1182,7 +1182,7 @@ Wilt u de testmodus inschakelen?</value>
     <value>Aangepast</value>
   </data>
   <data name="Bootstrapper.FilesInUse" xml:space="preserve">
-    <value>SleepStrap heeft geprobeerd Roblox bij te werken, maar kan dit niet omdat de bestanden van Roblox nog in gebruik zijn.
+    <value>SleepBlox heeft geprobeerd Roblox bij te werken, maar kan dit niet omdat de bestanden van Roblox nog in gebruik zijn.
 
 Sluit alstublieft alle applicaties die mogelijk de bestanden van Roblox gebruiken en start opnieuw.</value>
     <comment>This is *not* for when Roblox is still running when trying to upgrade. This applies to files being open (i.e. image assets)</comment>
@@ -1193,16 +1193,16 @@ Sluit alstublieft alle applicaties die mogelijk de bestanden van Roblox gebruike
   </data>
   <data name="Common.Export" xml:space="preserve">
     <value>Exporteer</value>
-    <comment>Currently used under the "SleepStrap" settings tab for the button to export diagnostic data</comment>
+    <comment>Currently used under the "SleepBlox" settings tab for the button to export diagnostic data</comment>
   </data>
   <data name="App.OSDeprecation.Win7_81" xml:space="preserve">
     <value>Roblox ondersteunt niet meer Windows 7 of 8.1. Voor Roblox te blijven spelen, upgrade naar Windows 10 of nieuwer.</value>
   </data>
   <data name="Bootstrapper.Status.UpgradingSleepStrap" xml:space="preserve">
-    <value>De nieuwste SleepStrap krijgen...</value>
+    <value>De nieuwste SleepBlox krijgen...</value>
   </data>
   <data name="Menu.SleepStrap.Description" xml:space="preserve">
-    <value>Configureer opties gerelateerd aan het gedrag van SleepStrap zelf.</value>
+    <value>Configureer opties gerelateerd aan het gedrag van SleepBlox zelf.</value>
   </data>
   <data name="Menu.SleepStrap.Analytics.Title" xml:space="preserve">
     <value>Het verzenden van analytics inschakelen</value>
@@ -1217,11 +1217,11 @@ Sluit alstublieft alle applicaties die mogelijk de bestanden van Roblox gebruike
     <value>Verzamel informatie die online kan worden geüpload om een probleem op te lossen dat je hebt.</value>
   </data>
   <data name="Menu.SleepStrap.ExportData.ExportConfig" xml:space="preserve">
-    <value>SleepStrap configuratie</value>
+    <value>SleepBlox configuratie</value>
     <comment>Label that appears next to a checkbox</comment>
   </data>
   <data name="Menu.SleepStrap.ExportData.ExportLogs" xml:space="preserve">
-    <value>Alle SleepStrap logs</value>
+    <value>Alle SleepBlox logs</value>
     <comment>Label that appears next to a checkbox</comment>
   </data>
   <data name="Enums.CustomThemeTemplate.Blank" xml:space="preserve">
@@ -1381,7 +1381,7 @@ Sluit alstublieft alle applicaties die mogelijk de bestanden van Roblox gebruike
   <data name="CustomTheme.Errors.SetupFailed" xml:space="preserve">
     <value>Het instellen van aangepaste bootstrapper: {0}.
 Word ingesteld op de standaard {1}.</value>
-    <comment>{0} is the error reason, {1} is the theme name (e.g. SleepStrap (Classic))</comment>
+    <comment>{0} is the error reason, {1} is the theme name (e.g. SleepBlox (Classic))</comment>
   </data>
   <data name="Menu.Appearance.CustomThemes.NoneSelected" xml:space="preserve">
     <value>Geen aangepaste thema geselecteerd.</value>
@@ -1448,7 +1448,7 @@ Word ingesteld op de standaard {1}.</value>
     <value>Aanpassen</value>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>Over SleepStrap</value>
+    <value>Over SleepBlox</value>
   </data>
   <data name="Menu.FastFlags.Presets.EscapeMenuVersion.Title" xml:space="preserve">
     <value>Gewenste escape-menu-versie</value>
@@ -1460,7 +1460,7 @@ Word ingesteld op de standaard {1}.</value>
     <value>Framerate-limiet</value>
   </data>
   <data name="Menu.FastFlags.Presets.HideGuis.Description" xml:space="preserve">
-    <value>Omschakelen met [sneltoetsen]({0}). Werkt alleen als je in de [SleepStrap-groep]({1}) zit.</value>
+    <value>Omschakelen met [sneltoetsen]({0}). Werkt alleen als je in de [SleepBlox-groep]({1}) zit.</value>
   </data>
   <data name="Menu.FastFlags.Presets.HideGuis.Title" xml:space="preserve">
     <value>Mogelijkheid om GUI's te verbergen inschakelen</value>

@@ -66,8 +66,9 @@ namespace SleepStrap
 
                     try
                     {
-                        // Create a backup of loaded file
-                        File.Copy(FileLocation, FileLocation + ".bak", true);
+                        // Preserve the damaged file so settings can be recovered or inspected.
+                        if (File.Exists(FileLocation))
+                            File.Copy(FileLocation, FileLocation + $".corrupt-{DateTime.Now:yyyyMMdd-HHmmss}.bak", true);
                     }
                     catch (Exception copyEx)
                     {
@@ -92,7 +93,25 @@ namespace SleepStrap
             {
                 string contents = JsonSerializer.Serialize(Prop, new JsonSerializerOptions { WriteIndented = true });
 
-                File.WriteAllText(FileLocation, contents);
+                string temporaryPath = FileLocation + $".{Environment.ProcessId}.{Guid.NewGuid():N}.tmp";
+                try
+                {
+                    // Complete the new file before replacing the old one. A crash or
+                    // power loss can no longer leave a partially written JSON file.
+                    using (var stream = new FileStream(temporaryPath, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, FileOptions.WriteThrough))
+                    using (var writer = new StreamWriter(stream, new System.Text.UTF8Encoding(false)))
+                    {
+                        writer.Write(contents);
+                        writer.Flush();
+                        stream.Flush(true);
+                    }
+
+                    File.Move(temporaryPath, FileLocation, true);
+                }
+                finally
+                {
+                    try { if (File.Exists(temporaryPath)) File.Delete(temporaryPath); } catch { }
+                }
 
                 LastFileHash = MD5Hash.FromString(contents);
             }

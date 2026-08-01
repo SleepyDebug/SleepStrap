@@ -30,7 +30,7 @@ namespace SleepStrap.UI
             string info = String.Format(
                 Strings.Dialog_PlayerError_HelpInformation,
                 $"https://github.com/{App.ProjectRepository}/wiki/Roblox-crashes-or-does-not-launch",
-                $"https://github.com/{App.ProjectRepository}/wiki/Switching-between-Roblox-and-SleepStrap"
+                App.ProjectHelpLink
             );
 
             ShowMessageBox($"{topLine}\n\n{info}", MessageBoxImage.Error);

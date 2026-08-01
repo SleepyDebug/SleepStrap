@@ -29,7 +29,7 @@ namespace SleepStrap.UI
             _notifyIcon = new(new System.ComponentModel.Container())
             {
                 Icon = Properties.Resources.IconSleepStrap,
-                Text = "SleepStrap",
+                Text = App.ProjectName,
                 Visible = true
             };
 

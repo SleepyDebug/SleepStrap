@@ -8,7 +8,7 @@
         xmlns:base="clr-namespace:SleepStrap.UI.Elements.Base"
         xmlns:controls="clr-namespace:SleepStrap.UI.Elements.Controls"
         mc:Ignorable="d"
-        Title="SleepStrap"
+        Title="SleepBlox"
         d:DesignWidth="480"
         MinWidth="180"
         MaxWidth="480"
@@ -31,7 +31,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ui:TitleBar Grid.ColumnSpan="3" Padding="8" x:Name="RootTitleBar" Title="SleepStrap" ShowMinimize="False" ShowMaximize="False" CanMaximize="False" KeyboardNavigation.TabNavigation="None" VerticalAlignment="Center" />
+        <ui:TitleBar Grid.ColumnSpan="3" Padding="8" x:Name="RootTitleBar" Title="SleepBlox" ShowMinimize="False" ShowMaximize="False" CanMaximize="False" KeyboardNavigation.TabNavigation="None" VerticalAlignment="Center" />
 
         <Grid Grid.Row="1" Margin="15,15,15,15" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>

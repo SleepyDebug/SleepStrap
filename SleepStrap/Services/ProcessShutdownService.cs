@@ -22,7 +22,7 @@ namespace SleepStrap.Services
             if (remainingProcessIds.Count > 0)
             {
                 throw new InvalidOperationException(
-                    $"SleepStrap could not close these running processes: {String.Join(", ", remainingProcessIds)}.");
+                    $"{App.ProjectName} could not close these running processes: {String.Join(", ", remainingProcessIds)}.");
             }
 
             return processes.Count;
@@ -33,7 +33,7 @@ namespace SleepStrap.Services
             List<Process> matches = new();
             foreach (Process process in Utilities.GetProcessesSafe())
             {
-                if (process.Id != currentProcessId && IsSleepStrapProcess(process))
+                if (process.Id != currentProcessId && IsSleepBloxProcess(process))
                     matches.Add(process);
                 else
                     process.Dispose();
@@ -42,11 +42,12 @@ namespace SleepStrap.Services
             return matches;
         }
 
-        private static bool IsSleepStrapProcess(Process process)
+        private static bool IsSleepBloxProcess(Process process)
         {
             try
             {
-                return process.ProcessName.StartsWith("SleepStrap", StringComparison.OrdinalIgnoreCase);
+                return process.ProcessName.StartsWith(App.ProjectName, StringComparison.OrdinalIgnoreCase)
+                    || process.ProcessName.StartsWith(App.LegacyProjectName, StringComparison.OrdinalIgnoreCase);
             }
             catch (InvalidOperationException)
             {
@@ -61,14 +62,14 @@ namespace SleepStrap.Services
                 if (process.HasExited)
                     return;
 
-                App.Logger.WriteLine(LogIdent, $"Closing SleepStrap process {process.Id} ({process.ProcessName})");
+                App.Logger.WriteLine(LogIdent, $"Closing {App.ProjectName} process {process.Id} ({process.ProcessName})");
                 process.CloseMainWindow();
 
                 if (!process.WaitForExit(1500))
                 {
                     process.Kill(true);
                     if (!process.WaitForExit(5000))
-                        throw new InvalidOperationException($"SleepStrap process {process.Id} did not close.");
+                        throw new InvalidOperationException($"{App.ProjectName} process {process.Id} did not close.");
                 }
             }
             catch (InvalidOperationException) when (process.HasExited)

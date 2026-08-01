@@ -26,7 +26,7 @@
         public static string Modifications { get; private set; } = "";
         public static string Roblox { get; private set; } = "";
         public static string CustomThemes { get; private set; } = "";
-        public static string SleepStrapData { get; private set; } = "";
+        public static string SleepBloxData { get; private set; } = "";
         public static string Playbacks { get; private set; } = "";
 
         // cleaner paths
@@ -48,7 +48,27 @@
             Versions = Path.Combine(Base, "Versions");
             Modifications = Path.Combine(Base, "Modifications");
             CustomThemes = Path.Combine(Base, "CustomThemes");
-            SleepStrapData = Path.Combine(Base, "SleepStrapData");
+            string rebrandedDataDirectory = Path.Combine(Base, "SleepBloxData");
+            string legacyDataDirectory = Path.Combine(Base, "SleepStrapData");
+
+            // Carry forward custom skyboxes, font backups, and material backups
+            // from builds that used the old folder name. This happens before any
+            // settings or visual-mod services access the directory.
+            if (!Directory.Exists(rebrandedDataDirectory) && Directory.Exists(legacyDataDirectory))
+            {
+                try
+                {
+                    Directory.Move(legacyDataDirectory, rebrandedDataDirectory);
+                }
+                catch
+                {
+                    // Keep using the old directory for this launch if another
+                    // process has it open. A later launch will retry the move.
+                    rebrandedDataDirectory = legacyDataDirectory;
+                }
+            }
+
+            SleepBloxData = rebrandedDataDirectory;
             Playbacks = Path.Combine(Base, "Playbacks");
             Roblox = Path.Combine(LocalAppData, "Roblox"); // that was base before?
 

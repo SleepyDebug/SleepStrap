@@ -27,6 +27,8 @@ namespace SleepStrap.Services
         private int _saveRequested;
         private bool _disposed;
 
+        public static event EventHandler<string>? ClipSaved;
+
         public void Start()
         {
             if (_captureTask is not null || !App.Settings.Prop.ClippingEnabled)
@@ -121,15 +123,17 @@ namespace SleepStrap.Services
             if (String.IsNullOrWhiteSpace(display))
                 display = System.Windows.Forms.Screen.PrimaryScreen?.DeviceName ?? @"\\.\DISPLAY1";
             var source = new DisplayRecordingSource(display);
-            // ScreenRecorderLib 6.6 can access-violate when Windows Graphics Capture
-            // is initialized from the background watcher. Desktop Duplication is the
-            // stable display backend here; software encoding below keeps it isolated
-            // from Roblox's hardware encoder resources.
+            // Desktop Duplication is a GPU-backed capture path and is stable when
+            // Roblox is running fullscreen or borderless. Keep the selected
+            // display's complete native size; never resize an ultrawide display
+            // down to a 16:9-style output.
             source.RecorderApi = RecorderApi.DesktopDuplication;
             source.IsCursorCaptureEnabled = true;
             source.IsBorderRequired = false;
             ScreenRecorderLib.ScreenSize outputSize = GetCaptureSize(display);
-            int framerate = outputSize.Width > 2560 ? 30 : 60;
+            // 120 fps preserves high-refresh Roblox motion. If the selected
+            // display runs below that rate, the recorder safely duplicates frames.
+            const int framerate = 120;
 
             bool speaker = App.Settings.Prop.ClippingSpeakerEnabled;
             bool microphone = App.Settings.Prop.ClippingMicrophoneEnabled;
@@ -144,7 +148,7 @@ namespace SleepStrap.Services
                 {
                     RecorderMode = RecorderMode.Video,
                     OutputFrameSize = outputSize,
-                    Stretch = StretchMode.Uniform
+                    Stretch = StretchMode.None
                 },
                 AudioOptions = new AudioOptions
                 {
@@ -166,12 +170,10 @@ namespace SleepStrap.Services
                         EncoderProfile = H264Profile.High
                     },
                     Framerate = framerate,
-                    Bitrate = 45_000_000,
-                    Quality = 95,
+                    Bitrate = 100_000_000,
+                    Quality = 100,
                     IsFixedFramerate = true,
-                    // Keep the encoder off Roblox's GPU context. Quality remains high,
-                    // but capture can no longer force a hardware encoder reset in-game.
-                    IsHardwareEncodingEnabled = false,
+                    IsHardwareEncodingEnabled = true,
                     IsLowLatencyEnabled = false,
                     IsFragmentedMp4Enabled = false,
                     IsMp4FastStartEnabled = false
@@ -227,15 +229,21 @@ namespace SleepStrap.Services
                     $"Playback {DateTime.Now:yyyy-MM-dd HH-mm-ss}.mp4",
                     CreationCollisionOption.GenerateUniqueName);
 
+                // Keep the dimensions and frame rate of the captured video. Using
+                // the 1080p profile here can quietly scale a recording down on a
+                // wider/high-resolution display even after Width/Height are set.
                 VideoEncodingProperties sourceProperties = composition.Clips[0].GetVideoEncodingProperties();
-                VideoEncodingQuality quality = sourceProperties.Width > 1920 || sourceProperties.Height > 1080
-                    ? VideoEncodingQuality.Uhd2160p
-                    : VideoEncodingQuality.HD1080p;
-                MediaEncodingProfile profile = MediaEncodingProfile.CreateMp4(quality);
+                if (sourceProperties.Width == 0 || sourceProperties.Height == 0)
+                    throw new InvalidOperationException("The replay did not report its recorded video dimensions.");
+
+                MediaEncodingProfile profile = MediaEncodingProfile.CreateMp4(VideoEncodingQuality.Uhd2160p);
                 profile.Video.Width = sourceProperties.Width;
                 profile.Video.Height = sourceProperties.Height;
-                profile.Video.FrameRate.Numerator = sourceProperties.FrameRate.Numerator;
-                profile.Video.FrameRate.Denominator = sourceProperties.FrameRate.Denominator;
+                profile.Video.Bitrate = Math.Max(sourceProperties.Bitrate, 100_000_000);
+                profile.Video.FrameRate.Numerator = sourceProperties.FrameRate.Numerator == 0 ? 120u : sourceProperties.FrameRate.Numerator;
+                profile.Video.FrameRate.Denominator = sourceProperties.FrameRate.Denominator == 0 ? 1u : sourceProperties.FrameRate.Denominator;
+                App.Logger.WriteLine("ReplayBufferService::SaveReplay",
+                    $"Rendering replay at {profile.Video.Width}x{profile.Video.Height} @ {profile.Video.FrameRate.Numerator}/{profile.Video.FrameRate.Denominator} fps");
                 TranscodeFailureReason result = await composition.RenderToFileAsync(
                     output,
                     MediaTrimmingPreference.Precise,
@@ -245,6 +253,7 @@ namespace SleepStrap.Services
                     throw new InvalidOperationException($"Windows could not render the replay ({result}).");
 
                 App.Logger.WriteLine("ReplayBufferService::SaveReplay", $"Saved {output.Path}");
+                ClipSaved?.Invoke(null, output.Path);
             }
             catch (Exception ex)
             {
@@ -268,7 +277,7 @@ namespace SleepStrap.Services
 
         private void RegisterHotkey()
         {
-            _hotkeyWindow = new HwndSource(new HwndSourceParameters("SleepStrap Replay Hotkey")
+            _hotkeyWindow = new HwndSource(new HwndSourceParameters($"{App.ProjectName} Replay Hotkey")
             {
                 Width = 0,
                 Height = 0,
@@ -304,13 +313,10 @@ namespace SleepStrap.Services
         {
             System.Windows.Forms.Screen? screen = System.Windows.Forms.Screen.AllScreens
                 .FirstOrDefault(x => String.Equals(x.DeviceName, deviceName, StringComparison.OrdinalIgnoreCase));
+            // Bounds reports the actual pixel dimensions of the selected display.
+            // Do not cap or letterbox it: a 21:9 / 32:9 display must remain wide.
             double width = screen?.Bounds.Width ?? 1920;
             double height = screen?.Bounds.Height ?? 1080;
-            if (width > 3840)
-            {
-                height = Math.Round(height * (3840 / width));
-                width = 3840;
-            }
             width -= width % 2;
             height -= height % 2;
             return new ScreenRecorderLib.ScreenSize(width, height);

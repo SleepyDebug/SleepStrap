@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 
@@ -11,32 +12,187 @@ namespace SleepStrap.UI.ViewModels.Settings
     {
         private bool _isBusy;
         private SkyboxChoice? _selectedSkybox;
-        private string _statusText;
+        private string _statusText = "";
 
         public SkyboxViewModel()
         {
-            SkyboxChoices = SkyboxGalleryService.GetChoices();
+            SkyboxChoices = new ObservableCollection<SkyboxChoice>();
             OpenModsFolderCommand = new RelayCommand(OpenModsFolder);
 
+            ReloadChoices();
+            SkyboxGalleryService.GalleryChanged += SkyboxGalleryService_GalleryChanged;
+        }
+
+        public ObservableCollection<SkyboxChoice> SkyboxChoices { get; }
+        public ICommand OpenModsFolderCommand { get; }
+
+        public void BeginRenameUserSkybox(SkyboxChoice? choice)
+        {
+            if (choice is null || !choice.IsUserImported || IsBusy)
+                return;
+
+            choice.EditName = choice.Name;
+            choice.IsRenaming = true;
+        }
+
+        public void CancelRenameUserSkybox(SkyboxChoice? choice)
+        {
+            if (choice is not null)
+                choice.IsRenaming = false;
+        }
+
+        public void CommitRenameUserSkybox(SkyboxChoice? choice)
+        {
+            if (choice is null || !choice.IsUserImported || !choice.IsRenaming || IsBusy)
+                return;
+
+            string name = choice.EditName.Trim();
+            if (String.IsNullOrWhiteSpace(name))
+            {
+                choice.IsRenaming = false;
+                return;
+            }
+
+            try
+            {
+                IsBusy = true;
+                UserSkyboxService.Rename(choice.SelectionKey, name);
+                // Update immediately. Do not wait for the gallery event because the
+                // page can remain open while a user renames several imported skies.
+                ReloadChoices();
+                StatusText = $"Renamed to {name}.";
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("SkyboxViewModel::RenameUserSkybox", ex);
+                Frontend.ShowMessageBox($"{App.ProjectName} could not rename that custom skybox.\n\n{ex.Message}", MessageBoxImage.Error);
+                choice.IsRenaming = false;
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public void DeleteUserSkybox(SkyboxChoice? choice)
+        {
+            if (choice is null || !choice.IsUserImported || IsBusy)
+                return;
+
+            try
+            {
+                IsBusy = true;
+                string deletedName = choice.Name;
+                UserSkyboxService.Delete(choice.SelectionKey);
+                // The selected item and its action buttons must disappear in the
+                // same interaction, even when the gallery event is delayed.
+                ReloadChoices();
+                StatusText = $"Deleted {deletedName}.";
+            }
+            catch (Exception ex)
+            {
+                App.Logger.WriteException("SkyboxViewModel::DeleteUserSkybox", ex);
+                Frontend.ShowMessageBox($"{App.ProjectName} could not delete that custom skybox.\n\n{ex.Message}", MessageBoxImage.Error);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
+        public void ToggleFavorite(SkyboxChoice? choice)
+        {
+            if (choice is null || choice.IsNone || IsBusy)
+                return;
+
+            choice.IsFavorite = !choice.IsFavorite;
+            App.Settings.Prop.FavoriteSkyboxes = SkyboxChoices
+                .Where(x => x.IsFavorite)
+                .Select(x => x.SelectionKey)
+                .ToList();
+            App.Settings.Save();
+            ReorderFavoritesAndOriginals();
+        }
+
+        private void SkyboxGalleryService_GalleryChanged(object? sender, EventArgs e)
+        {
+            if (Application.Current?.Dispatcher is { } dispatcher && !dispatcher.CheckAccess())
+            {
+                _ = dispatcher.BeginInvoke(new Action(ReloadChoices));
+                return;
+            }
+
+            ReloadChoices();
+        }
+
+        private void ReloadChoices()
+        {
+            string selectedKey = App.Settings.Prop.CustomSkyboxSourceName ?? "";
+            List<SkyboxChoice> choices = SkyboxGalleryService.GetChoices().ToList();
+
+            for (int index = 0; index < choices.Count; index++)
+            {
+                SkyboxChoice choice = choices[index];
+                choice.OriginalIndex = index;
+                choice.IsFavorite = !choice.IsNone && App.Settings.Prop.FavoriteSkyboxes.Any(favorite =>
+                    String.Equals(favorite, choice.SelectionKey, StringComparison.OrdinalIgnoreCase) ||
+                    String.Equals(favorite, choice.Name, StringComparison.OrdinalIgnoreCase) ||
+                    String.Equals(favorite, choice.ResourceFolder, StringComparison.OrdinalIgnoreCase));
+            }
+
+            SkyboxChoices.Clear();
+            foreach (SkyboxChoice choice in choices)
+                SkyboxChoices.Add(choice);
+            ReorderFavoritesAndOriginals();
+
+            SkyboxChoice none = SkyboxChoices.First(x => x.IsNone);
             if (!App.Settings.Prop.CustomSkyboxEnabled)
             {
-                _selectedSkybox = SkyboxChoices.First(x => x.IsNone);
+                _selectedSkybox = none;
                 _statusText = "Roblox's original sky is active.";
             }
             else
             {
-                _selectedSkybox = SkyboxChoices.FirstOrDefault(x =>
-                    !x.IsNone &&
-                    (String.Equals(x.Name, App.Settings.Prop.CustomSkyboxSourceName, StringComparison.OrdinalIgnoreCase) ||
-                     String.Equals(x.ResourceFolder, App.Settings.Prop.CustomSkyboxSourceName, StringComparison.OrdinalIgnoreCase)));
-                _statusText = _selectedSkybox is null
-                    ? "A legacy imported sky is active. Pick a preset or None to replace it."
-                    : $"Selected: {_selectedSkybox.Name}.";
+                _selectedSkybox = SkyboxChoices.FirstOrDefault(choice =>
+                    !choice.IsNone && MatchesSelection(choice, selectedKey));
+
+                if (_selectedSkybox?.IsUserImported == true && !_selectedSkybox.IsAvailable)
+                {
+                    _selectedSkybox = none;
+                    _statusText = UserSkyboxService.IsEnabled
+                        ? "This imported sky needs to be re-imported with the updated Roblox texture format."
+                        : "Imported skyboxes are disabled in Experimental.";
+                }
+                else
+                {
+                    _statusText = _selectedSkybox is null
+                        ? "A legacy imported sky is active. Pick a preset or None to replace it."
+                        : $"Selected: {_selectedSkybox.Name}.";
+                }
             }
+
+            OnPropertyChanged(nameof(SelectedSkybox));
+            OnPropertyChanged(nameof(StatusText));
         }
 
-        public IReadOnlyList<SkyboxChoice> SkyboxChoices { get; }
-        public ICommand OpenModsFolderCommand { get; }
+        private static bool MatchesSelection(SkyboxChoice choice, string selection) =>
+            String.Equals(choice.SelectionKey, selection, StringComparison.OrdinalIgnoreCase) ||
+            String.Equals(choice.Name, selection, StringComparison.OrdinalIgnoreCase) ||
+            String.Equals(choice.ResourceFolder, selection, StringComparison.OrdinalIgnoreCase);
+
+        private void ReorderFavoritesAndOriginals()
+        {
+            List<SkyboxChoice> ordered = SkyboxChoices
+                .OrderByDescending(x => x.IsFavorite)
+                .ThenBy(x => x.OriginalIndex)
+                .ToList();
+            for (int target = 0; target < ordered.Count; target++)
+            {
+                int index = SkyboxChoices.IndexOf(ordered[target]);
+                if (index >= 0 && index != target)
+                    SkyboxChoices.Move(index, target);
+            }
+        }
 
         public SkyboxChoice? SelectedSkybox
         {
@@ -45,6 +201,15 @@ namespace SleepStrap.UI.ViewModels.Settings
             {
                 if (value is null || value == _selectedSkybox || IsBusy)
                     return;
+
+                if (value.IsUserImported && !value.IsAvailable)
+                {
+                    StatusText = UserSkyboxService.IsEnabled
+                        ? "Re-import this sky to update it to Roblox's current texture format."
+                        : "Enable imported skyboxes in Experimental before selecting one.";
+                    OnPropertyChanged(nameof(SelectedSkybox));
+                    return;
+                }
 
                 SkyboxChoice? previous = _selectedSkybox;
                 try
@@ -66,7 +231,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                         }
 
                         App.Settings.Prop.CustomSkyboxEnabled = true;
-                        App.Settings.Prop.CustomSkyboxSourceName = value.Name;
+                        App.Settings.Prop.CustomSkyboxSourceName = value.SelectionKey;
                         StatusText = $"Selected: {value.Name}. It will be applied when you click Launch Roblox.";
                     }
 
@@ -78,7 +243,7 @@ namespace SleepStrap.UI.ViewModels.Settings
                 {
                     _selectedSkybox = previous;
                     App.Logger.WriteException("SkyboxViewModel::SelectSkybox", ex);
-                    Frontend.ShowMessageBox($"SleepStrap could not apply that sky.\n\n{ex.Message}", MessageBoxImage.Error);
+                    Frontend.ShowMessageBox($"{App.ProjectName} could not apply that sky.\n\n{ex.Message}", MessageBoxImage.Error);
                     StatusText = "Sky selection failed.";
                     OnPropertyChanged(nameof(SelectedSkybox));
                 }
@@ -120,7 +285,7 @@ namespace SleepStrap.UI.ViewModels.Settings
             if (App.State.Prop.VisualModsWarningAcknowledged)
                 return true;
 
-            const string message = "Skybox presets replace local Roblox asset files. They do not inject code or modify the Roblox executable, but they are unofficial and SleepStrap cannot guarantee that Roblox will never take enforcement action.\n\nContinue with visual mods?";
+            const string message = "Skybox presets replace local Roblox asset files. They do not inject code or modify the Roblox executable, but they are unofficial and SleepBlox cannot guarantee that Roblox will never take enforcement action.\n\nContinue with visual mods?";
             if (Frontend.ShowMessageBox(message, MessageBoxImage.Warning, MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                 return false;
 

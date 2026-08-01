@@ -75,7 +75,7 @@ namespace SleepStrap
 
         public bool IsStudioLaunch => _launchMode != LaunchMode.Player;
 
-        public string MutexName { get; set; } = "SleepStrap-Bootstrapper";
+        public string MutexName { get; set; } = App.BootstrapperMutexName;
         public bool QuitIfMutexExists { get; set; } = false;
         #endregion
 
@@ -270,7 +270,9 @@ namespace SleepStrap
 
                 if (AppData.State.VersionGuid != _latestVersionGuid || _mustUpgrade)
                 {
-                    bool backgroundUpdaterMutexOpen = Utilities.DoesMutexExist("SleepStrap-BackgroundUpdater");
+                    bool backgroundUpdaterMutexOpen = Utilities.DoesAnyMutexExist(
+                        App.BackgroundUpdaterMutexName,
+                        App.LegacyBackgroundUpdaterMutexName);
                     if (App.LaunchSettings.BackgroundUpdaterFlag.Active)
                         backgroundUpdaterMutexOpen = false; // we want to actually update lol
 
@@ -606,7 +608,7 @@ namespace SleepStrap
                 return;
             }
 
-            using EventWaitHandle initEventHandle = new EventWaitHandle(false, EventResetMode.AutoReset, "SleepStrap-MultiInstanceWatcherInitialisationFinished");
+            using EventWaitHandle initEventHandle = new EventWaitHandle(false, EventResetMode.AutoReset, App.MultiInstanceWatcherEventName);
             Process.Start(Paths.Process, "-multiinstancewatcher");
 
             bool initSuccess = initEventHandle.WaitOne(TimeSpan.FromSeconds(2));
@@ -1253,7 +1255,7 @@ namespace SleepStrap
         {
             const string LOG_IDENT = "Bootstrapper::StartBackgroundUpdater";
 
-            if (Utilities.DoesMutexExist("SleepStrap-BackgroundUpdater"))
+            if (Utilities.DoesAnyMutexExist(App.BackgroundUpdaterMutexName, App.LegacyBackgroundUpdaterMutexName))
             {
                 App.Logger.WriteLine(LOG_IDENT, "Background updater already running");
                 return;
@@ -1432,14 +1434,14 @@ namespace SleepStrap
             var currentModFiles = new HashSet<string>(modFolderFiles, StringComparer.OrdinalIgnoreCase);
             var previouslyAppliedMods = new HashSet<string>(App.RobloxState.Prop.ModManifest, StringComparer.OrdinalIgnoreCase);
             string managedTextureRepairMarker = Path.Combine(
-                Paths.SleepStrapData,
+                Paths.SleepBloxData,
                 "State",
                 $"managed-texture-repair-v2-{Path.GetFileName(_latestVersionDirectory)}.complete");
             bool repairManagedTextures = !File.Exists(managedTextureRepairMarker);
             bool managedTextureRepairFailed = false;
 
             // Builds before this repair could forget removed texture entries after an
-            // unsuccessful package restore. Reconcile every SleepStrap-owned texture once
+            // unsuccessful package restore. Reconcile every SleepBlox-owned texture once
             // for the active Roblox version, while leaving currently enabled layers alone.
             if (repairManagedTextures)
                 previouslyAppliedMods.UnionWith(VisualModService.GetManagedTextureModificationPaths());

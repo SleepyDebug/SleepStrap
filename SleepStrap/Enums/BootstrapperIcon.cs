@@ -2,9 +2,9 @@ namespace SleepStrap.Enums
 {
     public enum BootstrapperIcon
     {
-        [EnumName(StaticName = "SleepStrap")]
+        [EnumName(StaticName = "SleepBlox")]
         IconSleepStrap,
-        [EnumName(StaticName = "SleepStrap (Legacy)")]
+        [EnumName(StaticName = "SleepBlox (Legacy)")]
         LegacySleepStrap,
         [EnumName(StaticName = "2008")]
         Icon2008,
@@ -22,7 +22,7 @@ namespace SleepStrap.Enums
         Icon2022,
         [EnumName(FromTranslation = "Common.Custom")]
         IconCustom,
-        [EnumName(StaticName = "SleepStrap (Legacy Classic)")]
+        [EnumName(StaticName = "SleepBlox (Legacy Classic)")]
         LegacySleepStrapClassic
     }
 }
