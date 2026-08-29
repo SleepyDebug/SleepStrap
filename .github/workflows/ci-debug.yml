@@ -24,7 +24,7 @@ jobs:
       run: dotnet publish -p:Platform=x64 -p:PublishSingleFile=true -p:CommitHash=${{ github.sha }} -p:CommitRef=${{ github.ref_type }}/${{ github.ref_name }} -r win-x64 -c Debug --self-contained false .\SleepStrap\SleepStrap.csproj
 
     - name: Upload Artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: SleepStrap (Debug) (${{ github.sha }})
         path: .\SleepStrap\bin\x64\Debug\net6.0-windows10.0.19041.0\win-x64\publish\*
